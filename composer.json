@@ -1,0 +1,24 @@
+{
+  "name": "rest-server-mirage",
+  "version": "0.0.1",
+  "description": "Servidor REST para o painel educativo",
+  "license": "UNLISENCED",
+  "config": {
+    "vendor-dir": "vendor/"
+  },
+  "autoload": {
+    "psr-4": {
+      "BossEdu\\Controller\\": "controller/"
+      , "BossEdu\\Model\\": "model/generated-classes/BossEdu/Model/"
+      , "BossEdu\\Util\\": "util/"
+    }
+  },
+  "require": {
+    "propel/propel": "~2.0@dev",
+    "jacwright/restserver": "dev-master",
+    "mailgun/mailgun-php": "^1.8"
+  },
+  "require-dev": {
+    "heroku/heroku-buildpack-php": "^87.0"
+  }
+}
