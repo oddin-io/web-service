@@ -16,11 +16,11 @@ class InstructionCtrl
         return AuthCtrl::check();
     }
 
-    public static function setCurrentInstruction($event, $lecture, $start_date, $class, $person)
+    public static function setCurrentInstruction($instruction_id, $person)
     {
         PersonQuery::create()
             ->filterById($person)
-            ->update(["CurrentInstruction" => InstructionCtrl::getInstructionId($event, $lecture, $start_date, $class)]);
+            ->update(["CurrentInstruction" => $instruction_id]);
     }
 
     public static function getInstructionId($event, $lecture, $start_date, $class)
@@ -41,42 +41,66 @@ class InstructionCtrl
             ->update(["CurrentInstruction" => null]);
     }
 
-    public static function auth($event, $lecture, $start_date, $class, $person, $profile)
+    public static function auth($instruction_id, $person, $profile)
     {
         return (boolean)PiLinkQuery::create()
-            ->useInstructionQuery()
-            ->filterByEventCode($event)
-            ->filterByLectureCode($lecture)
-            ->filterByClass($class)
-            ->filterByStartDate($start_date)
-            ->endUse()
+            ->filterByInstructionId($instruction_id)
             ->filterByPersonId($person)
             ->filterByProfile(["min" => $profile])
             ->findOne();
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/info
+     * @url GET /instruction
      */
-    public function getInfo($event, $lecture, $start_date, $class)
+    public function getInstruction()
     {
         header("Content-Type: application/json");
 
-        $event = urldecode($event);
-        $lecture = urldecode($lecture);
-        $start_date = urldecode($start_date);
-        $class = urldecode($class);
         $person = $_SESSION["id"];
 
-        if (self::auth($event, $lecture, $start_date, $class, $person, 0)) {
+        $lectures = PiLinkQuery::create()
+            ->join("PiLink.Instruction")
+            ->join("Instruction.ElHave")
+            ->join("ElHave.Event")
+            ->join("ElHave.Lecture")
+            ->filterByPersonId($person)
+            ->select([
+                "Instruction.Id"
+                , "Instruction.StartDate"
+                , "Instruction.EndDate"
+                , "Instruction.Class"
+                , "Event.Code"
+                , "Event.Name"
+                , "Lecture.Code"
+                , "Lecture.Name"
+                , "PiLink.Profile"
+            ])
+            ->find()
+            ->toArray();
+
+        $lectures = ["lectures" =>
+            Util::adjustArrayCase(Util::namespacedArrayToNormal($lectures, ["Instruction", "Lecture", "PiLink"]), "lower")
+        ];
+        echo json_encode($lectures);
+    }
+
+    /**
+     * @url GET /instruction/$instruction_id/info
+     */
+    public function getInfo($instruction_id)
+    {
+        header("Content-Type: application/json");
+
+        $instruction_id = urldecode($instruction_id);
+        $person = $_SESSION["id"];
+
+        if (InstructionCtrl::auth($instruction_id, $person, 0)) {
             $info = InstructionQuery::create()
                 ->join("Instruction.ElHave")
                 ->join("ElHave.Event")
                 ->join("ElHave.Lecture")
-                ->filterByEventCode($event)
-                ->filterByLectureCode($lecture)
-                ->filterByStartDate($start_date)
-                ->filterByClass($class)
+                ->filterById($instruction_id)
                 ->select([
                     "Instruction.StartDate"
                     , "Instruction.EndDate"
@@ -97,32 +121,22 @@ class InstructionCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/participants
+     * @url GET /instruction/$instruction_id/participants
      */
-    public function getParticipants($event, $lecture, $start_date, $class)
+    public function getParticipants($instruction_id)
     {
         header("Content-Type: application/json");
 
-        $event = urldecode($event);
-        $lecture = urldecode($lecture);
-        $start_date = urldecode($start_date);
-        $class = urldecode($class);
+        $instruction_id = urldecode($instruction_id);
         $person = $_SESSION["id"];
 
-        if (self::auth($event, $lecture, $start_date, $class, $person, 0)) {
-            $lectureHashHash = self::getInstructionId($event, $lecture, $start_date, $class);
-
+        if (InstructionCtrl::auth($instruction_id, $person, 0)) {
             $participants = PiLinkQuery::create()
                 ->join("PiLink.Person")
-                ->useInstructionQuery()
-                ->filterByEventCode($event)
-                ->filterByLectureCode($lecture)
-                ->filterByStartDate($start_date)
-                ->filterByClass($class)
-                ->endUse()
+                ->filterByInstructionId($instruction_id)
                 ->where("PiLink.PersonId != ?", $person)
                 ->select(["Person.Name", "PiLink.Profile"])
-                ->withColumn("'" . $lectureHashHash . "' = Person.CurrentInstruction", "\"Person.Online\"")
+                ->withColumn("'" . $instruction_id . "' = Person.CurrentInstruction", "\"Person.Online\"")
                 ->find()
                 ->toArray();
 
@@ -136,27 +150,19 @@ class InstructionCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/historic
+     * @url GET /instruction/$instruction_id/historic
      */
-    public function getPresentations($event, $lecture, $start_date, $class)
+    public function getPresentations($instruction_id)
     {
         header("Content-Type: application/json");
 
-        $event = urldecode($event);
-        $lecture = urldecode($lecture);
-        $start_date = urldecode($start_date);
-        $class = urldecode($class);
+        $instruction_id = urldecode($instruction_id);
         $person = $_SESSION["id"];
 
-        if (self::auth($event, $lecture, $start_date, $class, $person, 0)) {
+        if (InstructionCtrl::auth($instruction_id, $person, 0)) {
             $presentation = PresentationQuery::create()
                 ->join("Presentation.Person")
-                ->useInstructionQuery()
-                ->filterByEventCode($event)
-                ->filterByLectureCode($lecture)
-                ->filterByStartDate($start_date)
-                ->filterByClass($class)
-                ->endUse()
+                ->filterByInstructionId($instruction_id)
                 ->withColumn("Presentation.CreatedAt::date", "\"Presentation.Date\"")
                 ->withColumn("Presentation.CreatedAt::time", "\"Presentation.Time\"")
                 ->select([

@@ -23,7 +23,7 @@ class FrontEndCtrl
     }
 
     /**
-     * @url GET /lectures
+     * @url GET /instruction
      */
     public function lectures()
     {
@@ -33,20 +33,17 @@ class FrontEndCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/material
+     * @url GET /instruction/$instruction_id/material
      */
-    public function material($event, $lecture, $start_date, $class)
+    public function material($instruction_id)
     {
-        $event = urldecode($event);
-        $lecture = urldecode($lecture);
-        $start_date = urldecode($start_date);
-        $class = urldecode($class);
+        $instruction_id = urldecode($instruction_id);
 
         $person = $_SESSION["id"];
 
-        $profile = $this->getProfile($event, $lecture, $start_date, $class, $person);
+        $profile = $this->getProfile($instruction_id, $person);
 
-        InstructionCtrl::setCurrentInstruction($event, $lecture, $start_date, $class, $_SESSION["id"]);
+        InstructionCtrl::setCurrentInstruction($instruction_id, $_SESSION["id"]);
 
         if ($profile >= 2) {
             echo file_get_contents(__VIEWFOLDER__."/material-p.html");
@@ -57,44 +54,35 @@ class FrontEndCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/participants
+     * @url GET /instruction/$instruction_id/participants
      */
-    public function participants($event, $lecture, $start_date, $class)
+    public function participants($instruction_id)
     {
-        InstructionCtrl::setCurrentInstruction($event, $lecture, $start_date, $class, $_SESSION["id"]);
+        InstructionCtrl::setCurrentInstruction($instruction_id, $_SESSION["id"]);
 
         echo file_get_contents(__VIEWFOLDER__."/participantes.html");
     }
 
-    public function getProfile($event, $lecture, $start_date, $class, $person)
+    public function getProfile($instruction_id, $person)
     {
         return (int) PiLinkQuery::create()
-            ->useInstructionQuery()
-            ->filterByEventCode($event)
-            ->filterByLectureCode($lecture)
-            ->filterByClass($class)
-            ->filterByStartDate($start_date)
-            ->endUse()
+            ->filterByInstructionId($instruction_id)
             ->filterByPersonId($person)
             ->select("PiLink.Profile")
             ->findOne();
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/historic
+     * @url GET /instruction/$instruction_id/historic
      */
-    public function historic($event, $lecture, $start_date, $class)
+    public function historic($instruction_id)
     {
-        $event = urldecode($event);
-        $lecture = urldecode($lecture);
-        $start_date = urldecode($start_date);
-        $class = urldecode($class);
-
+        $instruction_id = urldecode($instruction_id);
         $person = $_SESSION["id"];
 
-        $profile = $this->getProfile($event, $lecture, $start_date, $class, $person);
+        $profile = $this->getProfile($instruction_id, $person);
 
-        InstructionCtrl::setCurrentInstruction($event, $lecture, $start_date, $class, $_SESSION["id"]);
+        InstructionCtrl::setCurrentInstruction($instruction_id, $_SESSION["id"]);
 
         if ($profile >= 2) {
             echo file_get_contents(__VIEWFOLDER__."/historico-p.html");
@@ -105,47 +93,36 @@ class FrontEndCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/presentation/current
+     * @url GET /instruction/$instruction_id/presentation/current
      */
-    public function currentPresentation($event, $lecture, $start_date, $class)
+    public function currentPresentation($instruction_id)
     {
-        $event = urldecode($event);
-        $lecture = urldecode($lecture);
-        $start_date = urldecode($start_date);
-        $class = urldecode($class);
+        $instruction_id = urldecode($instruction_id);
 
-        $id = PresentationQuery::create()
-            ->useInstructionQuery()
-            ->filterByEventCode($event)
-            ->filterByLectureCode($lecture)
-            ->filterByClass($class)
-            ->filterByStartDate($start_date)
-            ->endUse()
+        $presentation_id = PresentationQuery::create()
+            ->filterByInstructionId($instruction_id)
             ->select("Id")
             ->findOne();
 
-        if ($id) {
-            $url = "/app/{$event}/{$lecture}/{$start_date}/{$class}/presentation/{$id}";
+        if ($presentation_id) {
+            $url = "/app/{$instruction_id}/presentation/{$presentation_id}";
             header("Location: {$url}");
         } else {
-            $url = "/app/{$event}/{$lecture}/{$start_date}/{$class}/historic";
+            $url = "/app/{$instruction_id}/historic";
             header("Location: {$url}");
         }
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/presentation/$id
+     * @url GET /instruction/$instruction_id/presentation/$id
      */
-    public function presentation($event, $lecture, $start_date, $class, $id)
+    public function presentation($instruction_id, $id)
     {
-        $event = urldecode($event);
-        $lecture = urldecode($lecture);
-        $start_date = urldecode($start_date);
-        $class = urldecode($class);
+        $instruction_id = urldecode($instruction_id);
 
-        InstructionCtrl::setCurrentInstruction($event, $lecture, $start_date, $class, $_SESSION["id"]);
+        InstructionCtrl::setCurrentInstruction($instruction_id, $_SESSION["id"]);
 
-        $profile = $this->getProfile($event, $lecture, $start_date, $class, $_SESSION["id"]);
+        $profile = $this->getProfile($instruction_id, $_SESSION["id"]);
 
         if ($profile >= 2) {
             echo file_get_contents(__VIEWFOLDER__."/apresentacao-p-slick_carousel.html");

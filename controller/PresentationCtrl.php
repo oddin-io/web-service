@@ -14,14 +14,17 @@ class PresentationCtrl
 {
     public static function auth($presentation_id, $person_id, $profile)
     {
-        $presentation = PresentationQuery::create()
-            ->filterById($presentation_id)
-            ->findOne();
-
         return (boolean) PiLinkQuery::create()
-            ->filterByInstructionId($presentation->getInstructionId())
+            ->filterByInstructionId(PresentationCtrl::getInstructionId($presentation_id))
             ->filterByPersonId($person_id)
             ->filterByProfile(["min" => $profile])
+            ->findOne();
+    }
+
+    public static function getInstructionId($presentation_id) {
+        return (int) PresentationQuery::create()
+            ->filterById($presentation_id)
+            ->select("InstructionId")
             ->findOne();
     }
 
@@ -31,32 +34,22 @@ class PresentationCtrl
     }
 
     /**
-     * @url POST /$event/$lecture/$start_date/$class/presentation
+     * @url POST /instruction/$instruction_id/presentation
      */
-    public function newPresentation($event, $lecture, $start_date, $class)
+    public function newPresentation($instruction_id)
     {
         header("Content-Type: application/json");
 
-        $event = urldecode($event);
-        $lecture = urldecode($lecture);
-        $start_date = urldecode($start_date);
-        $class = urldecode($class);
+        $instruction_id = urldecode($instruction_id);
         $person = $_SESSION["id"];
 
-        if (InstructionCtrl::auth($event, $lecture, $start_date, $class, $person, 2))
+        if (InstructionCtrl::auth($instruction_id, $person, 2))
         {
             $postData = Util::getPostContents("lower");
 
-            $instruction = InstructionQuery::create()
-                ->filterByEventCode($event)
-                ->filterByLectureCode($lecture)
-                ->filterByClass($class)
-                ->filterByStartDate($start_date)
-                ->findOne();
-
             $presentation = new Presentation();
             $presentation->setSubject($postData["subject"])
-                ->setInstructionId($instruction->getId())
+                ->setInstructionId($instruction_id)
                 ->setPersonId($person)
                 ->save();
 
@@ -67,22 +60,19 @@ class PresentationCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/presentation/$id
+     * @url GET /instruction/$instruction_id/presentation/$presentation_id
      */
-    public function getPresentation($event, $lecture, $start_date, $class, $id)
+    public function getPresentation($instruction_id, $presentation_id)
     {
         header("Content-Type: application/json");
 
-        $event = urldecode($event);
-        $lecture = urldecode($lecture);
-        $start_date = urldecode($start_date);
-        $class = urldecode($class);
+        $instruction_id = urldecode($instruction_id);
         $person = $_SESSION["id"];
 
-        if (InstructionCtrl::auth($event, $lecture, $start_date, $class, $person, 0)) {
+        if (InstructionCtrl::auth($instruction_id, $person, 0)) {
             $presentation = PresentationQuery::create()
                 ->join("Presentation.Person")
-                ->filterById($id)
+                ->filterById($presentation_id)
                 ->select([
                     "Person.Name"
                     , "Presentation.Status"
@@ -101,26 +91,23 @@ class PresentationCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/presentation/$presentation/info
+     * @url GET /instruction/$instruction_id/presentation/$presentation_id/info
      */
-    public function getInfo($event, $lecture, $start_date, $class, $presentation)
+    public function getInfo($instruction_id, $presentation_id)
     {
         header("Content-Type: application/json");
 
-        $event = urldecode($event);
-        $lecture = urldecode($lecture);
-        $start_date = urldecode($start_date);
-        $class = urldecode($class);
-        $presentation = urldecode($presentation);
+        $instruction_id = urldecode($instruction_id);
+        $presentation_id = urldecode($presentation_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $info = PresentationQuery::create()
                 ->join("Presentation.Instruction")
                 ->join("Instruction.ElHave")
                 ->join("ElHave.Event")
                 ->join("ElHave.Lecture")
-                ->filterById($presentation)
+                ->filterById($presentation_id)
                 ->withColumn("(select profile from pi_link where instruction_id = Instruction.Id and person_id = ".$person.")", "Profile")
                 ->select([
                     "Event.Name"
@@ -144,14 +131,14 @@ class PresentationCtrl
     }
 
     /**
-     * @url POST /$event/$lecture/$start_date/$class/presentation/$presentation/material
+     * @url POST /instruction/$instruction_id/presentation/$presentation_id/material
      */
-    public function newMaterial($event, $lecture, $start_date, $class, $presentation)
+    public function newMaterial($instruction_id, $presentation_id)
     {
-        $presentation = urldecode($presentation);
-        $person = 3;
+        $presentation_id = urldecode($presentation_id);
+        $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 2)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 2)) {
             $file = $_FILES["file"];
 
             if ($file["error"]) {
@@ -162,7 +149,7 @@ class PresentationCtrl
             $material->setFile(fopen($file["tmp_name"], "rb"));
             $material->setName(basename($file["name"]));
             $material->setMime($file["type"]);
-            $material->setPresentationId($presentation);
+            $material->setPresentationId($presentation_id);
             $material->save();
         } else {
             throw new RestException(401, "Unauthorized");
@@ -170,25 +157,25 @@ class PresentationCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/presentation/$presentation/material/$material
+     * @url GET /instruction/$instruction_id/presentation/$presentation_id/material/$material
      */
-    public function getMaterial($event, $lecture, $start_date, $class, $presentation, $material)
+    public function getMaterial($instruction_id, $presentation_id, $material_id)
     {
-        $presentation = urldecode($presentation);
+        $presentation_id = urldecode($presentation_id);
         $person = $_SESSION["id"];
-        $material = urldecode($material);
+        $material_id = urldecode($material_id);
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
-            $material = MpMaterialQuery::create()
-                ->findOneById($material);
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
+            $material_id = MpMaterialQuery::create()
+                ->findOneById($material_id);
 
-            if ($material) {
-                header("Content-Type: ".$material->getMime());
-                header("Content-Disposition: attachment; filename=\"".$material->getName()."\"");
+            if ($material_id) {
+                header("Content-Type: ".$material_id->getMime());
+                header("Content-Disposition: attachment; filename=\"".$material_id->getName()."\"");
                 header("Cache-Control: no-cache, no-store, must-revalidate");
                 header("Pragma: no-cache");
                 header("Expires: 0");
-                fpassthru($material->getFile());
+                fpassthru($material_id->getFile());
                 exit(0);
             } else {
                 throw new RestException(404, "Arquivo");
@@ -199,16 +186,16 @@ class PresentationCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/presentation/$presentation/materials
+     * @url GET /instruction/$instruction_id/presentation/$presentation_id/materials
      */
-    public function getMaterials($event, $lecture, $start_date, $class, $presentation)
+    public function getMaterials($instruction_id, $presentation_id)
     {
-        $presentation = urldecode($presentation);
+        $presentation_id = urldecode($presentation_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $materials = MpMaterialQuery::create()
-                ->filterByPresentationId($presentation)
+                ->filterByPresentationId($presentation_id)
                 ->select(["Id", "Name", "Mime"])
                 ->find();
 
@@ -222,18 +209,18 @@ class PresentationCtrl
     }
 
     /**
-     * @url POST /$event/$lecture/$start_date/$class/presentation/$presentation/close
+     * @url POST /instruction/$instruction_id/presentation/$_id/close
      */
-    public function closePresentation($event, $lecture, $start_date, $class, $presentation)
+    public function closePresentation($instruction_id, $presentation_id)
     {
         header("Content-Type: application/json");
 
-        $presentation = urldecode($presentation);
+        $presentation_id = urldecode($presentation_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 2)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 2)) {
             PresentationQuery::create()
-                ->filterById($presentation)
+                ->filterById($presentation_id)
                 ->update(["Status" => 1]);
         } else {
             throw new RestException(401, "Unauthorized");

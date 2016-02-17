@@ -14,7 +14,7 @@ class DatabaseCtrl
 
         $user = SomeoneQuery::create()
             ->filterByEmail($_SESSION["email"])
-            ->filterByPassword($_SESSION["senha"])
+            ->filterByPassword($_SESSION["password"])
             ->findOne();
 
         if (!$user->getAdmin()) {

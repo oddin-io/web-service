@@ -18,20 +18,20 @@ class DoubtCtrl
     }
 
     /**
-     * @url POST /$event/$lecture/$start_date/$class/presentation/$presentation/chat/doubt
+     * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt
      */
-    public function newDoubt($event, $lecture, $start_date, $class, $presentation)
+    public function newDoubt($instruction_id, $presentation_id)
     {
         header("Content-Type: application/json");
 
-        $presentation = urldecode($presentation);
+        $presentation_id = urldecode($presentation_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $data = Util::getPostContents("lower");
             $data["status"] = 0;
             $data["person_id"] = $person;
-            $data["presentation_id"] = $presentation;
+            $data["presentation_id"] = $presentation_id;
 
             $doubt = new Doubt();
             $doubt->fromArray($data, DoubtTableMap::TYPE_FIELDNAME);
@@ -45,20 +45,20 @@ class DoubtCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/presentation/$presentation/chat/doubt
+     * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt
      */
-    public function getDoubts($event, $lecture, $start_date, $class, $presentation)
+    public function getDoubts($instruction_id, $presentation_id)
     {
         header("Content-Type: application/json");
 
-        $presentation = urldecode($presentation);
+        $presentation_id = urldecode($presentation_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $doubts = PdLikeQuery::create()
                 ->join("PdLike.Doubt", Criteria::RIGHT_JOIN)
                 ->join("Doubt.Person")
-                ->where("Doubt.PresentationId = ?", $presentation)
+                ->where("Doubt.PresentationId = ?", $presentation_id)
                 ->_if(isset($_GET["status"]))
                 ->where("Doubt.Status = ?", $_GET["status"])
                 ->_endif()
@@ -107,22 +107,22 @@ class DoubtCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/presentation/$presentation/chat/doubt/$doubt
+     * @url GET /instruction/$instruction_id/presentation/$presentation/doubt/$doubt_id
      */
-    public function getDoubt($event, $lecture, $start_date, $class, $presentation, $doubt = null)
+    public function getDoubt($instruction_id, $presentation_id, $doubt_id)
     {
         header("Content-Type: application/json");
 
-        $presentation = urldecode($presentation);
-        $doubt = urldecode($doubt);
+        $presentation_id = urldecode($presentation_id);
+        $doubt_id = urldecode($doubt_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $doubts = PdLikeQuery::create()
                 ->join("PdLike.Doubt", Criteria::RIGHT_JOIN)
                 ->join("Doubt.Person")
-                ->where("Doubt.PresentationId = ?", $presentation)
-                ->where("Doubt.Id = ?", $doubt)
+                ->where("Doubt.PresentationId = ?", $presentation_id)
+                ->where("Doubt.Id = ?", $doubt_id)
                 ->select([
                     "Doubt.Id"
                     , "Doubt.Status"
@@ -157,24 +157,24 @@ class DoubtCtrl
     }
 
     /**
-     * @url POST /$event/$lecture/$start_date/$class/presentation/$presentation/chat/doubt/$doubt/like
+     * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/like
      */
-    public function like($event, $lecture, $start_date, $class, $presentation, $doubt)
+    public function like($instruction_id, $presentation_id, $doubt_id)
     {
         header("Content-Type: application/json");
 
-        $presentation = urldecode($presentation);
-        $doubt = urldecode($doubt);
+        $presentation_id = urldecode($presentation_id);
+        $doubt_id = urldecode($doubt_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $d = DoubtQuery::create()
-                ->filterById($doubt)
+                ->filterById($doubt_id)
                 ->findOne();
 
             if (!($d->getPersonId() == $person)) {
                 $pdLike = new PdLike();
-                $pdLike->setDoubtId($doubt);
+                $pdLike->setDoubtId($doubt_id);
                 $pdLike->setPersonId($person);
                 $pdLike->save();
             } else {
@@ -186,24 +186,24 @@ class DoubtCtrl
     }
 
     /**
-     * @url DELETE /$event/$lecture/$start_date/$class/presentation/$presentation/chat/doubt/$doubt/like
+     * @url DELETE /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/like
      */
-    public function removeLike($event, $lecture, $start_date, $class, $presentation, $doubt)
+    public function removeLike($instruction_id, $presentation_id, $doubt_id)
     {
         header("Content-Type: application/json");
 
-        $presentation = urldecode($presentation);
-        $doubt = urldecode($doubt);
+        $presentation_id = urldecode($presentation_id);
+        $doubt_id = urldecode($doubt_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $d = DoubtQuery::create()
-                ->filterById($doubt)
+                ->filterById($doubt_id)
                 ->findOne();
 
             if (!($d->getPersonId() == $person)) {
                 $pdLike = new PdLike();
-                $pdLike->setDoubtId($doubt);
+                $pdLike->setDoubtId($doubt_id);
                 $pdLike->setPersonId($person);
                 $pdLike->delete();
             } else {
@@ -215,25 +215,25 @@ class DoubtCtrl
     }
 
     /**
-     * @url POST /$event/$lecture/$start_date/$class/presentation/$presentation/chat/doubt/$doubt/understand
+     * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/understand
      */
-    public function understand($event, $lecture, $start_date, $class, $presentation, $doubt)
+    public function understand($instruction_id, $presentation_id, $doubt_id)
     {
-        $presentation = urldecode($presentation);
-        $doubt = urldecode($doubt);
+        $presentation_id = urldecode($presentation_id);
+        $doubt_id = urldecode($doubt_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $d = PdLikeQuery::create()
                 ->join("PdLike.Doubt")
-                ->where("Doubt.Id = ?", $doubt)
+                ->where("Doubt.Id = ?", $doubt_id)
                 ->where("Doubt.Status = ?", 2)
                 ->where("PdLike.PersonId = ?", $person)
                 ->findOne();
 
             if ($d) {
                 PdLikeQuery::create()
-                    ->where("PdLike.DoubtId = ?", $doubt)
+                    ->where("PdLike.DoubtId = ?", $doubt_id)
                     ->where("PdLike.PersonId = ?", $person)
                     ->update(["Understand" => true]);
             } else {
@@ -245,18 +245,18 @@ class DoubtCtrl
     }
 
     /**
-     * @url DELETE /$event/$lecture/$start_date/$class/presentation/$presentation/chat/doubt/$doubt/understand
+     * @url DELETE /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/understand
      */
-    public function removeUnderstand($event, $lecture, $start_date, $class, $presentation, $doubt)
+    public function removeUnderstand($instruction_id, $presentation_id, $doubt_id)
     {
-        $presentation = urldecode($presentation);
-        $doubt = urldecode($doubt);
+        $presentation_id = urldecode($presentation_id);
+        $doubt_id = urldecode($doubt_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $d = PdLikeQuery::create()
                 ->join("PdLike.Doubt")
-                ->where("PdLike.Idd = ?", $doubt)
+                ->where("PdLike.Idd = ?", $doubt_id)
                 ->where("PdLike.Idp = ?", $person)
                 ->where("Doubt.Status = ?", 2)
                 ->where("PdLike.Understand = ?", true)
@@ -264,7 +264,7 @@ class DoubtCtrl
 
             if ($d) {
                 PdLikeQuery::create()
-                    ->where("PdLike.Idd = ?", $doubt)
+                    ->where("PdLike.Idd = ?", $doubt_id)
                     ->where("PdLike.Idp = ?", $person)
                     ->update(["Understand" => false]);
             } else {
@@ -276,21 +276,21 @@ class DoubtCtrl
     }
 
     /**
-     * @url POST /$event/$lecture/$start_date/$class/presentation/$presentation/chat/doubt/$doubt/change-status
+     * @url POST /presentation/$presentation_id/doubt/$doubt_id/change-status
      */
-    public function changeStatus($event, $lecture, $start_date, $class, $presentation, $doubt)
+    public function changeStatus($presentation_id, $doubt_id)
     {
         header("Content-Type: application/json");
 
-        $presentation = urldecode($presentation);
-        $doubt = urldecode($doubt);
+        $presentation_id = urldecode($presentation_id);
+        $doubt_id = urldecode($doubt_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 2)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 2)) {
             $data = Util::getPostContents("lower");
 
             DoubtQuery::create()
-                ->filterById($doubt)
+                ->filterById($doubt_id)
                 ->update(["Status" => $data["status"]]);
         } else {
             throw new RestException(401, "Unauthorized");

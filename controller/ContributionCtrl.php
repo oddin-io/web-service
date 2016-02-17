@@ -23,31 +23,31 @@ class ContributionCtrl
                 throw new RestException(410, "File error: ".$file["error"]);
             }
 
-            $material = new McMaterial();
-            $material->setFile(fopen($file["tmp_name"], "rb"));
-            $material->setName(basename($file["name"]));
-            $material->setMime($file["type"]);
-            $material->setContributionId($comment);
-            $material->save();
+            $material_id = new McMaterial();
+            $material_id->setFile(fopen($file["tmp_name"], "rb"));
+            $material_id->setName(basename($file["name"]));
+            $material_id->setMime($file["type"]);
+            $material_id->setContributionId($comment);
+            $material_id->save();
         }
     }
 
     /**
-     * @url POST /$event/$lecture/$start_date/$class/presentation/$presentation/chat/doubt/$doubt/contribution
+     * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution
      */
-    public function newContribution($event, $lecture, $start_date, $class, $presentation, $doubt)
+    public function newContribution($instruction_id, $presentation_id, $doubt_id)
     {
         header("Content-Type: application/json");
 
-        $presentation = urldecode($presentation);
-        $doubt = urldecode($doubt);
+        $presentation_id = urldecode($presentation_id);
+        $doubt_id = urldecode($doubt_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 1)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 1)) {
             $data = Util::adjustArrayCase($_POST, "lower");
             $contribution = new Contribution();
             $contribution->fromArray($data, ContributionTableMap::TYPE_FIELDNAME);
-            $contribution->setDoubtId($doubt);
+            $contribution->setDoubtId($doubt_id);
             $contribution->setPersonId($person);
             $contribution->save();
 
@@ -72,20 +72,20 @@ class ContributionCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/presentation/$presentation/chat/doubt/$doubt/contribution
+     * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution
      */
-    public function getContributions($event, $lecture, $start_date, $class, $presentation, $doubt)
+    public function getContributions($instruction_id, $presentation_id, $doubt_id)
     {
         header("Content-Type: application/json");
 
-        $presentation = urldecode($presentation);
-        $doubt = urldecode($doubt);
+        $presentation_id = urldecode($presentation_id);
+        $doubt_id = urldecode($doubt_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $contributions = ContributionQuery::create()
                 ->join("Contribution.Pessoa")
-                ->filterByDoubtId($doubt)
+                ->filterByDoubtId($doubt_id)
                 ->select([
                     "Contribution.Id"
                     , "Contribution.Text"
@@ -106,22 +106,22 @@ class ContributionCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/presentation/$presentation/chat/doubt/$doubt/contribution/$contribution
+     * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id
      */
-    public function getContribution($event, $lecture, $start_date, $class, $presentation, $doubt, $contribution)
+    public function getContribution($instruction_id, $presentation_id, $doubt_id, $contribution_id)
     {
         header("Content-Type: application/json");
 
-        $presentation = urldecode($presentation);
-        $doubt = urldecode($doubt);
-        $contribution = urldecode($contribution);
+        $presentation_id = urldecode($presentation_id);
+        $doubt_id = urldecode($doubt_id);
+        $contribution_id = urldecode($contribution_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $contributions = ContributionQuery::create()
                 ->join("Contribution.Person")
-                ->filterByDoubtId($doubt)
-                ->filterById($contribution)
+                ->filterByDoubtId($doubt_id)
+                ->filterById($contribution_id)
                 ->select([
                     "Contribution.Id"
                     , "Contribution.Text"
@@ -139,17 +139,17 @@ class ContributionCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/presentation/$presentation/chat/doubt/$doubt/contribution/$contribution/materials
+     * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id/materials
      */
-    public function getContributionMaterials($event, $lecture, $start_date, $class, $presentation, $doubt, $contribution)
+    public function getContributionMaterials($instruction_id, $presentation_id, $doubt_id, $contribution_id)
     {
-        $presentation = urldecode($presentation);
-        $contribution = urldecode($contribution);
+        $presentation_id = urldecode($presentation_id);
+        $contribution_id = urldecode($contribution_id);
         $person = $_SESSION["id"];
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $materials = McMaterialQuery::create()
-                ->filterByContributionId($contribution)
+                ->filterByContributionId($contribution_id)
                 ->select(["Id", "Nome", "Mime"])
                 ->find();
 
@@ -163,26 +163,25 @@ class ContributionCtrl
     }
 
     /**
-     * @url GET /$event/$lecture/$start_date/$class/presentation/$presentation/chat/doubt/$doubt/contribution/$contribution/materials/$material
+     * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id/materials/$material_id
      */
-    public function getContributionMaterial($event, $lecture, $start_date, $class, $presentation, $doubt, $contribution, $material)
+    public function getContributionMaterial($instruction_id, $presentation_id, $doubt_id, $contribution_id, $material_id)
     {
-        $presentation = urldecode($presentation);
+        $presentation_id = urldecode($presentation_id);
         $person = $_SESSION["id"];
-        $contribution = urldecode($contribution);
-        $material = urldecode($material);
+        $material_id = urldecode($material_id);
 
-        if (PresentationCtrl::auth($presentation, $person, 0)) {
-            $material = McMaterialQuery::create()
-                ->findOneById($material);
+        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
+            $material_id = McMaterialQuery::create()
+                ->findOneById($material_id);
 
-            if ($material) {
-                header("Content-Type: ".$material->getMime());
-                header("Content-Disposition: attachment; filename=\"".$material->getName()."\"");
+            if ($material_id) {
+                header("Content-Type: ".$material_id->getMime());
+                header("Content-Disposition: attachment; filename=\"".$material_id->getName()."\"");
                 header("Cache-Control: no-cache, no-store, must-revalidate");
                 header("Pragma: no-cache");
                 header("Expires: 0");
-                fpassthru($material->getFile());
+                fpassthru($material_id->getFile());
                 exit(0);
             } else {
                 throw new RestException(404, "File");
