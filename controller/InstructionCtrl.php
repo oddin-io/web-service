@@ -150,7 +150,7 @@ class InstructionCtrl
     }
 
     /**
-     * @url GET /instruction/$instruction_id/historic
+     * @url GET /instruction/$instruction_id/presentation
      */
     public function getPresentations($instruction_id)
     {
