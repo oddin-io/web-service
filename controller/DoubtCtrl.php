@@ -37,8 +37,22 @@ class DoubtCtrl
             $doubt->fromArray($data, DoubtTableMap::TYPE_FIELDNAME);
             $doubt->save();
 
-            $doubt = Util::adjustArrayCase($doubt->toArray(), "lower");
-            echo json_encode($doubt);
+            $doubt = DoubtQuery::create()
+                ->filterById($doubt->getId())
+                ->withColumn("Doubt.CreatedAt::date", "\"Doubt.Date\"")
+                ->withColumn("Doubt.CreatedAt::time", "\"Doubt.Time\"")
+                ->select([
+                    "Doubt.Id"
+                    , "Doubt.Status"
+                    , "Doubt.Text"
+                    , "Doubt.Anonymous"
+                    , "Doubt.Understand"
+                    , "Doubt.PresentationId"
+                    , "Doubt.PersonId"
+                ])
+                ->findOne();
+
+            echo json_encode(Util::adjustArrayCase(Util::namespacedArrayToNormal($doubt, "Doubt"), "underscore"));
         } else {
             throw new RestException(401, "Unauthorized");
         }
