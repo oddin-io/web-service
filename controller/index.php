@@ -14,7 +14,6 @@ use Jacwright\RestServer\RestServer;
 $server = new RestServer("debug");
 try {
   $server->addClass("\\BossEdu\\Controller\\AuthCtrl");
-  $server->addClass("\\BossEdu\\Controller\\LectureCtrl");
   $server->addClass("\\BossEdu\\Controller\\InstructionCtrl");
   $server->addClass("\\BossEdu\\Controller\\PresentationCtrl");
   $server->addClass("\\BossEdu\\Controller\\DoubtCtrl");
