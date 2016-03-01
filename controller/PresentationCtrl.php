@@ -53,7 +53,20 @@ class PresentationCtrl
                 ->setPersonId($person)
                 ->save();
 
-            echo json_encode(Util::adjustArrayCase($presentation->toArray(), "lower"));
+            $presentation = PresentationQuery::create()
+                ->filterById($presentation->getId())
+                ->withColumn("Presentation.CreatedAt::date", "\"Presentation.Date\"")
+                ->withColumn("Presentation.CreatedAt::time", "\"Presentation.Time\"")
+                ->select([
+                    "Presentation.Id"
+                    , "Presentation.Status"
+                    , "Presentation.InstructionId"
+                    , "Presentation.PersonId"
+                    , "Presentation.Subject"
+                ])
+                ->findOne();
+
+            echo json_encode(Util::adjustArrayCase(Util::namespacedArrayToNormal($presentation, "Presentation"), "underscore"));
         } else {
             throw new RestException(401, "Enrollment");
         }
