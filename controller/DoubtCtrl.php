@@ -38,6 +38,7 @@ class DoubtCtrl
             $doubt->save();
 
             $doubt = DoubtQuery::create()
+                ->join("Doubt.Person")
                 ->filterById($doubt->getId())
                 ->withColumn("Doubt.CreatedAt::date", "\"Doubt.Date\"")
                 ->withColumn("Doubt.CreatedAt::time", "\"Doubt.Time\"")
@@ -49,6 +50,7 @@ class DoubtCtrl
                     , "Doubt.Understand"
                     , "Doubt.PresentationId"
                     , "Doubt.PersonId"
+                    , "Person.Name"
                 ])
                 ->findOne();
 
