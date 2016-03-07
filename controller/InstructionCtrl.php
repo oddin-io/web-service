@@ -148,38 +148,4 @@ class InstructionCtrl
             throw new RestException(401, "Enrollment");
         }
     }
-
-    /**
-     * @url GET /instruction/$instruction_id/presentation
-     */
-    public function getPresentations($instruction_id)
-    {
-        header("Content-Type: application/json");
-
-        $instruction_id = urldecode($instruction_id);
-        $person = $_SESSION["id"];
-
-        if (InstructionCtrl::auth($instruction_id, $person, 0)) {
-            $presentation = PresentationQuery::create()
-                ->join("Presentation.Person")
-                ->filterByInstructionId($instruction_id)
-                ->withColumn("Presentation.CreatedAt::date", "\"Presentation.Date\"")
-                ->withColumn("Presentation.CreatedAt::time", "\"Presentation.Time\"")
-                ->select([
-                    "Person.Name"
-                    , "Presentation.Status"
-                    , "Presentation.Id"
-                    , "Presentation.Subject"
-                ])
-                ->find()
-                ->toArray();
-
-            $presentation = ["presentations" =>
-                Util::adjustArrayCase(Util::namespacedArrayToNormal($presentation, "Presentation"), "lower")
-            ];
-            echo json_encode($presentation);
-        } else {
-            throw new RestException(401, "Enrollment");
-        }
-    }
 }
