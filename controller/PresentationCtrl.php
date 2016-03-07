@@ -222,7 +222,7 @@ class PresentationCtrl
     }
 
     /**
-     * @url POST /instruction/$instruction_id/presentation/$_id/close
+     * @url POST /instruction/$instruction_id/presentation/$presentation_id/close
      */
     public function closePresentation($instruction_id, $presentation_id)
     {
