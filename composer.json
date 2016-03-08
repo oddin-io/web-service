@@ -1,8 +1,8 @@
 {
-  "name": "rest-server-mirage",
+  "name": "siena/rest-server-mirage",
   "version": "0.0.1",
   "description": "Servidor REST para o painel educativo",
-  "license": "UNLISENCED",
+  "license": "proprietary",
   "config": {
     "vendor-dir": "vendor/"
   },
@@ -16,7 +16,8 @@
   "require": {
     "propel/propel": "~2.0@dev",
     "jacwright/restserver": "dev-master",
-    "mailgun/mailgun-php": "^1.8"
+    "mailgun/mailgun-php": "^1.8",
+    "jasny/sso": "^0.1.8"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "^87.0"

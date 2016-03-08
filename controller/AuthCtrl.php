@@ -6,6 +6,7 @@ use BossEdu\Model\SomeoneQuery;
 use BossEdu\Util\Util;
 use Jacwright\RestServer\RestException;
 use Mailgun\Mailgun;
+use Jasny\SSO\Broker;
 
 class AuthCtrl
 {
@@ -75,43 +76,14 @@ class AuthCtrl
      */
     public function login()
     {
+        $broker = new Broker("http://localhost:9000", "Alice", "8iwzik1bwd");
+        $broker->attach(true);
+
         $user = Util::getPostContents("lower");
 
-        AuthCtrl::startSession($user["persist"]);
+        echo json_encode($user, JSON_PRETTY_PRINT);
 
-        if (!isset($_SESSION["email"]) && !isset($_SESSION["password"])) {
-            if (isset($user["email"]) && isset($user["password"])) {
-                $entity = SomeoneQuery::create()
-                    ->filterByEmail($user["email"])
-                    ->findOne();
-
-                if ($entity) {
-                    $entity = SomeoneQuery::create()
-                        ->filterByEmail($user["email"])
-                        ->filterByPassword($user["password"])
-                        ->findOne();
-
-                    if ($entity) {
-                        $_SESSION["id"] = PersonQuery::create()
-                            ->filterByEmail($user["email"])
-                            ->select("Person.Id")
-                            ->findOne();
-                        $_SESSION["email"] = $user["email"];
-                        $_SESSION["password"] = $user["password"];
-                        $_SESSION["persist"] = $user["persist"] ? true : false;
-                    } else {
-                        AuthCtrl::destroySession();
-                        throw new RestException(401, "Password");
-                    }
-                } else {
-                    AuthCtrl::destroySession();
-                    throw new RestException(404, "User");
-                }
-            } else {
-                AuthCtrl::destroySession();
-                throw new RestException(400, "No post data");
-            }
-        }
+        $broker->login($user['username'], $user['password']);
     }
 
     /**
@@ -120,7 +92,9 @@ class AuthCtrl
      */
     public function logout()
     {
-        AuthCtrl::destroySession();
+        $broker = new Broker("http://localhost:9000", "Alice", "8iwzik1bwd");
+        $broker->attach(true);
+        $broker->logout();
     }
 
     /**
@@ -155,7 +129,11 @@ class AuthCtrl
      */
     public function getTest()
     {
-        var_dump(getenv("DATABASE_URL"));
+        $broker = new Broker("http://localhost:9000", "Alice", "8iwzik1bwd");
+        $broker->attach(true);
+        $user = $broker->getUserInfo();
+
+        echo json_encode($user, JSON_PRETTY_PRINT);
     }
 
     /**
