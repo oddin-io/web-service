@@ -14,8 +14,6 @@ class AuthCtrl
     {
         if (!isset($_SESSION)) session_start();
 
-        AuthCtrl::refreshSession();
-
         if (isset($_SESSION["email"])) {
             $user = SomeoneQuery::create()
                 ->filterByEmail($_SESSION["email"])
@@ -26,49 +24,13 @@ class AuthCtrl
                 return true;
             }
         }
-
-        AuthCtrl::destroySession();
     }
 
-    public static function startSession($persist = false)
-    {
-        if ($persist) {
-            session_set_cookie_params(time() + 3600 * 24 * 60); // 2 Months
-        }
+    private function attach() {
+        $broker = new Broker("http://auth.localhost", "Alice", "8iwzik1bwd");
+        $broker->attach(true);
 
-        session_start();
-    }
-
-    public static function refreshSession()
-    {
-        if (!isset($_SESSION)) session_start();
-
-        if ($_SESSION["persist"]) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), session_id(), time() + 3600 * 24 * 60,
-                $params["path"], $params["domain"],
-                $params["secure"], $params["httponly"]
-            );
-        }
-    }
-
-    public static function destroySession()
-    {
-        if (!isset($_SESSION)) session_start();
-
-        if (isset($_SESSION["id"])) InstructionCtrl::resetCurrentInstruction($_SESSION["id"]);
-
-        $_SESSION = [];
-
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000,
-                $params["path"], $params["domain"],
-                $params["secure"], $params["httponly"]
-            );
-        }
-
-        session_destroy();
+        return $broker;
     }
 
     /**
@@ -76,14 +38,14 @@ class AuthCtrl
      */
     public function login()
     {
-        $broker = new Broker("http://localhost:9000", "Alice", "8iwzik1bwd");
-        $broker->attach(true);
-
+        $broker = $this->attach();
         $user = Util::getPostContents("lower");
 
-        echo json_encode($user, JSON_PRETTY_PRINT);
-
-        $broker->login($user['username'], $user['password']);
+        try {
+            $broker->login($user['username'], $user['password']);
+        } catch (\Exception $ex) {
+            throw new RestException(401, "Unauthorized");
+        }
     }
 
     /**
@@ -92,8 +54,8 @@ class AuthCtrl
      */
     public function logout()
     {
-        $broker = new Broker("http://localhost:9000", "Alice", "8iwzik1bwd");
-        $broker->attach(true);
+        $broker = $this->attach();
+
         $broker->logout();
     }
 
@@ -129,8 +91,8 @@ class AuthCtrl
      */
     public function getTest()
     {
-        $broker = new Broker("http://localhost:9000", "Alice", "8iwzik1bwd");
-        $broker->attach(true);
+        $broker = $this->attach();
+
         $user = $broker->getUserInfo();
 
         echo json_encode($user, JSON_PRETTY_PRINT);
