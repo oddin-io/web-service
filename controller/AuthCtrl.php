@@ -1,7 +1,6 @@
 <?php
 namespace BossEdu\Controller;
 
-use BossEdu\Model\PersonQuery;
 use BossEdu\Model\SomeoneQuery;
 use BossEdu\Util\Util;
 use Jacwright\RestServer\RestException;
@@ -17,6 +16,7 @@ class AuthCtrl
 
         if ($user) {
             session_start();
+            $_SESSION["id"] = $user["id"];
             return true;
         } else {
             throw new RestException(401, "Unauthorized");
@@ -41,11 +41,6 @@ class AuthCtrl
 
         try {
             $broker->login($user["email"], $user["password"]);
-            session_start();
-            $_SESSION["id"] = PersonQuery::create()
-                ->filterByEmail($user["email"])
-                ->select("Id")
-                ->findOne();
         } catch (\Exception $ex) {
             throw new RestException(401, "Unauthorized");
         }

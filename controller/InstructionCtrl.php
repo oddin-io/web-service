@@ -16,13 +16,6 @@ class InstructionCtrl
         return AuthCtrl::check();
     }
 
-    public static function setCurrentInstruction($instruction_id, $person)
-    {
-        PersonQuery::create()
-            ->filterById($person)
-            ->update(["CurrentInstruction" => $instruction_id]);
-    }
-
     public static function getInstructionId($event, $lecture, $start_date, $class)
     {
         return (int) InstructionQuery::create()
@@ -32,13 +25,6 @@ class InstructionCtrl
             ->filterByClass($class)
             ->select("Id")
             ->findOne();
-    }
-
-    public static function resetCurrentInstruction($person)
-    {
-        PersonQuery::create()
-            ->filterById($person)
-            ->update(["CurrentInstruction" => null]);
     }
 
     public static function auth($instruction_id, $person, $profile)
@@ -136,7 +122,6 @@ class InstructionCtrl
                 ->filterByInstructionId($instruction_id)
                 ->where("PiLink.PersonId != ?", $person)
                 ->select(["Person.Name", "PiLink.Profile"])
-                ->withColumn("'" . $instruction_id . "' = Person.CurrentInstruction", "\"Person.Online\"")
                 ->find()
                 ->toArray();
 
