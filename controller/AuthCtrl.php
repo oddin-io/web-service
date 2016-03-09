@@ -12,21 +12,19 @@ class AuthCtrl
 {
     public static function check()
     {
-        if (!isset($_SESSION)) session_start();
+        $broker = self::attach();
+        $user = $broker->getUserInfo();
 
-        if (isset($_SESSION["email"])) {
-            $user = SomeoneQuery::create()
-                ->filterByEmail($_SESSION["email"])
-                ->filterByPassword($_SESSION["password"])
-                ->findOne();
-
-            if ($user) {
-                return true;
-            }
+        if ($user) {
+            session_start();
+            return true;
+        } else {
+            throw new RestException(401, "Unauthorized");
         }
     }
 
-    private function attach() {
+    private static function attach()
+    {
         $broker = new Broker("http://auth.localhost", "Alice", "8iwzik1bwd");
         $broker->attach(true);
 
@@ -38,11 +36,16 @@ class AuthCtrl
      */
     public function login()
     {
-        $broker = $this->attach();
+        $broker = self::attach();
         $user = Util::getPostContents("lower");
 
         try {
-            $broker->login($user['username'], $user['password']);
+            $broker->login($user["email"], $user["password"]);
+            session_start();
+            $_SESSION["id"] = PersonQuery::create()
+                ->filterByEmail($user["email"])
+                ->select("Id")
+                ->findOne();
         } catch (\Exception $ex) {
             throw new RestException(401, "Unauthorized");
         }
@@ -54,8 +57,7 @@ class AuthCtrl
      */
     public function logout()
     {
-        $broker = $this->attach();
-
+        $broker = self::attach();
         $broker->logout();
     }
 
@@ -86,20 +88,26 @@ class AuthCtrl
     }
 
     /**
-     * @noAuth
+     * @url GET /check
+     */
+    public function checkStatus()
+    {
+        self::check();
+        echo $_SESSION["id"];
+    }
+
+    /**
      * @url GET /test
      */
     public function getTest()
     {
-        $broker = $this->attach();
-
+        $broker = self::attach();
         $user = $broker->getUserInfo();
 
         echo json_encode($user, JSON_PRETTY_PRINT);
     }
 
     /**
-     * @noAuth
      * @url POST /test
      */
     public function postTest()
