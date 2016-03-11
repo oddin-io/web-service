@@ -84,7 +84,7 @@ class ContributionCtrl
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $contributions = ContributionQuery::create()
-                ->join("Contribution.Pessoa")
+                ->join("Contribution.Person")
                 ->filterByDoubtId($doubt_id)
                 ->select([
                     "Contribution.Id"
@@ -96,7 +96,7 @@ class ContributionCtrl
                 ->toArray();
 
             $contributions = ["contributions" =>
-                Util::adjustArrayCase(Util::namespacedArrayToNormal($contributions, ["Contribution", "Person"]), "lower")
+                Util::adjustArrayCase(Util::namespacedArrayToNormal($contributions, ["Contribution"]), "lower")
             ];
 
             echo json_encode($contributions);
