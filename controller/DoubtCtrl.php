@@ -124,7 +124,7 @@ class DoubtCtrl
     }
 
     /**
-     * @url GET /instruction/$instruction_id/presentation/$presentation/doubt/$doubt_id
+     * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id
      */
     public function getDoubt($instruction_id, $presentation_id, $doubt_id)
     {
