@@ -11,6 +11,7 @@
       "BossEdu\\Controller\\": "controller/"
       , "BossEdu\\Model\\": "model/generated-classes/BossEdu/Model/"
       , "BossEdu\\Util\\": "util/"
+      , "BombArea\\SSO\\": "BombArea/SSO/"
     }
   },
   "require": {

@@ -1,34 +1,42 @@
 <?php
 namespace BossEdu\Controller;
 
+use BombArea\SSO\Client;
+use BombArea\SSO\LoggedClient;
 use BossEdu\Model\SomeoneQuery;
 use BossEdu\Util\Util;
 use Jacwright\RestServer\RestException;
 use Mailgun\Mailgun;
-use Jasny\SSO\Broker;
 
 class AuthCtrl
 {
-    public static function check()
-    {
-        $broker = self::attach();
-        $user = $broker->getUserInfo();
+    /**
+     * @var Client
+     */
+    private static $client;
 
-        if ($user) {
-            session_start();
-            $_SESSION["id"] = $user["id"];
-            return true;
-        } else {
-            throw new RestException(401, "Unauthorized");
-        }
+    /**
+     * @return Client
+     */
+    public static function getClient()
+    {
+        if (!self::$client) new Client("http://auth.localhost/controller", "client", "asd123");
+
+        return self::$client;
     }
 
-    private static function attach()
+    public static function check()
     {
-        $broker = new Broker("http://auth.localhost", "Alice", "8iwzik1bwd");
-        $broker->attach(true);
+        if (!isset($_COOKIE[self::getCookieName()])) return false;
 
-        return $broker;
+        return true;
+    }
+
+    private static function buildLoggedClient()
+    {
+        if(!self::check()) throw new \Exception("You aren't logged");
+
+        return new LoggedClient(self::getClient(), $_COOKIE[self::getCookieName()]);
     }
 
     /**
@@ -36,13 +44,16 @@ class AuthCtrl
      */
     public function login()
     {
-        $broker = self::attach();
-        $user = Util::getPostContents("lower");
+        $postData = json_decode(file_get_contents("php://input"), true);
+        $postData["persist"] = $postData["persist"] ?? false;
 
         try {
-            $broker->login($user["email"], $user["password"]);
+            $loggedClient = self::getClient()->login($postData["email"], $postData["password"]);
+            self::setCookie($loggedClient->getSessionToken(), $postData["persist"]);
+
+            $loggedClient->setSessionData(["persist" => $postData["persist"]]);
         } catch (\Exception $ex) {
-            throw new RestException(401, "Unauthorized");
+            throw new RestException(401, $ex->getMessage());
         }
     }
 
@@ -52,8 +63,14 @@ class AuthCtrl
      */
     public function logout()
     {
-        $broker = self::attach();
-        $broker->logout();
+        $loggedClient = new LoggedClient(self::getClient(), $_COOKIE[self::getCookieName()]);
+
+        try {
+            $loggedClient->logout();
+            self::deleteCookie();
+        } catch (\Exception $ex) {
+            throw new RestException(401, $ex->getMessage());
+        }
     }
 
     /**
@@ -82,32 +99,39 @@ class AuthCtrl
         }
     }
 
-    /**
-     * @url GET /check
-     */
-    public function checkStatus()
+    public function getSession()
     {
-        self::check();
-        echo $_SESSION["id"];
+        $loggedUser = self::buildLoggedClient();
+        return $loggedUser->getSessionData();
     }
 
-    /**
-     * @url GET /test
-     */
-    public function getTest()
+    public function setSession($values)
     {
-        $broker = self::attach();
-        $user = $broker->getUserInfo();
-
-        echo json_encode($user, JSON_PRETTY_PRINT);
+        $loggedUser = self::buildLoggedClient();
+        return $loggedUser->setSessionData($values);
     }
 
-    /**
-     * @url POST /test
-     */
-    public function postTest()
+    private static function setCookie($value, $persist = false)
     {
-        echo json_encode($_FILES);
-        echo json_encode($_POST);
+        $ttl = 0;
+
+        if ($persist) $ttl = time() + 3600 * 24 * 60;
+
+        setcookie(self::getCookieName(), $value, $ttl, "/");
+    }
+
+    private static function deleteCookie()
+    {
+        setcookie(self::getCookieName(), "", -3600, "/");
+    }
+
+    private static function renewCookie()
+    {
+        setcookie(self::getCookieName(), $_COOKIE[self::getCookieName()], time() + 3600 * 24 * 60, "/");
+    }
+
+    private static function getCookieName()
+    {
+        return "sso_client_token";
     }
 }
