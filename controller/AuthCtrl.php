@@ -6,23 +6,15 @@ use BombArea\SSO\LoggedClient;
 use BossEdu\Model\SomeoneQuery;
 use BossEdu\Util\Util;
 use Jacwright\RestServer\RestException;
-use Mailgun\Mailgun;
 
 class AuthCtrl
 {
-    /**
-     * @var Client
-     */
-    private static $client;
-
     /**
      * @return Client
      */
     public static function getClient()
     {
-        if (!self::$client) new Client("http://auth.localhost/controller", "client", "asd123");
-
-        return self::$client;
+        return new Client("http://auth.localhost/controller", "client", "asd123");
     }
 
     public static function check()
@@ -70,32 +62,6 @@ class AuthCtrl
             self::deleteCookie();
         } catch (\Exception $ex) {
             throw new RestException(401, $ex->getMessage());
-        }
-    }
-
-    /**
-     * @url POST /recover-password
-     */
-    public function recoverPassword()
-    {
-        $email = Util::getPostContents("lower")["email"];
-
-        $user = SomeoneQuery::create()
-            ->findOneByEmail($email);
-
-        if ($user) {
-            $mgClient = new Mailgun("key-c34a8cf7dc6291c18df4fd0c92d3e6ba");
-            $domain = "sandboxa45ec9d3f56c49078aad139e56984298.mailgun.org";
-
-            $mgClient->sendMessage("$domain",
-                [ "from"    => "Mirage <postmaster@sandboxa45ec9d3f56c49078aad139e56984298.mailgun.org>",
-                    "to"      => $user->getEmail(),
-                    "subject" => "Recuperação de Senha",
-                    "text"    => $user->getPassword()
-                ]
-            );
-        } else {
-            throw new RestException(401, "Unauthorized");
         }
     }
 
