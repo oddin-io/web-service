@@ -132,7 +132,7 @@ class DoubtCtrl
 
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $doubts = PdLikeQuery::create()
@@ -182,7 +182,7 @@ class DoubtCtrl
 
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $d = DoubtQuery::create()
@@ -211,7 +211,7 @@ class DoubtCtrl
 
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $d = DoubtQuery::create()
@@ -238,7 +238,7 @@ class DoubtCtrl
     {
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $d = PdLikeQuery::create()
@@ -268,7 +268,7 @@ class DoubtCtrl
     {
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $d = PdLikeQuery::create()
@@ -301,7 +301,7 @@ class DoubtCtrl
 
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 2)) {
             $data = Util::getPostContents("lower");

@@ -43,7 +43,7 @@ class InstructionCtrl
     {
         header("Content-Type: application/json");
 
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         $lectures = PiLinkQuery::create()
             ->join("PiLink.Instruction")
@@ -79,7 +79,7 @@ class InstructionCtrl
         header("Content-Type: application/json");
 
         $instruction_id = urldecode($instruction_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (InstructionCtrl::auth($instruction_id, $person, 0)) {
             $info = InstructionQuery::create()
@@ -114,7 +114,7 @@ class InstructionCtrl
         header("Content-Type: application/json");
 
         $instruction_id = urldecode($instruction_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (InstructionCtrl::auth($instruction_id, $person, 0)) {
             $participants = PiLinkQuery::create()

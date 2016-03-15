@@ -115,7 +115,7 @@ class ContributionCtrl
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
         $contribution_id = urldecode($contribution_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $contributions = ContributionQuery::create()
@@ -145,7 +145,7 @@ class ContributionCtrl
     {
         $presentation_id = urldecode($presentation_id);
         $contribution_id = urldecode($contribution_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $materials = McMaterialQuery::create()
@@ -168,7 +168,7 @@ class ContributionCtrl
     public function getContributionMaterial($instruction_id, $presentation_id, $doubt_id, $contribution_id, $material_id)
     {
         $presentation_id = urldecode($presentation_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
         $material_id = urldecode($material_id);
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {

@@ -3,47 +3,32 @@ namespace BossEdu\Controller;
 
 use BombArea\SSO\Client;
 use BombArea\SSO\LoggedClient;
-use BossEdu\Model\SomeoneQuery;
+use BossEdu\Model\PersonQuery;
 use BossEdu\Util\Util;
 use Jacwright\RestServer\RestException;
 
 class AuthCtrl
 {
     /**
-     * @return Client
-     */
-    public static function getClient()
-    {
-        return new Client("http://auth.localhost/controller", "client", "asd123");
-    }
-
-    public static function check()
-    {
-        if (!isset($_COOKIE[self::getCookieName()])) return false;
-
-        return true;
-    }
-
-    private static function buildLoggedClient()
-    {
-        if(!self::check()) throw new \Exception("You aren't logged");
-
-        return new LoggedClient(self::getClient(), $_COOKIE[self::getCookieName()]);
-    }
-
-    /**
      * @url POST /login
      */
     public function login()
     {
-        $postData = json_decode(file_get_contents("php://input"), true);
+        $postData = Util::getPostContents("lower");
         $postData["persist"] = $postData["persist"] ?? false;
 
         try {
             $loggedClient = self::getClient()->login($postData["email"], $postData["password"]);
             self::setCookie($loggedClient->getSessionToken(), $postData["persist"]);
 
-            $loggedClient->setSessionData(["persist" => $postData["persist"]]);
+            $personId = PersonQuery::create()
+                ->findOneByEmail($postData["email"])
+                ->getId();
+
+            $loggedClient->setSessionData([
+                "id" => $personId,
+                "persist" => $postData["persist"]
+            ]);
         } catch (\Exception $ex) {
             throw new RestException(401, $ex->getMessage());
         }
@@ -65,16 +50,35 @@ class AuthCtrl
         }
     }
 
-    public function getSession()
+    public static function getSession()
     {
         $loggedUser = self::buildLoggedClient();
         return $loggedUser->getSessionData();
     }
 
-    public function setSession($values)
+    public static function setSession($values)
     {
         $loggedUser = self::buildLoggedClient();
         return $loggedUser->setSessionData($values);
+    }
+
+    public static function check()
+    {
+        if (!isset($_COOKIE[self::getCookieName()])) return false;
+
+        return true;
+    }
+
+    public static function getClient()
+    {
+        return new Client("http://auth.localhost/controller", "client", "asd123");
+    }
+
+    private static function buildLoggedClient()
+    {
+        if(!self::check()) throw new \Exception("You aren't logged");
+
+        return new LoggedClient(self::getClient(), $_COOKIE[self::getCookieName()]);
     }
 
     private static function setCookie($value, $persist = false)
