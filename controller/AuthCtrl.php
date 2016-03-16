@@ -40,7 +40,7 @@ class AuthCtrl
      */
     public function logout()
     {
-        $loggedClient = new LoggedClient(self::getClient(), $_COOKIE[self::getCookieName()]);
+        $loggedClient = new LoggedClient(self::getClient(), self::getAuthToken());
 
         try {
             $loggedClient->logout();
@@ -48,6 +48,25 @@ class AuthCtrl
         } catch (\Exception $ex) {
             throw new RestException(401, $ex->getMessage());
         }
+    }
+
+    /**
+     * @url GET /test
+     */
+    public function getTest()
+    {
+        echo json_encode($_SERVER, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * @url OPTIONS /test
+     */
+    public function optionsTest()
+    {
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE");
+        header("Access-Control-Allow-Headers: X-Auth-Token");
+        header("Access-Control-Max-Age: 1728000");
     }
 
     public static function getSession()
@@ -62,23 +81,23 @@ class AuthCtrl
         return $loggedUser->setSessionData($values);
     }
 
-    public static function check()
-    {
-        if (!isset($_COOKIE[self::getCookieName()])) return false;
-
-        return true;
-    }
-
     public static function getClient()
     {
         return new Client("http://auth.localhost/controller", "client", "asd123");
+    }
+
+    public static function check()
+    {
+        if (!self::getAuthToken()) return false;
+
+        return true;
     }
 
     private static function buildLoggedClient()
     {
         if(!self::check()) throw new \Exception("You aren't logged");
 
-        return new LoggedClient(self::getClient(), $_COOKIE[self::getCookieName()]);
+        return new LoggedClient(self::getClient(), self::getAuthToken());
     }
 
     private static function setCookie($value, $persist = false)
@@ -95,13 +114,19 @@ class AuthCtrl
         setcookie(self::getCookieName(), "", -3600, "/");
     }
 
-    private static function renewCookie()
-    {
-        setcookie(self::getCookieName(), $_COOKIE[self::getCookieName()], time() + 3600 * 24 * 60, "/");
-    }
-
     private static function getCookieName()
     {
         return "sso_client_token";
+    }
+
+    /**
+     * @return string|null
+     */
+    private static function getAuthToken()
+    {
+        if (isset($_SERVER["HTTP_X_AUTH_TOKEN"])) return $_SERVER["HTTP_X_AUTH_TOKEN"];
+        if (isset($_COOKIE[self::getCookieName()])) return $_COOKIE[self::getCookieName()];
+
+        return null;
     }
 }
