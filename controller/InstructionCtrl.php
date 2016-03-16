@@ -1,7 +1,6 @@
 <?php
 namespace BossEdu\Controller;
 
-
 use BossEdu\Model\InstructionQuery;
 use BossEdu\Model\PersonQuery;
 use BossEdu\Model\PiLinkQuery;
@@ -16,13 +15,6 @@ class InstructionCtrl
         return AuthCtrl::check();
     }
 
-    public static function setCurrentInstruction($instruction_id, $person)
-    {
-        PersonQuery::create()
-            ->filterById($person)
-            ->update(["CurrentInstruction" => $instruction_id]);
-    }
-
     public static function getInstructionId($event, $lecture, $start_date, $class)
     {
         return (int) InstructionQuery::create()
@@ -32,13 +24,6 @@ class InstructionCtrl
             ->filterByClass($class)
             ->select("Id")
             ->findOne();
-    }
-
-    public static function resetCurrentInstruction($person)
-    {
-        PersonQuery::create()
-            ->filterById($person)
-            ->update(["CurrentInstruction" => null]);
     }
 
     public static function auth($instruction_id, $person, $profile)
@@ -51,13 +36,22 @@ class InstructionCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction
+     */
+    public function optionsGetInstruction()
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url GET /instruction
      */
     public function getInstruction()
     {
         header("Content-Type: application/json");
 
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         $lectures = PiLinkQuery::create()
             ->join("PiLink.Instruction")
@@ -86,6 +80,15 @@ class InstructionCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/info
+     */
+    public function optionsGetInfo($instruction_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url GET /instruction/$instruction_id/info
      */
     public function getInfo($instruction_id)
@@ -93,7 +96,7 @@ class InstructionCtrl
         header("Content-Type: application/json");
 
         $instruction_id = urldecode($instruction_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (InstructionCtrl::auth($instruction_id, $person, 0)) {
             $info = InstructionQuery::create()
@@ -121,6 +124,15 @@ class InstructionCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/participants
+     */
+    public function optionsGetParticipants($instruction_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url GET /instruction/$instruction_id/participants
      */
     public function getParticipants($instruction_id)
@@ -128,7 +140,7 @@ class InstructionCtrl
         header("Content-Type: application/json");
 
         $instruction_id = urldecode($instruction_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (InstructionCtrl::auth($instruction_id, $person, 0)) {
             $participants = PiLinkQuery::create()
@@ -136,7 +148,6 @@ class InstructionCtrl
                 ->filterByInstructionId($instruction_id)
                 ->where("PiLink.PersonId != ?", $person)
                 ->select(["Person.Name", "PiLink.Profile"])
-                ->withColumn("'" . $instruction_id . "' = Person.CurrentInstruction", "\"Person.Online\"")
                 ->find()
                 ->toArray();
 

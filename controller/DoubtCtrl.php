@@ -18,6 +18,15 @@ class DoubtCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt
+     */
+    public function optionsDoubt($instruction_id, $presentation_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt
      */
     public function newDoubt($instruction_id, $presentation_id)
@@ -124,7 +133,16 @@ class DoubtCtrl
     }
 
     /**
-     * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id
+     */
+    public function optionsGetDoubt($instruction_id, $presentation_id, $doubt_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
+     * @url GET /instruction/$instruction_id/presentation/$presentation/doubt/$doubt_id
      */
     public function getDoubt($instruction_id, $presentation_id, $doubt_id)
     {
@@ -132,7 +150,7 @@ class DoubtCtrl
 
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $doubts = PdLikeQuery::create()
@@ -174,6 +192,15 @@ class DoubtCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/like
+     */
+    public function optionsLike($instruction_id, $presentation_id, $doubt_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/like
      */
     public function like($instruction_id, $presentation_id, $doubt_id)
@@ -182,7 +209,7 @@ class DoubtCtrl
 
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $d = DoubtQuery::create()
@@ -211,7 +238,7 @@ class DoubtCtrl
 
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $d = DoubtQuery::create()
@@ -232,13 +259,22 @@ class DoubtCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/understand
+     */
+    public function optionsUnderstand($instruction_id, $presentation_id, $doubt_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/understand
      */
     public function understand($instruction_id, $presentation_id, $doubt_id)
     {
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $d = PdLikeQuery::create()
@@ -268,7 +304,7 @@ class DoubtCtrl
     {
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $d = PdLikeQuery::create()
@@ -293,6 +329,15 @@ class DoubtCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/change-status
+     */
+    public function optionsChangeStatus($instruction_id, $presentation_id, $doubt_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url POST /presentation/$presentation_id/doubt/$doubt_id/change-status
      */
     public function changeStatus($presentation_id, $doubt_id)
@@ -301,7 +346,7 @@ class DoubtCtrl
 
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 2)) {
             $data = Util::getPostContents("lower");

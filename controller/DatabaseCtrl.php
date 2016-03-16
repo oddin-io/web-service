@@ -12,9 +12,12 @@ class DatabaseCtrl
             return false;
         }
 
+        $personId = AuthCtrl::getSession()["id"];
+
         $user = SomeoneQuery::create()
-            ->filterByEmail($_SESSION["email"])
-            ->filterByPassword($_SESSION["password"])
+            ->usePersonQuery()
+                ->filterById($personId)
+            ->endUse()
             ->findOne();
 
         if (!$user->getAdmin()) {
@@ -22,6 +25,15 @@ class DatabaseCtrl
         }
 
         return true;
+    }
+
+    /**
+     * @noAuth
+     * @url OPTIONS /$class
+     */
+    public function optionsDatabase($class)
+    {
+        AuthCtrl::preFlightResponse();
     }
 
     /**

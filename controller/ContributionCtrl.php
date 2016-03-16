@@ -33,6 +33,15 @@ class ContributionCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution
+     */
+    public function optionsContribution($instruction_id, $presentation_id, $doubt_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution
      */
     public function newContribution($instruction_id, $presentation_id, $doubt_id)
@@ -106,6 +115,15 @@ class ContributionCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id
+     */
+    public function optionsGetContribution($instruction_id, $presentation_id, $doubt_id, $contribution_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id
      */
     public function getContribution($instruction_id, $presentation_id, $doubt_id, $contribution_id)
@@ -115,7 +133,7 @@ class ContributionCtrl
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
         $contribution_id = urldecode($contribution_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $contributions = ContributionQuery::create()
@@ -139,13 +157,22 @@ class ContributionCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id/materials
+     */
+    public function optionsGetContributionsMaterial($instruction_id, $presentation_id, $doubt_id, $contribution_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id/materials
      */
     public function getContributionMaterials($instruction_id, $presentation_id, $doubt_id, $contribution_id)
     {
         $presentation_id = urldecode($presentation_id);
         $contribution_id = urldecode($contribution_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $materials = McMaterialQuery::create()
@@ -163,12 +190,21 @@ class ContributionCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id/materials/$material_id
+     */
+    public function optionsGetContributionMaterial($instruction_id, $presentation_id, $doubt_id, $contribution_id, $material_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id/materials/$material_id
      */
     public function getContributionMaterial($instruction_id, $presentation_id, $doubt_id, $contribution_id, $material_id)
     {
         $presentation_id = urldecode($presentation_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
         $material_id = urldecode($material_id);
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {

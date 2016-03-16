@@ -1,73 +1,21 @@
 <?php
 namespace BossEdu\Controller;
 
+use BombArea\SSO\Client;
+use BombArea\SSO\LoggedClient;
 use BossEdu\Model\PersonQuery;
-use BossEdu\Model\SomeoneQuery;
 use BossEdu\Util\Util;
 use Jacwright\RestServer\RestException;
-use Mailgun\Mailgun;
 
 class AuthCtrl
 {
-    public static function check()
+    /**
+     * @noAuth
+     * @url OPTIONS /login
+     */
+    public function optionsLogin()
     {
-        if (!isset($_SESSION)) session_start();
-
-        AuthCtrl::refreshSession();
-
-        if (isset($_SESSION["email"])) {
-            $user = SomeoneQuery::create()
-                ->filterByEmail($_SESSION["email"])
-                ->filterByPassword($_SESSION["password"])
-                ->findOne();
-
-            if ($user) {
-                return true;
-            }
-        }
-
-        AuthCtrl::destroySession();
-    }
-
-    public static function startSession($persist = false)
-    {
-        if ($persist) {
-            session_set_cookie_params(time() + 3600 * 24 * 60); // 2 Months
-        }
-
-        session_start();
-    }
-
-    public static function refreshSession()
-    {
-        if (!isset($_SESSION)) session_start();
-
-        if ($_SESSION["persist"]) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), session_id(), time() + 3600 * 24 * 60,
-                $params["path"], $params["domain"],
-                $params["secure"], $params["httponly"]
-            );
-        }
-    }
-
-    public static function destroySession()
-    {
-        if (!isset($_SESSION)) session_start();
-
-        if (isset($_SESSION["id"])) InstructionCtrl::resetCurrentInstruction($_SESSION["id"]);
-
-        $_SESSION = [];
-
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000,
-                $params["path"], $params["domain"],
-                $params["secure"], $params["httponly"]
-            );
-        }
-
-        session_destroy();
+        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -75,43 +23,33 @@ class AuthCtrl
      */
     public function login()
     {
-        $user = Util::getPostContents("lower");
+        $postData = Util::getPostContents("lower");
+        $postData["persist"] = $postData["persist"] ?? false;
 
-        AuthCtrl::startSession($user["persist"]);
+        try {
+            $loggedClient = self::getClient()->login($postData["email"], $postData["password"]);
+            self::setCookie($loggedClient->getSessionToken(), $postData["persist"]);
 
-        if (!isset($_SESSION["email"]) && !isset($_SESSION["password"])) {
-            if (isset($user["email"]) && isset($user["password"])) {
-                $entity = SomeoneQuery::create()
-                    ->filterByEmail($user["email"])
-                    ->findOne();
+            $personId = PersonQuery::create()
+                ->findOneByEmail($postData["email"])
+                ->getId();
 
-                if ($entity) {
-                    $entity = SomeoneQuery::create()
-                        ->filterByEmail($user["email"])
-                        ->filterByPassword($user["password"])
-                        ->findOne();
-
-                    if ($entity) {
-                        $_SESSION["id"] = PersonQuery::create()
-                            ->filterByEmail($user["email"])
-                            ->select("Person.Id")
-                            ->findOne();
-                        $_SESSION["email"] = $user["email"];
-                        $_SESSION["password"] = $user["password"];
-                        $_SESSION["persist"] = $user["persist"] ? true : false;
-                    } else {
-                        AuthCtrl::destroySession();
-                        throw new RestException(401, "Password");
-                    }
-                } else {
-                    AuthCtrl::destroySession();
-                    throw new RestException(404, "User");
-                }
-            } else {
-                AuthCtrl::destroySession();
-                throw new RestException(400, "No post data");
-            }
+            $loggedClient->setSessionData([
+                "id" => $personId,
+                "persist" => $postData["persist"]
+            ]);
+        } catch (\Exception $ex) {
+            throw new RestException(401, $ex->getMessage());
         }
+    }
+
+    /**
+     * @noAuth
+     * @url OPTIONS /logout
+     */
+    public function optionsLogout()
+    {
+        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -120,51 +58,82 @@ class AuthCtrl
      */
     public function logout()
     {
-        AuthCtrl::destroySession();
-    }
+        $loggedClient = new LoggedClient(self::getClient(), self::getAuthToken());
 
-    /**
-     * @url POST /recover-password
-     */
-    public function recoverPassword()
-    {
-        $email = Util::getPostContents("lower")["email"];
-
-        $user = SomeoneQuery::create()
-            ->findOneByEmail($email);
-
-        if ($user) {
-            $mgClient = new Mailgun("key-c34a8cf7dc6291c18df4fd0c92d3e6ba");
-            $domain = "sandboxa45ec9d3f56c49078aad139e56984298.mailgun.org";
-
-            $mgClient->sendMessage("$domain",
-                [ "from"    => "Mirage <postmaster@sandboxa45ec9d3f56c49078aad139e56984298.mailgun.org>",
-                    "to"      => $user->getEmail(),
-                    "subject" => "Recuperação de Senha",
-                    "text"    => $user->getPassword()
-                ]
-            );
-        } else {
-            throw new RestException(401, "Unauthorized");
+        try {
+            $loggedClient->logout();
+            self::deleteCookie();
+        } catch (\Exception $ex) {
+            throw new RestException(401, $ex->getMessage());
         }
     }
 
-    /**
-     * @noAuth
-     * @url GET /test
-     */
-    public function getTest()
+    public static function preFlightResponse()
     {
-        var_dump(getenv("DATABASE_URL"));
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Methods: POST, GET, DELETE, OPTIONS, PUT");
+        header("Access-Control-Allow-Headers: X-Auth-Token");
+        header("Access-Control-Max-Age: 86400");
+    }
+
+    public static function getSession()
+    {
+        $loggedUser = self::buildLoggedClient();
+        return $loggedUser->getSessionData();
+    }
+
+    public static function setSession($values)
+    {
+        $loggedUser = self::buildLoggedClient();
+        return $loggedUser->setSessionData($values);
+    }
+
+    public static function getClient()
+    {
+        return new Client("http://auth.localhost/controller", "client", "asd123");
+    }
+
+    public static function check()
+    {
+        if (!self::getAuthToken()) return false;
+
+        return true;
+    }
+
+    private static function buildLoggedClient()
+    {
+        if(!self::check()) throw new \Exception("You aren't logged");
+
+        return new LoggedClient(self::getClient(), self::getAuthToken());
+    }
+
+    private static function setCookie($value, $persist = false)
+    {
+        $ttl = 0;
+
+        if ($persist) $ttl = time() + 3600 * 24 * 60;
+
+        setcookie(self::getCookieName(), $value, $ttl, "/");
+    }
+
+    private static function deleteCookie()
+    {
+        setcookie(self::getCookieName(), "", -3600, "/");
+    }
+
+    private static function getCookieName()
+    {
+        return "sso_client_token";
     }
 
     /**
-     * @noAuth
-     * @url POST /test
+     * @return string|null
      */
-    public function postTest()
+    private static function getAuthToken()
     {
-        echo json_encode($_FILES);
-        echo json_encode($_POST);
+        if (isset($_SERVER["HTTP_X_AUTH_TOKEN"])) return $_SERVER["HTTP_X_AUTH_TOKEN"];
+        if (isset($_COOKIE[self::getCookieName()])) return $_COOKIE[self::getCookieName()];
+
+        return null;
     }
 }
