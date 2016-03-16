@@ -10,6 +10,15 @@ use Jacwright\RestServer\RestException;
 class AuthCtrl
 {
     /**
+     * @noAuth
+     * @url OPTIONS /login
+     */
+    public function optionsLogin()
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url POST /login
      */
     public function login()
@@ -35,6 +44,15 @@ class AuthCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /logout
+     */
+    public function optionsLogout()
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url GET /logout
      * @url POST /logout
      */
@@ -50,23 +68,12 @@ class AuthCtrl
         }
     }
 
-    /**
-     * @url GET /test
-     */
-    public function getTest()
-    {
-        echo json_encode($_SERVER, JSON_PRETTY_PRINT);
-    }
-
-    /**
-     * @url OPTIONS /test
-     */
-    public function optionsTest()
+    public static function preFlightResponse()
     {
         header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE");
+        header("Access-Control-Allow-Methods: POST, GET, DELETE, OPTIONS, PUT");
         header("Access-Control-Allow-Headers: X-Auth-Token");
-        header("Access-Control-Max-Age: 1728000");
+        header("Access-Control-Max-Age: 86400");
     }
 
     public static function getSession()

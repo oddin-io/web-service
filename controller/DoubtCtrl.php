@@ -18,6 +18,15 @@ class DoubtCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt
+     */
+    public function optionsDoubt($instruction_id, $presentation_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt
      */
     public function newDoubt($instruction_id, $presentation_id)
@@ -124,6 +133,15 @@ class DoubtCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id
+     */
+    public function optionsGetDoubt($instruction_id, $presentation_id, $doubt_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url GET /instruction/$instruction_id/presentation/$presentation/doubt/$doubt_id
      */
     public function getDoubt($instruction_id, $presentation_id, $doubt_id)
@@ -171,6 +189,15 @@ class DoubtCtrl
         } else {
             throw new RestException(401, "Unauthorized");
         }
+    }
+
+    /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/like
+     */
+    public function optionsLike($instruction_id, $presentation_id, $doubt_id)
+    {
+        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -232,6 +259,15 @@ class DoubtCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/understand
+     */
+    public function optionsUnderstand($instruction_id, $presentation_id, $doubt_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/understand
      */
     public function understand($instruction_id, $presentation_id, $doubt_id)
@@ -290,6 +326,15 @@ class DoubtCtrl
         } else {
             throw new RestException(401, "Unauthorized");
         }
+    }
+
+    /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/change-status
+     */
+    public function optionsChangeStatus($instruction_id, $presentation_id, $doubt_id)
+    {
+        AuthCtrl::preFlightResponse();
     }
 
     /**

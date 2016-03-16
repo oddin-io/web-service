@@ -41,10 +41,7 @@ class InstructionCtrl
      */
     public function optionsGetInstruction()
     {
-        header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE");
-        header("Access-Control-Allow-Headers: X-Auth-Token");
-        header("Access-Control-Max-Age: 86400");
+        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -83,6 +80,15 @@ class InstructionCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/info
+     */
+    public function optionsGetInfo($instruction_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url GET /instruction/$instruction_id/info
      */
     public function getInfo($instruction_id)
@@ -115,6 +121,15 @@ class InstructionCtrl
         } else {
             throw new RestException(401, "Enrollment");
         }
+    }
+
+    /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/participants
+     */
+    public function optionsGetParticipants($instruction_id)
+    {
+        AuthCtrl::preFlightResponse();
     }
 
     /**

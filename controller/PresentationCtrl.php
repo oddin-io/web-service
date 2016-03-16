@@ -35,6 +35,15 @@ class PresentationCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation
+     */
+    public function optionsPresentation($instruction_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url POST /instruction/$instruction_id/presentation
      */
     public function newPresentation($instruction_id)
@@ -44,8 +53,7 @@ class PresentationCtrl
         $instruction_id = urldecode($instruction_id);
         $person = AuthCtrl::getSession()["id"];
 
-        if (InstructionCtrl::auth($instruction_id, $person, 2))
-        {
+        if (InstructionCtrl::auth($instruction_id, $person, 2)) {
             $postData = Util::getPostContents("lower");
 
             $presentation = new Presentation();
@@ -109,6 +117,15 @@ class PresentationCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id
+     */
+    public function optionsGetPresentation($instruction_id, $presentation_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url GET /instruction/$instruction_id/presentation/$presentation_id
      */
     public function getPresentation($instruction_id, $presentation_id)
@@ -137,6 +154,15 @@ class PresentationCtrl
         } else {
             throw new RestException(401, "Enrollment");
         }
+    }
+
+    /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/info
+     */
+    public function optionsGetInfo($instruction_id, $presentation_id)
+    {
+        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -180,6 +206,15 @@ class PresentationCtrl
     }
 
     /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/material
+     */
+    public function optionsMaterial($instruction_id, $presentation_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
      * @url POST /instruction/$instruction_id/presentation/$presentation_id/material
      */
     public function newMaterial($instruction_id, $presentation_id)
@@ -206,7 +241,16 @@ class PresentationCtrl
     }
 
     /**
-     * @url GET /instruction/$instruction_id/presentation/$presentation_id/material/$material
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/material/$material_id
+     */
+    public function optionsGetMaterial($instruction_id, $presentation_id, $material_id)
+    {
+        AuthCtrl::preFlightResponse();
+    }
+
+    /**
+     * @url GET /instruction/$instruction_id/presentation/$presentation_id/material/$material_id
      */
     public function getMaterial($instruction_id, $presentation_id, $material_id)
     {
@@ -235,7 +279,7 @@ class PresentationCtrl
     }
 
     /**
-     * @url GET /instruction/$instruction_id/presentation/$presentation_id/materials
+     * @url GET /instruction/$instruction_id/presentation/$presentation_id/material
      */
     public function getMaterials($instruction_id, $presentation_id)
     {
@@ -255,6 +299,15 @@ class PresentationCtrl
         } else {
             throw new RestException(401, "Unauthorized");
         }
+    }
+
+    /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/close
+     */
+    public function optionsClosePresentation($instruction_id, $presentation_id)
+    {
+        AuthCtrl::preFlightResponse();
     }
 
     /**
