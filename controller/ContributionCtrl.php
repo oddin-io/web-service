@@ -50,29 +50,29 @@ class ContributionCtrl
 
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 1)) {
-            $data = Util::adjustArrayCase($_POST, "lower");
+            $data = Util::getPostContents("lower");
             $contribution = new Contribution();
             $contribution->fromArray($data, ContributionTableMap::TYPE_FIELDNAME);
             $contribution->setDoubtId($doubt_id);
             $contribution->setPersonId($person);
             $contribution->save();
 
-            $commentId = $contribution->getId();
-
-            if (isset($_FILES) && !empty($_FILES)) {
-                $video = $_FILES["video"];
-                $audio = $_FILES["audio"];
-
-                $this->insertFile($video, $commentId);
-                $this->insertFile($audio, $commentId);
-
-                foreach ($_FILES["misc"] as $key => $value) {
-                    $this->insertFile($value, $commentId);
-                }
-            }
+//            $commentId = $contribution->getId();
+//
+//            if (isset($_FILES) && !empty($_FILES)) {
+//                $video = $_FILES["video"];
+//                $audio = $_FILES["audio"];
+//
+//                $this->insertFile($video, $commentId);
+//                $this->insertFile($audio, $commentId);
+//
+//                foreach ($_FILES["misc"] as $key => $value) {
+//                    $this->insertFile($value, $commentId);
+//                }
+//            }
 
             echo json_encode($contribution->toArray());
         } else {
@@ -89,7 +89,7 @@ class ContributionCtrl
 
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $contributions = ContributionQuery::create()
