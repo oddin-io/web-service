@@ -107,7 +107,8 @@ class InstructionCtrl
                 ->join("ElHave.Lecture")
                 ->filterById($instruction_id)
                 ->select([
-                    "Instruction.StartDate"
+                    "Instruction.Id"
+                    , "Instruction.StartDate"
                     , "Instruction.EndDate"
                     , "Instruction.Class"
                     , "Event.Code"
