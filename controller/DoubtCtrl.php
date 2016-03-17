@@ -34,7 +34,7 @@ class DoubtCtrl
         header("Content-Type: application/json");
 
         $presentation_id = urldecode($presentation_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $data = Util::getPostContents("lower");
@@ -77,7 +77,7 @@ class DoubtCtrl
         header("Content-Type: application/json");
 
         $presentation_id = urldecode($presentation_id);
-        $person = $_SESSION["id"];
+        $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $doubts = PdLikeQuery::create()
@@ -142,7 +142,7 @@ class DoubtCtrl
     }
 
     /**
-     * @url GET /instruction/$instruction_id/presentation/$presentation/doubt/$doubt_id
+     * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id
      */
     public function getDoubt($instruction_id, $presentation_id, $doubt_id)
     {
