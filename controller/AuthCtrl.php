@@ -90,7 +90,7 @@ class AuthCtrl
 
     public static function getClient()
     {
-        return new Client("http://auth.localhost/controller", "client", "asd123");
+        return new Client(getenv("AUTH_URL"), "client", "asd123");
     }
 
     public static function check()
