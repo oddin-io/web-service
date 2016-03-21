@@ -72,7 +72,7 @@ class AuthCtrl
     {
         header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Methods: POST, GET, DELETE, OPTIONS, PUT");
-        header("Access-Control-Allow-Headers: X-Auth-Token");
+        header("Access-Control-Allow-Headers: Content-Type, Accept, X-Auth-Token");
         header("Access-Control-Max-Age: 86400");
     }
 
