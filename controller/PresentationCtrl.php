@@ -171,8 +171,7 @@ class PresentationCtrl
     public function getInfo($instruction_id, $presentation_id)
     {
         header("Content-Type: application/json");
-
-        $instruction_id = urldecode($instruction_id);
+        
         $presentation_id = urldecode($presentation_id);
         $person = AuthCtrl::getSession()["id"];
 

@@ -4,9 +4,7 @@ namespace BossEdu\Controller;
 use BossEdu\Model\InstructionQuery;
 use BossEdu\Model\MiMaterial;
 use BossEdu\Model\MiMaterialQuery;
-use BossEdu\Model\PersonQuery;
 use BossEdu\Model\PiLinkQuery;
-use BossEdu\Model\PresentationQuery;
 use BossEdu\Util\Util;
 use Jacwright\RestServer\RestException;
 
@@ -246,7 +244,7 @@ class InstructionCtrl
 
         if (PresentationCtrl::auth($instruction_id, $person, 0)) {
             $materials = MiMaterialQuery::create()
-                ->filterByPresentationId($instruction_id)
+                ->filterByInstructionId($instruction_id)
                 ->select(["Id", "Name", "Mime"])
                 ->find();
 
