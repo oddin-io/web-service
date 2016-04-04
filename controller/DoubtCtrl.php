@@ -274,23 +274,23 @@ class DoubtCtrl
     {
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = AuthCtrl::getSession()["id"];
+        $person_id = AuthCtrl::getSession()["id"];
 
-        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
-            $d = PdLikeQuery::create()
-                ->join("PdLike.Doubt")
-                ->where("Doubt.Id = ?", $doubt_id)
-                ->where("Doubt.Status = ?", 2)
-                ->where("PdLike.PersonId = ?", $person)
-                ->findOne();
-
-            if ($d) {
+        if (PresentationCtrl::auth($presentation_id, $person_id, 0)) {
+            if (!$this->isOwner($doubt_id, $person_id)) {
+                if (!$this->itLikes($doubt_id, $person_id)) {
+                    throw new RestException(401, "Unauthorized");
+                }
+                echo "Eu dei like";
                 PdLikeQuery::create()
-                    ->where("PdLike.DoubtId = ?", $doubt_id)
-                    ->where("PdLike.PersonId = ?", $person)
+                    ->filterByDoubtId($doubt_id)
+                    ->filterByPersonId($person_id)
                     ->update(["Understand" => true]);
             } else {
-                throw new RestException(401, "Unauthorized");
+                echo "Eu sou o criador";
+                DoubtQuery::create()
+                    ->filterById($doubt_id)
+                    ->update(["Understand" => true]);
             }
         } else {
             throw new RestException(401, "Unauthorized");
@@ -304,24 +304,22 @@ class DoubtCtrl
     {
         $presentation_id = urldecode($presentation_id);
         $doubt_id = urldecode($doubt_id);
-        $person = AuthCtrl::getSession()["id"];
+        $person_id = AuthCtrl::getSession()["id"];
 
-        if (PresentationCtrl::auth($presentation_id, $person, 0)) {
-            $d = PdLikeQuery::create()
-                ->join("PdLike.Doubt")
-                ->where("PdLike.Idd = ?", $doubt_id)
-                ->where("PdLike.Idp = ?", $person)
-                ->where("Doubt.Status = ?", 2)
-                ->where("PdLike.Understand = ?", true)
-                ->findOne();
+        if (PresentationCtrl::auth($presentation_id, $person_id, 0)) {
+            if (!$this->isOwner($doubt_id, $person_id)) {
+                if (!$this->itLikes($doubt_id, $person_id)) {
+                    throw new RestException(401, "Unauthorized");
+                }
 
-            if ($d) {
                 PdLikeQuery::create()
-                    ->where("PdLike.Idd = ?", $doubt_id)
-                    ->where("PdLike.Idp = ?", $person)
+                    ->filterByDoubtId($doubt_id)
+                    ->filterByPersonId($person_id)
                     ->update(["Understand" => false]);
             } else {
-                throw new RestException(401, "Unauthorized");
+                DoubtQuery::create()
+                    ->filterById($doubt_id)
+                    ->update(["Understand" => false]);
             }
         } else {
             throw new RestException(401, "Unauthorized");
@@ -357,5 +355,33 @@ class DoubtCtrl
         } else {
             throw new RestException(401, "Unauthorized");
         }
+    }
+
+    /**
+     * Check if the person is the owner of the doubt
+     *
+     * @param int $doubt_id
+     * @param int $person_id
+     * @return boolean
+     */
+    private function isOwner($doubt_id, $person_id) {
+        return (boolean) DoubtQuery::create()
+            ->filterById($doubt_id)
+            ->filterByPersonId($person_id)
+            ->findOne();
+    }
+
+    /**
+     * Check if a person likes a doubt
+     *
+     * @param int $doubt_id
+     * @param int $person_id
+     * @return boolean
+     */
+    private function itLikes($doubt_id, $person_id) {
+        return (boolean) PdLikeQuery::create()
+            ->filterByDoubtId($doubt_id)
+            ->filterByPersonId($person_id)
+            ->findOne();
     }
 }
