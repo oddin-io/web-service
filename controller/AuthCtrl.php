@@ -58,6 +58,7 @@ class AuthCtrl
      */
     public function logout()
     {
+        InstructionCtrl::resetCurrentInstruction(AuthCtrl::getSession()["id"]);
         $loggedClient = new LoggedClient(self::getClient(), self::getAuthToken());
 
         try {

@@ -98,8 +98,8 @@ abstract class Doubt implements ActiveRecordInterface
     /**
      * The value for the created_at field.
      * 
-     * Note: this column has a database default value of: '2016-03-09 18:56:47'
-     * @var        \DateTime
+     * Note: this column has a database default value of: '2016-04-04 19:37:06'
+     * @var        DateTime
      */
     protected $created_at;
 
@@ -184,7 +184,7 @@ abstract class Doubt implements ActiveRecordInterface
     public function applyDefaultValues()
     {
         $this->status = 0;
-        $this->created_at = PropelDateTime::newInstance('2016-03-09 18:56:47', null, 'DateTime');
+        $this->created_at = PropelDateTime::newInstance('2016-04-04 19:37:06', null, 'DateTime');
         $this->anonymous = false;
         $this->understand = false;
     }
@@ -462,7 +462,7 @@ abstract class Doubt implements ActiveRecordInterface
         if ($format === null) {
             return $this->created_at;
         } else {
-            return $this->created_at instanceof \DateTime ? $this->created_at->format($format) : null;
+            return $this->created_at instanceof \DateTimeInterface ? $this->created_at->format($format) : null;
         }
     }
 
@@ -589,7 +589,7 @@ abstract class Doubt implements ActiveRecordInterface
     /**
      * Sets the value of [created_at] column to a normalized version of the date/time value specified.
      * 
-     * @param  mixed $v string, integer (timestamp), or \DateTime value.
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\BossEdu\Model\Doubt The current object (for fluent API support)
      */
@@ -598,7 +598,7 @@ abstract class Doubt implements ActiveRecordInterface
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
         if ($this->created_at !== null || $dt !== null) {
             if ( ($dt != $this->created_at) // normalized values don't match
-                || ($dt->format('Y-m-d H:i:s') === '2016-03-09 18:56:47') // or the entered value matches the default
+                || ($dt->format('Y-m-d H:i:s') === '2016-04-04 19:37:06') // or the entered value matches the default
                  ) {
                 $this->created_at = $dt === null ? null : clone $dt;
                 $this->modifiedColumns[DoubtTableMap::COL_CREATED_AT] = true;
@@ -726,7 +726,7 @@ abstract class Doubt implements ActiveRecordInterface
                 return false;
             }
 
-            if ($this->created_at && $this->created_at->format('Y-m-d H:i:s') !== '2016-03-09 18:56:47') {
+            if ($this->created_at && $this->created_at->format('Y-m-d H:i:s') !== '2016-04-04 19:37:06') {
                 return false;
             }
 
@@ -926,8 +926,8 @@ abstract class Doubt implements ActiveRecordInterface
         }
 
         return $con->transaction(function () use ($con) {
-            $isInsert = $this->isNew();
             $ret = $this->preSave($con);
+            $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
             } else {
@@ -1058,7 +1058,7 @@ abstract class Doubt implements ActiveRecordInterface
         if (null === $this->id) {
             try {                
                 $dataFetcher = $con->query("SELECT nextval('doubt_id_seq')");
-                $this->id = $dataFetcher->fetchColumn();
+                $this->id = (int) $dataFetcher->fetchColumn();
             } catch (Exception $e) {
                 throw new PropelException('Unable to get sequence id.', 0, $e);
             }

@@ -76,6 +76,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPersonQuery rightJoinWithPiLink() Adds a RIGHT JOIN clause and with to the query using the PiLink relation
  * @method     ChildPersonQuery innerJoinWithPiLink() Adds a INNER JOIN clause and with to the query using the PiLink relation
  *
+ * @method     ChildPersonQuery leftJoinPiStatus($relationAlias = null) Adds a LEFT JOIN clause to the query using the PiStatus relation
+ * @method     ChildPersonQuery rightJoinPiStatus($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PiStatus relation
+ * @method     ChildPersonQuery innerJoinPiStatus($relationAlias = null) Adds a INNER JOIN clause to the query using the PiStatus relation
+ *
+ * @method     ChildPersonQuery joinWithPiStatus($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PiStatus relation
+ *
+ * @method     ChildPersonQuery leftJoinWithPiStatus() Adds a LEFT JOIN clause and with to the query using the PiStatus relation
+ * @method     ChildPersonQuery rightJoinWithPiStatus() Adds a RIGHT JOIN clause and with to the query using the PiStatus relation
+ * @method     ChildPersonQuery innerJoinWithPiStatus() Adds a INNER JOIN clause and with to the query using the PiStatus relation
+ *
  * @method     ChildPersonQuery leftJoinPresentation($relationAlias = null) Adds a LEFT JOIN clause to the query using the Presentation relation
  * @method     ChildPersonQuery rightJoinPresentation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Presentation relation
  * @method     ChildPersonQuery innerJoinPresentation($relationAlias = null) Adds a INNER JOIN clause to the query using the Presentation relation
@@ -116,7 +126,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPersonQuery rightJoinWithContribution() Adds a RIGHT JOIN clause and with to the query using the Contribution relation
  * @method     ChildPersonQuery innerJoinWithContribution() Adds a INNER JOIN clause and with to the query using the Contribution relation
  *
- * @method     \BossEdu\Model\SomeoneQuery|\BossEdu\Model\PiLinkQuery|\BossEdu\Model\PresentationQuery|\BossEdu\Model\DoubtQuery|\BossEdu\Model\PdLikeQuery|\BossEdu\Model\ContributionQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \BossEdu\Model\SomeoneQuery|\BossEdu\Model\PiLinkQuery|\BossEdu\Model\PiStatusQuery|\BossEdu\Model\PresentationQuery|\BossEdu\Model\DoubtQuery|\BossEdu\Model\PdLikeQuery|\BossEdu\Model\ContributionQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPerson findOne(ConnectionInterface $con = null) Return the first ChildPerson matching the query
  * @method     ChildPerson findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPerson matching the query, or a new ChildPerson object populated from the query conditions when no match is found
@@ -899,6 +909,79 @@ abstract class PersonQuery extends ModelCriteria
         return $this
             ->joinPiLink($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'PiLink', '\BossEdu\Model\PiLinkQuery');
+    }
+
+    /**
+     * Filter the query by a related \BossEdu\Model\PiStatus object
+     *
+     * @param \BossEdu\Model\PiStatus|ObjectCollection $piStatus the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPersonQuery The current query, for fluid interface
+     */
+    public function filterByPiStatus($piStatus, $comparison = null)
+    {
+        if ($piStatus instanceof \BossEdu\Model\PiStatus) {
+            return $this
+                ->addUsingAlias(PersonTableMap::COL_ID, $piStatus->getPersonId(), $comparison);
+        } elseif ($piStatus instanceof ObjectCollection) {
+            return $this
+                ->usePiStatusQuery()
+                ->filterByPrimaryKeys($piStatus->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByPiStatus() only accepts arguments of type \BossEdu\Model\PiStatus or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the PiStatus relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPersonQuery The current query, for fluid interface
+     */
+    public function joinPiStatus($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('PiStatus');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'PiStatus');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the PiStatus relation PiStatus object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \BossEdu\Model\PiStatusQuery A secondary query class using the current class as primary query
+     */
+    public function usePiStatusQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinPiStatus($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'PiStatus', '\BossEdu\Model\PiStatusQuery');
     }
 
     /**

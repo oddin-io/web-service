@@ -672,8 +672,8 @@ abstract class McMaterial implements ActiveRecordInterface
         }
 
         return $con->transaction(function () use ($con) {
-            $isInsert = $this->isNew();
             $ret = $this->preSave($con);
+            $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
             } else {
@@ -768,7 +768,7 @@ abstract class McMaterial implements ActiveRecordInterface
         if (null === $this->id) {
             try {                
                 $dataFetcher = $con->query("SELECT nextval('mc_material_id_seq')");
-                $this->id = $dataFetcher->fetchColumn();
+                $this->id = (int) $dataFetcher->fetchColumn();
             } catch (Exception $e) {
                 throw new PropelException('Unable to get sequence id.', 0, $e);
             }

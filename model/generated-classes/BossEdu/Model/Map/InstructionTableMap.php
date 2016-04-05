@@ -184,6 +184,13 @@ class InstructionTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'PiLinks', false);
+        $this->addRelation('PiStatus', '\\BossEdu\\Model\\PiStatus', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':instruction_id',
+    1 => ':id',
+  ),
+), null, null, 'PiStatuses', false);
         $this->addRelation('IsrLink', '\\BossEdu\\Model\\IsrLink', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

@@ -221,6 +221,13 @@ class PersonTableMap extends TableMap
     1 => ':id',
   ),
 ), null, null, 'PiLinks', false);
+        $this->addRelation('PiStatus', '\\BossEdu\\Model\\PiStatus', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':person_id',
+    1 => ':id',
+  ),
+), null, null, 'PiStatuses', false);
         $this->addRelation('Presentation', '\\BossEdu\\Model\\Presentation', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

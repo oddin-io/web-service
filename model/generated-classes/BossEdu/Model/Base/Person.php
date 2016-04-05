@@ -15,6 +15,8 @@ use BossEdu\Model\Person as ChildPerson;
 use BossEdu\Model\PersonQuery as ChildPersonQuery;
 use BossEdu\Model\PiLink as ChildPiLink;
 use BossEdu\Model\PiLinkQuery as ChildPiLinkQuery;
+use BossEdu\Model\PiStatus as ChildPiStatus;
+use BossEdu\Model\PiStatusQuery as ChildPiStatusQuery;
 use BossEdu\Model\Presentation as ChildPresentation;
 use BossEdu\Model\PresentationQuery as ChildPresentationQuery;
 use BossEdu\Model\Someone as ChildSomeone;
@@ -24,6 +26,7 @@ use BossEdu\Model\Map\DoubtTableMap;
 use BossEdu\Model\Map\PdLikeTableMap;
 use BossEdu\Model\Map\PersonTableMap;
 use BossEdu\Model\Map\PiLinkTableMap;
+use BossEdu\Model\Map\PiStatusTableMap;
 use BossEdu\Model\Map\PresentationTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -111,7 +114,7 @@ abstract class Person implements ActiveRecordInterface
     /**
      * The value for the birth_date field.
      * 
-     * @var        \DateTime
+     * @var        DateTime
      */
     protected $birth_date;
 
@@ -183,6 +186,12 @@ abstract class Person implements ActiveRecordInterface
     protected $collPiLinksPartial;
 
     /**
+     * @var        ObjectCollection|ChildPiStatus[] Collection to store aggregation of ChildPiStatus objects.
+     */
+    protected $collPiStatuses;
+    protected $collPiStatusesPartial;
+
+    /**
      * @var        ObjectCollection|ChildPresentation[] Collection to store aggregation of ChildPresentation objects.
      */
     protected $collPresentations;
@@ -219,6 +228,12 @@ abstract class Person implements ActiveRecordInterface
      * @var ObjectCollection|ChildPiLink[]
      */
     protected $piLinksScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildPiStatus[]
+     */
+    protected $piStatusesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -525,7 +540,7 @@ abstract class Person implements ActiveRecordInterface
         if ($format === null) {
             return $this->birth_date;
         } else {
-            return $this->birth_date instanceof \DateTime ? $this->birth_date->format($format) : null;
+            return $this->birth_date instanceof \DateTimeInterface ? $this->birth_date->format($format) : null;
         }
     }
 
@@ -692,7 +707,7 @@ abstract class Person implements ActiveRecordInterface
     /**
      * Sets the value of [birth_date] column to a normalized version of the date/time value specified.
      * 
-     * @param  mixed $v string, integer (timestamp), or \DateTime value.
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\BossEdu\Model\Person The current object (for fluent API support)
      */
@@ -1022,6 +1037,8 @@ abstract class Person implements ActiveRecordInterface
             $this->aSomeone = null;
             $this->collPiLinks = null;
 
+            $this->collPiStatuses = null;
+
             $this->collPresentations = null;
 
             $this->collDoubts = null;
@@ -1088,8 +1105,8 @@ abstract class Person implements ActiveRecordInterface
         }
 
         return $con->transaction(function () use ($con) {
-            $isInsert = $this->isNew();
             $ret = $this->preSave($con);
+            $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
             } else {
@@ -1163,6 +1180,23 @@ abstract class Person implements ActiveRecordInterface
 
             if ($this->collPiLinks !== null) {
                 foreach ($this->collPiLinks as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->piStatusesScheduledForDeletion !== null) {
+                if (!$this->piStatusesScheduledForDeletion->isEmpty()) {
+                    \BossEdu\Model\PiStatusQuery::create()
+                        ->filterByPrimaryKeys($this->piStatusesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->piStatusesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPiStatuses !== null) {
+                foreach ($this->collPiStatuses as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1264,7 +1298,7 @@ abstract class Person implements ActiveRecordInterface
         if (null === $this->id) {
             try {                
                 $dataFetcher = $con->query("SELECT nextval('person_id_seq')");
-                $this->id = $dataFetcher->fetchColumn();
+                $this->id = (int) $dataFetcher->fetchColumn();
             } catch (Exception $e) {
                 throw new PropelException('Unable to get sequence id.', 0, $e);
             }
@@ -1538,6 +1572,21 @@ abstract class Person implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->collPiLinks->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collPiStatuses) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'piStatuses';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'pi_statuses';
+                        break;
+                    default:
+                        $key = 'PiStatuses';
+                }
+        
+                $result[$key] = $this->collPiStatuses->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collPresentations) {
                 
@@ -1927,6 +1976,12 @@ abstract class Person implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getPiStatuses() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addPiStatus($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getPresentations() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addPresentation($relObj->copy($deepCopy));
@@ -2045,6 +2100,9 @@ abstract class Person implements ActiveRecordInterface
     {
         if ('PiLink' == $relationName) {
             return $this->initPiLinks();
+        }
+        if ('PiStatus' == $relationName) {
+            return $this->initPiStatuses();
         }
         if ('Presentation' == $relationName) {
             return $this->initPresentations();
@@ -2311,6 +2369,259 @@ abstract class Person implements ActiveRecordInterface
         $query->joinWith('Instruction', $joinBehavior);
 
         return $this->getPiLinks($query, $con);
+    }
+
+    /**
+     * Clears out the collPiStatuses collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addPiStatuses()
+     */
+    public function clearPiStatuses()
+    {
+        $this->collPiStatuses = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collPiStatuses collection loaded partially.
+     */
+    public function resetPartialPiStatuses($v = true)
+    {
+        $this->collPiStatusesPartial = $v;
+    }
+
+    /**
+     * Initializes the collPiStatuses collection.
+     *
+     * By default this just sets the collPiStatuses collection to an empty array (like clearcollPiStatuses());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initPiStatuses($overrideExisting = true)
+    {
+        if (null !== $this->collPiStatuses && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = PiStatusTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collPiStatuses = new $collectionClassName;
+        $this->collPiStatuses->setModel('\BossEdu\Model\PiStatus');
+    }
+
+    /**
+     * Gets an array of ChildPiStatus objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPerson is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildPiStatus[] List of ChildPiStatus objects
+     * @throws PropelException
+     */
+    public function getPiStatuses(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPiStatusesPartial && !$this->isNew();
+        if (null === $this->collPiStatuses || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPiStatuses) {
+                // return empty collection
+                $this->initPiStatuses();
+            } else {
+                $collPiStatuses = ChildPiStatusQuery::create(null, $criteria)
+                    ->filterByPerson($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collPiStatusesPartial && count($collPiStatuses)) {
+                        $this->initPiStatuses(false);
+
+                        foreach ($collPiStatuses as $obj) {
+                            if (false == $this->collPiStatuses->contains($obj)) {
+                                $this->collPiStatuses->append($obj);
+                            }
+                        }
+
+                        $this->collPiStatusesPartial = true;
+                    }
+
+                    return $collPiStatuses;
+                }
+
+                if ($partial && $this->collPiStatuses) {
+                    foreach ($this->collPiStatuses as $obj) {
+                        if ($obj->isNew()) {
+                            $collPiStatuses[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collPiStatuses = $collPiStatuses;
+                $this->collPiStatusesPartial = false;
+            }
+        }
+
+        return $this->collPiStatuses;
+    }
+
+    /**
+     * Sets a collection of ChildPiStatus objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $piStatuses A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildPerson The current object (for fluent API support)
+     */
+    public function setPiStatuses(Collection $piStatuses, ConnectionInterface $con = null)
+    {
+        /** @var ChildPiStatus[] $piStatusesToDelete */
+        $piStatusesToDelete = $this->getPiStatuses(new Criteria(), $con)->diff($piStatuses);
+
+        
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->piStatusesScheduledForDeletion = clone $piStatusesToDelete;
+
+        foreach ($piStatusesToDelete as $piStatusRemoved) {
+            $piStatusRemoved->setPerson(null);
+        }
+
+        $this->collPiStatuses = null;
+        foreach ($piStatuses as $piStatus) {
+            $this->addPiStatus($piStatus);
+        }
+
+        $this->collPiStatuses = $piStatuses;
+        $this->collPiStatusesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related PiStatus objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related PiStatus objects.
+     * @throws PropelException
+     */
+    public function countPiStatuses(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPiStatusesPartial && !$this->isNew();
+        if (null === $this->collPiStatuses || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPiStatuses) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getPiStatuses());
+            }
+
+            $query = ChildPiStatusQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPerson($this)
+                ->count($con);
+        }
+
+        return count($this->collPiStatuses);
+    }
+
+    /**
+     * Method called to associate a ChildPiStatus object to this object
+     * through the ChildPiStatus foreign key attribute.
+     *
+     * @param  ChildPiStatus $l ChildPiStatus
+     * @return $this|\BossEdu\Model\Person The current object (for fluent API support)
+     */
+    public function addPiStatus(ChildPiStatus $l)
+    {
+        if ($this->collPiStatuses === null) {
+            $this->initPiStatuses();
+            $this->collPiStatusesPartial = true;
+        }
+
+        if (!$this->collPiStatuses->contains($l)) {
+            $this->doAddPiStatus($l);
+
+            if ($this->piStatusesScheduledForDeletion and $this->piStatusesScheduledForDeletion->contains($l)) {
+                $this->piStatusesScheduledForDeletion->remove($this->piStatusesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildPiStatus $piStatus The ChildPiStatus object to add.
+     */
+    protected function doAddPiStatus(ChildPiStatus $piStatus)
+    {
+        $this->collPiStatuses[]= $piStatus;
+        $piStatus->setPerson($this);
+    }
+
+    /**
+     * @param  ChildPiStatus $piStatus The ChildPiStatus object to remove.
+     * @return $this|ChildPerson The current object (for fluent API support)
+     */
+    public function removePiStatus(ChildPiStatus $piStatus)
+    {
+        if ($this->getPiStatuses()->contains($piStatus)) {
+            $pos = $this->collPiStatuses->search($piStatus);
+            $this->collPiStatuses->remove($pos);
+            if (null === $this->piStatusesScheduledForDeletion) {
+                $this->piStatusesScheduledForDeletion = clone $this->collPiStatuses;
+                $this->piStatusesScheduledForDeletion->clear();
+            }
+            $this->piStatusesScheduledForDeletion[]= clone $piStatus;
+            $piStatus->setPerson(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Person is new, it will return
+     * an empty collection; or if this Person has previously
+     * been saved, it will retrieve related PiStatuses from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Person.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildPiStatus[] List of ChildPiStatus objects
+     */
+    public function getPiStatusesJoinInstruction(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildPiStatusQuery::create(null, $criteria);
+        $query->joinWith('Instruction', $joinBehavior);
+
+        return $this->getPiStatuses($query, $con);
     }
 
     /**
@@ -3362,6 +3673,11 @@ abstract class Person implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collPiStatuses) {
+                foreach ($this->collPiStatuses as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collPresentations) {
                 foreach ($this->collPresentations as $o) {
                     $o->clearAllReferences($deep);
@@ -3385,6 +3701,7 @@ abstract class Person implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collPiLinks = null;
+        $this->collPiStatuses = null;
         $this->collPresentations = null;
         $this->collDoubts = null;
         $this->collPdLikes = null;

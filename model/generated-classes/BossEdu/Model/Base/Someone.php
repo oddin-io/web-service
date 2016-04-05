@@ -83,8 +83,8 @@ abstract class Someone implements ActiveRecordInterface
     /**
      * The value for the registration_date field.
      * 
-     * Note: this column has a database default value of: '2016-03-09'
-     * @var        \DateTime
+     * Note: this column has a database default value of: '2016-04-04'
+     * @var        DateTime
      */
     protected $registration_date;
 
@@ -124,7 +124,7 @@ abstract class Someone implements ActiveRecordInterface
      */
     public function applyDefaultValues()
     {
-        $this->registration_date = PropelDateTime::newInstance('2016-03-09', null, 'DateTime');
+        $this->registration_date = PropelDateTime::newInstance('2016-04-04', null, 'DateTime');
         $this->admin = false;
     }
 
@@ -391,7 +391,7 @@ abstract class Someone implements ActiveRecordInterface
         if ($format === null) {
             return $this->registration_date;
         } else {
-            return $this->registration_date instanceof \DateTime ? $this->registration_date->format($format) : null;
+            return $this->registration_date instanceof \DateTimeInterface ? $this->registration_date->format($format) : null;
         }
     }
 
@@ -458,7 +458,7 @@ abstract class Someone implements ActiveRecordInterface
     /**
      * Sets the value of [registration_date] column to a normalized version of the date/time value specified.
      * 
-     * @param  mixed $v string, integer (timestamp), or \DateTime value.
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\BossEdu\Model\Someone The current object (for fluent API support)
      */
@@ -467,7 +467,7 @@ abstract class Someone implements ActiveRecordInterface
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
         if ($this->registration_date !== null || $dt !== null) {
             if ( ($dt != $this->registration_date) // normalized values don't match
-                || ($dt->format('Y-m-d') === '2016-03-09') // or the entered value matches the default
+                || ($dt->format('Y-m-d') === '2016-04-04') // or the entered value matches the default
                  ) {
                 $this->registration_date = $dt === null ? null : clone $dt;
                 $this->modifiedColumns[SomeoneTableMap::COL_REGISTRATION_DATE] = true;
@@ -515,7 +515,7 @@ abstract class Someone implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->registration_date && $this->registration_date->format('Y-m-d') !== '2016-03-09') {
+            if ($this->registration_date && $this->registration_date->format('Y-m-d') !== '2016-04-04') {
                 return false;
             }
 
@@ -689,8 +689,8 @@ abstract class Someone implements ActiveRecordInterface
         }
 
         return $con->transaction(function () use ($con) {
-            $isInsert = $this->isNew();
             $ret = $this->preSave($con);
+            $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
             } else {

@@ -96,21 +96,21 @@ abstract class IsrLink implements ActiveRecordInterface
     /**
      * The value for the start_time field.
      * 
-     * @var        \DateTime
+     * @var        DateTime
      */
     protected $start_time;
 
     /**
      * The value for the end_time field.
      * 
-     * @var        \DateTime
+     * @var        DateTime
      */
     protected $end_time;
 
     /**
      * The value for the start_date field.
      * 
-     * @var        \DateTime
+     * @var        DateTime
      */
     protected $start_date;
 
@@ -413,7 +413,7 @@ abstract class IsrLink implements ActiveRecordInterface
         if ($format === null) {
             return $this->start_time;
         } else {
-            return $this->start_time instanceof \DateTime ? $this->start_time->format($format) : null;
+            return $this->start_time instanceof \DateTimeInterface ? $this->start_time->format($format) : null;
         }
     }
 
@@ -433,7 +433,7 @@ abstract class IsrLink implements ActiveRecordInterface
         if ($format === null) {
             return $this->end_time;
         } else {
-            return $this->end_time instanceof \DateTime ? $this->end_time->format($format) : null;
+            return $this->end_time instanceof \DateTimeInterface ? $this->end_time->format($format) : null;
         }
     }
 
@@ -453,7 +453,7 @@ abstract class IsrLink implements ActiveRecordInterface
         if ($format === null) {
             return $this->start_date;
         } else {
-            return $this->start_date instanceof \DateTime ? $this->start_date->format($format) : null;
+            return $this->start_date instanceof \DateTimeInterface ? $this->start_date->format($format) : null;
         }
     }
 
@@ -556,7 +556,7 @@ abstract class IsrLink implements ActiveRecordInterface
     /**
      * Sets the value of [start_time] column to a normalized version of the date/time value specified.
      * 
-     * @param  mixed $v string, integer (timestamp), or \DateTime value.
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\BossEdu\Model\IsrLink The current object (for fluent API support)
      */
@@ -580,7 +580,7 @@ abstract class IsrLink implements ActiveRecordInterface
     /**
      * Sets the value of [end_time] column to a normalized version of the date/time value specified.
      * 
-     * @param  mixed $v string, integer (timestamp), or \DateTime value.
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\BossEdu\Model\IsrLink The current object (for fluent API support)
      */
@@ -604,7 +604,7 @@ abstract class IsrLink implements ActiveRecordInterface
     /**
      * Sets the value of [start_date] column to a normalized version of the date/time value specified.
      * 
-     * @param  mixed $v string, integer (timestamp), or \DateTime value.
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\BossEdu\Model\IsrLink The current object (for fluent API support)
      */
@@ -831,8 +831,8 @@ abstract class IsrLink implements ActiveRecordInterface
         }
 
         return $con->transaction(function () use ($con) {
-            $isInsert = $this->isNew();
             $ret = $this->preSave($con);
+            $isInsert = $this->isNew();
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
             } else {

@@ -4,9 +4,12 @@ namespace BossEdu\Controller;
 use BossEdu\Model\InstructionQuery;
 use BossEdu\Model\MiMaterial;
 use BossEdu\Model\MiMaterialQuery;
+use BossEdu\Model\PersonQuery;
 use BossEdu\Model\PiLinkQuery;
+use BossEdu\Model\PiStatusQuery;
 use BossEdu\Util\Util;
 use Jacwright\RestServer\RestException;
+use Propel\Runtime\ActiveQuery\Criteria;
 
 class InstructionCtrl
 {
@@ -35,6 +38,46 @@ class InstructionCtrl
             ->findOne();
     }
 
+    public static function getCurrentInstruction($person_id) {
+        $status = PiStatusQuery::create()
+            ->findOneByPersonId($person_id);
+
+        $interval = new \DateInterval("3600S");
+        $gap = $status->getEnterAt()->diff(new \DateTime());
+
+        $result = $status->getInstructionId();
+        if ($gap > $interval) {
+            $status->setOnline(false);
+            $status->save();
+            $result = 0;
+        }
+
+        return $result;
+    }
+
+    public static function setCurrentInstruction($person_id, $instruction_id) {
+        $status = PiStatusQuery::create()
+            ->filterByPersonId($person_id)
+            ->filterByInstructionId($instruction_id)
+            ->findOneOrCreate();
+
+        $status->setEnterAt(new \DateTime());
+        $status->setOnline(true);
+        $status->save();
+    }
+
+    public static function resetCurrentInstruction($person_id) {
+        PiStatusQuery::create()
+            ->filterByPersonId($person_id)
+            ->update(["Online" => false]);
+    }
+
+    public static function updateCurrentInstructionToAll() {
+        PiStatusQuery::create()
+            ->where("PiStatus.EnterAt + '1 hour'::interval < current_timestamp(0)")
+            ->update(["Online" => false]);
+    }
+
     /**
      * @noAuth
      * @url OPTIONS /instruction
@@ -47,7 +90,7 @@ class InstructionCtrl
     /**
      * @url GET /instruction
      */
-    public function getInstruction()
+    public function getInstructions()
     {
         header("Content-Type: application/json");
 
@@ -117,6 +160,8 @@ class InstructionCtrl
                 ])
                 ->findOne();
 
+            InstructionCtrl::setCurrentInstruction($person, $instruction_id);
+
             $info = Util::adjustArrayCase(Util::namespacedArrayToNormal($info, ["Instruction", "Lecture"]), "lower");
             echo json_encode($info);
         } else {
@@ -144,16 +189,21 @@ class InstructionCtrl
         $person = AuthCtrl::getSession()["id"];
 
         if (InstructionCtrl::auth($instruction_id, $person, 0)) {
-            $participants = PiLinkQuery::create()
-                ->join("PiLink.Person")
-                ->filterByInstructionId($instruction_id)
+            InstructionCtrl::updateCurrentInstructionToAll();
+
+            $participants = PersonQuery::create()
+                ->leftJoinPiStatus()
+                ->usePiLinkQuery()
+                    ->filterByInstructionId($instruction_id)
+                ->endUse()
                 ->where("PiLink.PersonId != ?", $person)
                 ->select(["Person.Name", "PiLink.Profile"])
+                ->withColumn("coalesce(PiStatus.Online, false)" , "\"PiStatus.Online\"")
                 ->find()
                 ->toArray();
 
             $participants = ["participants" =>
-                Util::adjustArrayCase(Util::namespacedArrayToNormal($participants, ["Person", "PiLink"]), "lower")
+                Util::adjustArrayCase(Util::namespacedArrayToNormal($participants, ["Person", "PiLink", "PiStatus"]), "lower")
             ];
             echo json_encode($participants);
         } else {

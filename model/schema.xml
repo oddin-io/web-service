@@ -121,6 +121,22 @@
     </foreign-key>
   </table>
 
+  <table name="pi_status">
+    <column name="person_id" type="integer" primaryKey="true" required="true" />
+    <column name="instruction_id" type="integer" primaryKey="true" required="true" />
+    <column name="online" type="boolean" defaultValue="false" />
+    <column name="enter_at" type="timestamp" defaultExpr="current_timestamp(0)" defaultValue="now" />
+    <foreign-key foreignTable="person" name="pi_status_person_fk">
+      <reference local="person_id" foreign="id" />
+    </foreign-key>
+    <foreign-key foreignTable="instruction" name="pi_status_instruction_fk">
+      <reference local="instruction_id" foreign="id" />
+    </foreign-key>
+    <unique name="pi_status_person_uk">
+      <unique-column name="person_id" />
+    </unique>
+  </table>
+
   <table name="isr_link">
     <column name="instruction_id" type="integer" primaryKey="true" required="true" />
     <column name="building_code" type="varchar" size="15" primaryKey="true" required="true" />

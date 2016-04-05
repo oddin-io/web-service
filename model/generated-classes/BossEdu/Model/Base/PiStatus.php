@@ -2,40 +2,41 @@
 
 namespace BossEdu\Model\Base;
 
+use \DateTime;
 use \Exception;
 use \PDO;
-use BossEdu\Model\ElHave as ChildElHave;
-use BossEdu\Model\ElHaveQuery as ChildElHaveQuery;
-use BossEdu\Model\Event as ChildEvent;
-use BossEdu\Model\EventQuery as ChildEventQuery;
-use BossEdu\Model\Map\ElHaveTableMap;
-use BossEdu\Model\Map\EventTableMap;
+use BossEdu\Model\Instruction as ChildInstruction;
+use BossEdu\Model\InstructionQuery as ChildInstructionQuery;
+use BossEdu\Model\Person as ChildPerson;
+use BossEdu\Model\PersonQuery as ChildPersonQuery;
+use BossEdu\Model\PiStatusQuery as ChildPiStatusQuery;
+use BossEdu\Model\Map\PiStatusTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
-use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'event' table.
+ * Base class that represents a row from the 'pi_status' table.
  *
  * 
  *
 * @package    propel.generator.BossEdu.Model.Base
 */
-abstract class Event implements ActiveRecordInterface 
+abstract class PiStatus implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\BossEdu\\Model\\Map\\EventTableMap';
+    const TABLE_MAP = '\\BossEdu\\Model\\Map\\PiStatusTableMap';
 
 
     /**
@@ -65,31 +66,44 @@ abstract class Event implements ActiveRecordInterface
     protected $virtualColumns = array();
 
     /**
-     * The value for the code field.
+     * The value for the person_id field.
      * 
-     * @var        string
+     * @var        int
      */
-    protected $code;
+    protected $person_id;
 
     /**
-     * The value for the name field.
+     * The value for the instruction_id field.
      * 
-     * @var        string
+     * @var        int
      */
-    protected $name;
+    protected $instruction_id;
 
     /**
-     * The value for the workload field.
+     * The value for the online field.
      * 
-     * @var        string
+     * Note: this column has a database default value of: false
+     * @var        boolean
      */
-    protected $workload;
+    protected $online;
 
     /**
-     * @var        ObjectCollection|ChildElHave[] Collection to store aggregation of ChildElHave objects.
+     * The value for the enter_at field.
+     * 
+     * Note: this column has a database default value of: '2016-04-04 19:37:05'
+     * @var        DateTime
      */
-    protected $collElHaves;
-    protected $collElHavesPartial;
+    protected $enter_at;
+
+    /**
+     * @var        ChildPerson
+     */
+    protected $aPerson;
+
+    /**
+     * @var        ChildInstruction
+     */
+    protected $aInstruction;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -100,16 +114,24 @@ abstract class Event implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildElHave[]
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see __construct()
      */
-    protected $elHavesScheduledForDeletion = null;
+    public function applyDefaultValues()
+    {
+        $this->online = false;
+        $this->enter_at = PropelDateTime::newInstance('2016-04-04 19:37:05', null, 'DateTime');
+    }
 
     /**
-     * Initializes internal state of BossEdu\Model\Base\Event object.
+     * Initializes internal state of BossEdu\Model\Base\PiStatus object.
+     * @see applyDefaults()
      */
     public function __construct()
     {
+        $this->applyDefaultValues();
     }
 
     /**
@@ -201,9 +223,9 @@ abstract class Event implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Event</code> instance.  If
-     * <code>obj</code> is an instance of <code>Event</code>, delegates to
-     * <code>equals(Event)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>PiStatus</code> instance.  If
+     * <code>obj</code> is an instance of <code>PiStatus</code>, delegates to
+     * <code>equals(PiStatus)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -269,7 +291,7 @@ abstract class Event implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Event The current object, for fluid interface
+     * @return $this|PiStatus The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -331,94 +353,162 @@ abstract class Event implements ActiveRecordInterface
     }
 
     /**
-     * Get the [code] column value.
+     * Get the [person_id] column value.
      * 
-     * @return string
+     * @return int
      */
-    public function getCode()
+    public function getPersonId()
     {
-        return $this->code;
+        return $this->person_id;
     }
 
     /**
-     * Get the [name] column value.
+     * Get the [instruction_id] column value.
      * 
-     * @return string
+     * @return int
      */
-    public function getName()
+    public function getInstructionId()
     {
-        return $this->name;
+        return $this->instruction_id;
     }
 
     /**
-     * Get the [workload] column value.
+     * Get the [online] column value.
      * 
-     * @return string
+     * @return boolean
      */
-    public function getWorkload()
+    public function getOnline()
     {
-        return $this->workload;
+        return $this->online;
     }
 
     /**
-     * Set the value of [code] column.
+     * Get the [online] column value.
      * 
-     * @param string $v new value
-     * @return $this|\BossEdu\Model\Event The current object (for fluent API support)
+     * @return boolean
      */
-    public function setCode($v)
+    public function isOnline()
     {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->code !== $v) {
-            $this->code = $v;
-            $this->modifiedColumns[EventTableMap::COL_CODE] = true;
-        }
-
-        return $this;
-    } // setCode()
+        return $this->getOnline();
+    }
 
     /**
-     * Set the value of [name] column.
+     * Get the [optionally formatted] temporal [enter_at] column value.
      * 
-     * @param string $v new value
-     * @return $this|\BossEdu\Model\Event The current object (for fluent API support)
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function setName($v)
+    public function getEnterAt($format = NULL)
     {
-        if ($v !== null) {
-            $v = (string) $v;
+        if ($format === null) {
+            return $this->enter_at;
+        } else {
+            return $this->enter_at instanceof \DateTimeInterface ? $this->enter_at->format($format) : null;
         }
-
-        if ($this->name !== $v) {
-            $this->name = $v;
-            $this->modifiedColumns[EventTableMap::COL_NAME] = true;
-        }
-
-        return $this;
-    } // setName()
+    }
 
     /**
-     * Set the value of [workload] column.
+     * Set the value of [person_id] column.
      * 
-     * @param string $v new value
-     * @return $this|\BossEdu\Model\Event The current object (for fluent API support)
+     * @param int $v new value
+     * @return $this|\BossEdu\Model\PiStatus The current object (for fluent API support)
      */
-    public function setWorkload($v)
+    public function setPersonId($v)
     {
         if ($v !== null) {
-            $v = (string) $v;
+            $v = (int) $v;
         }
 
-        if ($this->workload !== $v) {
-            $this->workload = $v;
-            $this->modifiedColumns[EventTableMap::COL_WORKLOAD] = true;
+        if ($this->person_id !== $v) {
+            $this->person_id = $v;
+            $this->modifiedColumns[PiStatusTableMap::COL_PERSON_ID] = true;
+        }
+
+        if ($this->aPerson !== null && $this->aPerson->getId() !== $v) {
+            $this->aPerson = null;
         }
 
         return $this;
-    } // setWorkload()
+    } // setPersonId()
+
+    /**
+     * Set the value of [instruction_id] column.
+     * 
+     * @param int $v new value
+     * @return $this|\BossEdu\Model\PiStatus The current object (for fluent API support)
+     */
+    public function setInstructionId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->instruction_id !== $v) {
+            $this->instruction_id = $v;
+            $this->modifiedColumns[PiStatusTableMap::COL_INSTRUCTION_ID] = true;
+        }
+
+        if ($this->aInstruction !== null && $this->aInstruction->getId() !== $v) {
+            $this->aInstruction = null;
+        }
+
+        return $this;
+    } // setInstructionId()
+
+    /**
+     * Sets the value of the [online] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * 
+     * @param  boolean|integer|string $v The new value
+     * @return $this|\BossEdu\Model\PiStatus The current object (for fluent API support)
+     */
+    public function setOnline($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->online !== $v) {
+            $this->online = $v;
+            $this->modifiedColumns[PiStatusTableMap::COL_ONLINE] = true;
+        }
+
+        return $this;
+    } // setOnline()
+
+    /**
+     * Sets the value of [enter_at] column to a normalized version of the date/time value specified.
+     * 
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\BossEdu\Model\PiStatus The current object (for fluent API support)
+     */
+    public function setEnterAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->enter_at !== null || $dt !== null) {
+            if ( ($dt != $this->enter_at) // normalized values don't match
+                || ($dt->format('Y-m-d H:i:s') === '2016-04-04 19:37:05') // or the entered value matches the default
+                 ) {
+                $this->enter_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[PiStatusTableMap::COL_ENTER_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setEnterAt()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -430,6 +520,14 @@ abstract class Event implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->online !== false) {
+                return false;
+            }
+
+            if ($this->enter_at && $this->enter_at->format('Y-m-d H:i:s') !== '2016-04-04 19:37:05') {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -456,14 +554,17 @@ abstract class Event implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : EventTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->code = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : PiStatusTableMap::translateFieldName('PersonId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->person_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : EventTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->name = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : PiStatusTableMap::translateFieldName('InstructionId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->instruction_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : EventTableMap::translateFieldName('Workload', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->workload = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PiStatusTableMap::translateFieldName('Online', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->online = (null !== $col) ? (boolean) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PiStatusTableMap::translateFieldName('EnterAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->enter_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -472,10 +573,10 @@ abstract class Event implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 3; // 3 = EventTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = PiStatusTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\BossEdu\\Model\\Event'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\BossEdu\\Model\\PiStatus'), 0, $e);
         }
     }
 
@@ -494,6 +595,12 @@ abstract class Event implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
+        if ($this->aPerson !== null && $this->person_id !== $this->aPerson->getId()) {
+            $this->aPerson = null;
+        }
+        if ($this->aInstruction !== null && $this->instruction_id !== $this->aInstruction->getId()) {
+            $this->aInstruction = null;
+        }
     } // ensureConsistency
 
     /**
@@ -517,13 +624,13 @@ abstract class Event implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(EventTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(PiStatusTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildEventQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildPiStatusQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -533,8 +640,8 @@ abstract class Event implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collElHaves = null;
-
+            $this->aPerson = null;
+            $this->aInstruction = null;
         } // if (deep)
     }
 
@@ -544,8 +651,8 @@ abstract class Event implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Event::setDeleted()
-     * @see Event::isDeleted()
+     * @see PiStatus::setDeleted()
+     * @see PiStatus::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -554,11 +661,11 @@ abstract class Event implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EventTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PiStatusTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildEventQuery::create()
+            $deleteQuery = ChildPiStatusQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -589,7 +696,7 @@ abstract class Event implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EventTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PiStatusTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -608,7 +715,7 @@ abstract class Event implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                EventTableMap::addInstanceToPool($this);
+                PiStatusTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -634,6 +741,25 @@ abstract class Event implements ActiveRecordInterface
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aPerson !== null) {
+                if ($this->aPerson->isModified() || $this->aPerson->isNew()) {
+                    $affectedRows += $this->aPerson->save($con);
+                }
+                $this->setPerson($this->aPerson);
+            }
+
+            if ($this->aInstruction !== null) {
+                if ($this->aInstruction->isModified() || $this->aInstruction->isNew()) {
+                    $affectedRows += $this->aInstruction->save($con);
+                }
+                $this->setInstruction($this->aInstruction);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -643,23 +769,6 @@ abstract class Event implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
-            }
-
-            if ($this->elHavesScheduledForDeletion !== null) {
-                if (!$this->elHavesScheduledForDeletion->isEmpty()) {
-                    \BossEdu\Model\ElHaveQuery::create()
-                        ->filterByPrimaryKeys($this->elHavesScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->elHavesScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collElHaves !== null) {
-                foreach ($this->collElHaves as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
             }
 
             $this->alreadyInSave = false;
@@ -684,18 +793,21 @@ abstract class Event implements ActiveRecordInterface
 
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(EventTableMap::COL_CODE)) {
-            $modifiedColumns[':p' . $index++]  = 'code';
+        if ($this->isColumnModified(PiStatusTableMap::COL_PERSON_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'person_id';
         }
-        if ($this->isColumnModified(EventTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+        if ($this->isColumnModified(PiStatusTableMap::COL_INSTRUCTION_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'instruction_id';
         }
-        if ($this->isColumnModified(EventTableMap::COL_WORKLOAD)) {
-            $modifiedColumns[':p' . $index++]  = 'workload';
+        if ($this->isColumnModified(PiStatusTableMap::COL_ONLINE)) {
+            $modifiedColumns[':p' . $index++]  = 'online';
+        }
+        if ($this->isColumnModified(PiStatusTableMap::COL_ENTER_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'enter_at';
         }
 
         $sql = sprintf(
-            'INSERT INTO event (%s) VALUES (%s)',
+            'INSERT INTO pi_status (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -704,14 +816,17 @@ abstract class Event implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'code':                        
-                        $stmt->bindValue($identifier, $this->code, PDO::PARAM_STR);
+                    case 'person_id':                        
+                        $stmt->bindValue($identifier, $this->person_id, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
-                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                    case 'instruction_id':                        
+                        $stmt->bindValue($identifier, $this->instruction_id, PDO::PARAM_INT);
                         break;
-                    case 'workload':                        
-                        $stmt->bindValue($identifier, $this->workload, PDO::PARAM_STR);
+                    case 'online':                        
+                        $stmt->bindValue($identifier, $this->online, PDO::PARAM_BOOL);
+                        break;
+                    case 'enter_at':                        
+                        $stmt->bindValue($identifier, $this->enter_at ? $this->enter_at->format("Y-m-d H:i:s") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -752,7 +867,7 @@ abstract class Event implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = EventTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = PiStatusTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -769,13 +884,16 @@ abstract class Event implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                return $this->getCode();
+                return $this->getPersonId();
                 break;
             case 1:
-                return $this->getName();
+                return $this->getInstructionId();
                 break;
             case 2:
-                return $this->getWorkload();
+                return $this->getOnline();
+                break;
+            case 3:
+                return $this->getEnterAt();
                 break;
             default:
                 return null;
@@ -801,36 +919,56 @@ abstract class Event implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['Event'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['PiStatus'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Event'][$this->hashCode()] = true;
-        $keys = EventTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['PiStatus'][$this->hashCode()] = true;
+        $keys = PiStatusTableMap::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getCode(),
-            $keys[1] => $this->getName(),
-            $keys[2] => $this->getWorkload(),
+            $keys[0] => $this->getPersonId(),
+            $keys[1] => $this->getInstructionId(),
+            $keys[2] => $this->getOnline(),
+            $keys[3] => $this->getEnterAt(),
         );
+        if ($result[$keys[3]] instanceof \DateTime) {
+            $result[$keys[3]] = $result[$keys[3]]->format('c');
+        }
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
         
         if ($includeForeignObjects) {
-            if (null !== $this->collElHaves) {
+            if (null !== $this->aPerson) {
                 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'elHaves';
+                        $key = 'person';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'el_haves';
+                        $key = 'person';
                         break;
                     default:
-                        $key = 'ElHaves';
+                        $key = 'Person';
                 }
         
-                $result[$key] = $this->collElHaves->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->aPerson->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aInstruction) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'instruction';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'instruction';
+                        break;
+                    default:
+                        $key = 'Instruction';
+                }
+        
+                $result[$key] = $this->aInstruction->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -846,11 +984,11 @@ abstract class Event implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\BossEdu\Model\Event
+     * @return $this|\BossEdu\Model\PiStatus
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = EventTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = PiStatusTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -861,19 +999,22 @@ abstract class Event implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\BossEdu\Model\Event
+     * @return $this|\BossEdu\Model\PiStatus
      */
     public function setByPosition($pos, $value)
     {
         switch ($pos) {
             case 0:
-                $this->setCode($value);
+                $this->setPersonId($value);
                 break;
             case 1:
-                $this->setName($value);
+                $this->setInstructionId($value);
                 break;
             case 2:
-                $this->setWorkload($value);
+                $this->setOnline($value);
+                break;
+            case 3:
+                $this->setEnterAt($value);
                 break;
         } // switch()
 
@@ -899,16 +1040,19 @@ abstract class Event implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = EventTableMap::getFieldNames($keyType);
+        $keys = PiStatusTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setCode($arr[$keys[0]]);
+            $this->setPersonId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setName($arr[$keys[1]]);
+            $this->setInstructionId($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setWorkload($arr[$keys[2]]);
+            $this->setOnline($arr[$keys[2]]);
+        }
+        if (array_key_exists($keys[3], $arr)) {
+            $this->setEnterAt($arr[$keys[3]]);
         }
     }
 
@@ -929,7 +1073,7 @@ abstract class Event implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\BossEdu\Model\Event The current object, for fluid interface
+     * @return $this|\BossEdu\Model\PiStatus The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -949,16 +1093,19 @@ abstract class Event implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(EventTableMap::DATABASE_NAME);
+        $criteria = new Criteria(PiStatusTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(EventTableMap::COL_CODE)) {
-            $criteria->add(EventTableMap::COL_CODE, $this->code);
+        if ($this->isColumnModified(PiStatusTableMap::COL_PERSON_ID)) {
+            $criteria->add(PiStatusTableMap::COL_PERSON_ID, $this->person_id);
         }
-        if ($this->isColumnModified(EventTableMap::COL_NAME)) {
-            $criteria->add(EventTableMap::COL_NAME, $this->name);
+        if ($this->isColumnModified(PiStatusTableMap::COL_INSTRUCTION_ID)) {
+            $criteria->add(PiStatusTableMap::COL_INSTRUCTION_ID, $this->instruction_id);
         }
-        if ($this->isColumnModified(EventTableMap::COL_WORKLOAD)) {
-            $criteria->add(EventTableMap::COL_WORKLOAD, $this->workload);
+        if ($this->isColumnModified(PiStatusTableMap::COL_ONLINE)) {
+            $criteria->add(PiStatusTableMap::COL_ONLINE, $this->online);
+        }
+        if ($this->isColumnModified(PiStatusTableMap::COL_ENTER_AT)) {
+            $criteria->add(PiStatusTableMap::COL_ENTER_AT, $this->enter_at);
         }
 
         return $criteria;
@@ -976,8 +1123,9 @@ abstract class Event implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildEventQuery::create();
-        $criteria->add(EventTableMap::COL_CODE, $this->code);
+        $criteria = ChildPiStatusQuery::create();
+        $criteria->add(PiStatusTableMap::COL_PERSON_ID, $this->person_id);
+        $criteria->add(PiStatusTableMap::COL_INSTRUCTION_ID, $this->instruction_id);
 
         return $criteria;
     }
@@ -990,10 +1138,25 @@ abstract class Event implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getCode();
+        $validPk = null !== $this->getPersonId() &&
+            null !== $this->getInstructionId();
 
-        $validPrimaryKeyFKs = 0;
+        $validPrimaryKeyFKs = 2;
         $primaryKeyFKs = [];
+
+        //relation pi_status_person_fk to table person
+        if ($this->aPerson && $hash = spl_object_hash($this->aPerson)) {
+            $primaryKeyFKs[] = $hash;
+        } else {
+            $validPrimaryKeyFKs = false;
+        }
+
+        //relation pi_status_instruction_fk to table instruction
+        if ($this->aInstruction && $hash = spl_object_hash($this->aInstruction)) {
+            $primaryKeyFKs[] = $hash;
+        } else {
+            $validPrimaryKeyFKs = false;
+        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1005,23 +1168,29 @@ abstract class Event implements ActiveRecordInterface
     }
         
     /**
-     * Returns the primary key for this object (row).
-     * @return string
+     * Returns the composite primary key for this object.
+     * The array elements will be in same order as specified in XML.
+     * @return array
      */
     public function getPrimaryKey()
     {
-        return $this->getCode();
+        $pks = array();
+        $pks[0] = $this->getPersonId();
+        $pks[1] = $this->getInstructionId();
+
+        return $pks;
     }
 
     /**
-     * Generic method to set the primary key (code column).
+     * Set the [composite] primary key.
      *
-     * @param       string $key Primary key.
+     * @param      array $keys The elements of the composite key (order must match the order in XML file).
      * @return void
      */
-    public function setPrimaryKey($key)
+    public function setPrimaryKey($keys)
     {
-        $this->setCode($key);
+        $this->setPersonId($keys[0]);
+        $this->setInstructionId($keys[1]);
     }
 
     /**
@@ -1030,7 +1199,7 @@ abstract class Event implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return null === $this->getCode();
+        return (null === $this->getPersonId()) && (null === $this->getInstructionId());
     }
 
     /**
@@ -1039,30 +1208,17 @@ abstract class Event implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \BossEdu\Model\Event (or compatible) type.
+     * @param      object $copyObj An object of \BossEdu\Model\PiStatus (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setCode($this->getCode());
-        $copyObj->setName($this->getName());
-        $copyObj->setWorkload($this->getWorkload());
-
-        if ($deepCopy) {
-            // important: temporarily setNew(false) because this affects the behavior of
-            // the getter/setter methods for fkey referrer objects.
-            $copyObj->setNew(false);
-
-            foreach ($this->getElHaves() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addElHave($relObj->copy($deepCopy));
-                }
-            }
-
-        } // if ($deepCopy)
-
+        $copyObj->setPersonId($this->getPersonId());
+        $copyObj->setInstructionId($this->getInstructionId());
+        $copyObj->setOnline($this->getOnline());
+        $copyObj->setEnterAt($this->getEnterAt());
         if ($makeNew) {
             $copyObj->setNew(true);
         }
@@ -1077,7 +1233,7 @@ abstract class Event implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \BossEdu\Model\Event Clone of current object.
+     * @return \BossEdu\Model\PiStatus Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1090,273 +1246,106 @@ abstract class Event implements ActiveRecordInterface
         return $copyObj;
     }
 
-
     /**
-     * Initializes a collection based on the name of a relation.
-     * Avoids crafting an 'init[$relationName]s' method name
-     * that wouldn't work when StandardEnglishPluralizer is used.
+     * Declares an association between this object and a ChildPerson object.
      *
-     * @param      string $relationName The name of the relation to initialize
-     * @return void
-     */
-    public function initRelation($relationName)
-    {
-        if ('ElHave' == $relationName) {
-            return $this->initElHaves();
-        }
-    }
-
-    /**
-     * Clears out the collElHaves collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addElHaves()
-     */
-    public function clearElHaves()
-    {
-        $this->collElHaves = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collElHaves collection loaded partially.
-     */
-    public function resetPartialElHaves($v = true)
-    {
-        $this->collElHavesPartial = $v;
-    }
-
-    /**
-     * Initializes the collElHaves collection.
-     *
-     * By default this just sets the collElHaves collection to an empty array (like clearcollElHaves());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initElHaves($overrideExisting = true)
-    {
-        if (null !== $this->collElHaves && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = ElHaveTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collElHaves = new $collectionClassName;
-        $this->collElHaves->setModel('\BossEdu\Model\ElHave');
-    }
-
-    /**
-     * Gets an array of ChildElHave objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildEvent is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildElHave[] List of ChildElHave objects
+     * @param  ChildPerson $v
+     * @return $this|\BossEdu\Model\PiStatus The current object (for fluent API support)
      * @throws PropelException
      */
-    public function getElHaves(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function setPerson(ChildPerson $v = null)
     {
-        $partial = $this->collElHavesPartial && !$this->isNew();
-        if (null === $this->collElHaves || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collElHaves) {
-                // return empty collection
-                $this->initElHaves();
-            } else {
-                $collElHaves = ChildElHaveQuery::create(null, $criteria)
-                    ->filterByEvent($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collElHavesPartial && count($collElHaves)) {
-                        $this->initElHaves(false);
-
-                        foreach ($collElHaves as $obj) {
-                            if (false == $this->collElHaves->contains($obj)) {
-                                $this->collElHaves->append($obj);
-                            }
-                        }
-
-                        $this->collElHavesPartial = true;
-                    }
-
-                    return $collElHaves;
-                }
-
-                if ($partial && $this->collElHaves) {
-                    foreach ($this->collElHaves as $obj) {
-                        if ($obj->isNew()) {
-                            $collElHaves[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collElHaves = $collElHaves;
-                $this->collElHavesPartial = false;
-            }
+        if ($v === null) {
+            $this->setPersonId(NULL);
+        } else {
+            $this->setPersonId($v->getId());
         }
 
-        return $this->collElHaves;
-    }
+        $this->aPerson = $v;
 
-    /**
-     * Sets a collection of ChildElHave objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $elHaves A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildEvent The current object (for fluent API support)
-     */
-    public function setElHaves(Collection $elHaves, ConnectionInterface $con = null)
-    {
-        /** @var ChildElHave[] $elHavesToDelete */
-        $elHavesToDelete = $this->getElHaves(new Criteria(), $con)->diff($elHaves);
-
-        
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->elHavesScheduledForDeletion = clone $elHavesToDelete;
-
-        foreach ($elHavesToDelete as $elHaveRemoved) {
-            $elHaveRemoved->setEvent(null);
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildPerson object, it will not be re-added.
+        if ($v !== null) {
+            $v->addPiStatus($this);
         }
 
-        $this->collElHaves = null;
-        foreach ($elHaves as $elHave) {
-            $this->addElHave($elHave);
-        }
-
-        $this->collElHaves = $elHaves;
-        $this->collElHavesPartial = false;
 
         return $this;
     }
 
+
     /**
-     * Returns the number of related ElHave objects.
+     * Get the associated ChildPerson object
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related ElHave objects.
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildPerson The associated ChildPerson object.
      * @throws PropelException
      */
-    public function countElHaves(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function getPerson(ConnectionInterface $con = null)
     {
-        $partial = $this->collElHavesPartial && !$this->isNew();
-        if (null === $this->collElHaves || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collElHaves) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getElHaves());
-            }
-
-            $query = ChildElHaveQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByEvent($this)
-                ->count($con);
+        if ($this->aPerson === null && ($this->person_id !== null)) {
+            $this->aPerson = ChildPersonQuery::create()->findPk($this->person_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aPerson->addPiStatuses($this);
+             */
         }
 
-        return count($this->collElHaves);
+        return $this->aPerson;
     }
 
     /**
-     * Method called to associate a ChildElHave object to this object
-     * through the ChildElHave foreign key attribute.
+     * Declares an association between this object and a ChildInstruction object.
      *
-     * @param  ChildElHave $l ChildElHave
-     * @return $this|\BossEdu\Model\Event The current object (for fluent API support)
+     * @param  ChildInstruction $v
+     * @return $this|\BossEdu\Model\PiStatus The current object (for fluent API support)
+     * @throws PropelException
      */
-    public function addElHave(ChildElHave $l)
+    public function setInstruction(ChildInstruction $v = null)
     {
-        if ($this->collElHaves === null) {
-            $this->initElHaves();
-            $this->collElHavesPartial = true;
+        if ($v === null) {
+            $this->setInstructionId(NULL);
+        } else {
+            $this->setInstructionId($v->getId());
         }
 
-        if (!$this->collElHaves->contains($l)) {
-            $this->doAddElHave($l);
+        $this->aInstruction = $v;
 
-            if ($this->elHavesScheduledForDeletion and $this->elHavesScheduledForDeletion->contains($l)) {
-                $this->elHavesScheduledForDeletion->remove($this->elHavesScheduledForDeletion->search($l));
-            }
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildInstruction object, it will not be re-added.
+        if ($v !== null) {
+            $v->addPiStatus($this);
         }
 
-        return $this;
-    }
-
-    /**
-     * @param ChildElHave $elHave The ChildElHave object to add.
-     */
-    protected function doAddElHave(ChildElHave $elHave)
-    {
-        $this->collElHaves[]= $elHave;
-        $elHave->setEvent($this);
-    }
-
-    /**
-     * @param  ChildElHave $elHave The ChildElHave object to remove.
-     * @return $this|ChildEvent The current object (for fluent API support)
-     */
-    public function removeElHave(ChildElHave $elHave)
-    {
-        if ($this->getElHaves()->contains($elHave)) {
-            $pos = $this->collElHaves->search($elHave);
-            $this->collElHaves->remove($pos);
-            if (null === $this->elHavesScheduledForDeletion) {
-                $this->elHavesScheduledForDeletion = clone $this->collElHaves;
-                $this->elHavesScheduledForDeletion->clear();
-            }
-            $this->elHavesScheduledForDeletion[]= clone $elHave;
-            $elHave->setEvent(null);
-        }
 
         return $this;
     }
 
 
     /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Event is new, it will return
-     * an empty collection; or if this Event has previously
-     * been saved, it will retrieve related ElHaves from storage.
+     * Get the associated ChildInstruction object
      *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Event.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildElHave[] List of ChildElHave objects
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildInstruction The associated ChildInstruction object.
+     * @throws PropelException
      */
-    public function getElHavesJoinLecture(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getInstruction(ConnectionInterface $con = null)
     {
-        $query = ChildElHaveQuery::create(null, $criteria);
-        $query->joinWith('Lecture', $joinBehavior);
+        if ($this->aInstruction === null && ($this->instruction_id !== null)) {
+            $this->aInstruction = ChildInstructionQuery::create()->findPk($this->instruction_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aInstruction->addPiStatuses($this);
+             */
+        }
 
-        return $this->getElHaves($query, $con);
+        return $this->aInstruction;
     }
 
     /**
@@ -1366,11 +1355,19 @@ abstract class Event implements ActiveRecordInterface
      */
     public function clear()
     {
-        $this->code = null;
-        $this->name = null;
-        $this->workload = null;
+        if (null !== $this->aPerson) {
+            $this->aPerson->removePiStatus($this);
+        }
+        if (null !== $this->aInstruction) {
+            $this->aInstruction->removePiStatus($this);
+        }
+        $this->person_id = null;
+        $this->instruction_id = null;
+        $this->online = null;
+        $this->enter_at = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -1387,14 +1384,10 @@ abstract class Event implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collElHaves) {
-                foreach ($this->collElHaves as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
         } // if ($deep)
 
-        $this->collElHaves = null;
+        $this->aPerson = null;
+        $this->aInstruction = null;
     }
 
     /**
@@ -1404,7 +1397,7 @@ abstract class Event implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(EventTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(PiStatusTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**
