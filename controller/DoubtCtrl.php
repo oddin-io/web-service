@@ -18,15 +18,6 @@ class DoubtCtrl
     }
 
     /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt
-     */
-    public function optionsDoubt($instruction_id, $presentation_id)
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt
      */
     public function newDoubt($instruction_id, $presentation_id)
@@ -133,15 +124,6 @@ class DoubtCtrl
     }
 
     /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id
-     */
-    public function optionsGetDoubt($instruction_id, $presentation_id, $doubt_id)
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id
      */
     public function getDoubt($instruction_id, $presentation_id, $doubt_id)
@@ -189,15 +171,6 @@ class DoubtCtrl
         } else {
             throw new RestException(401, "Unauthorized");
         }
-    }
-
-    /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/like
-     */
-    public function optionsLike($instruction_id, $presentation_id, $doubt_id)
-    {
-        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -259,15 +232,6 @@ class DoubtCtrl
     }
 
     /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/understand
-     */
-    public function optionsUnderstand($instruction_id, $presentation_id, $doubt_id)
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/understand
      */
     public function understand($instruction_id, $presentation_id, $doubt_id)
@@ -278,7 +242,7 @@ class DoubtCtrl
 
         if (PresentationCtrl::auth($presentation_id, $person_id, 0)) {
             if (!$this->isOwner($doubt_id, $person_id)) {
-                if (!$this->itLikes($doubt_id, $person_id)) {
+                if (!$this->doesItLike($doubt_id, $person_id)) {
                     throw new RestException(401, "Unauthorized");
                 }
                 echo "Eu dei like";
@@ -308,7 +272,7 @@ class DoubtCtrl
 
         if (PresentationCtrl::auth($presentation_id, $person_id, 0)) {
             if (!$this->isOwner($doubt_id, $person_id)) {
-                if (!$this->itLikes($doubt_id, $person_id)) {
+                if (!$this->doesItLike($doubt_id, $person_id)) {
                     throw new RestException(401, "Unauthorized");
                 }
 
@@ -324,15 +288,6 @@ class DoubtCtrl
         } else {
             throw new RestException(401, "Unauthorized");
         }
-    }
-
-    /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/change-status
-     */
-    public function optionsChangeStatus($instruction_id, $presentation_id, $doubt_id)
-    {
-        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -364,7 +319,8 @@ class DoubtCtrl
      * @param int $person_id
      * @return boolean
      */
-    private function isOwner($doubt_id, $person_id) {
+    private function isOwner($doubt_id, $person_id)
+    {
         return (boolean) DoubtQuery::create()
             ->filterById($doubt_id)
             ->filterByPersonId($person_id)
@@ -378,10 +334,24 @@ class DoubtCtrl
      * @param int $person_id
      * @return boolean
      */
-    private function itLikes($doubt_id, $person_id) {
+    private function doesItLike($doubt_id, $person_id)
+    {
         return (boolean) PdLikeQuery::create()
             ->filterByDoubtId($doubt_id)
             ->filterByPersonId($person_id)
             ->findOne();
+    }
+
+    /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/like
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/understand
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/change-status
+     */
+    public function options($instruction_id, $presentation_id, $doubt_id = null)
+    {
+        AuthCtrl::preFlightResponse();
     }
 }

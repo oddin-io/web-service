@@ -38,7 +38,8 @@ class InstructionCtrl
             ->findOne();
     }
 
-    public static function getCurrentInstruction($person_id) {
+    public static function getCurrentInstruction($person_id)
+    {
         $status = PiStatusQuery::create()
             ->findOneByPersonId($person_id);
 
@@ -55,7 +56,8 @@ class InstructionCtrl
         return $result;
     }
 
-    public static function setCurrentInstruction($person_id, $instruction_id) {
+    public static function setCurrentInstruction($person_id, $instruction_id)
+    {
         $status = PiStatusQuery::create()
             ->filterByPersonId($person_id)
             ->filterByInstructionId($instruction_id)
@@ -66,25 +68,18 @@ class InstructionCtrl
         $status->save();
     }
 
-    public static function resetCurrentInstruction($person_id) {
+    public static function resetCurrentInstruction($person_id)
+    {
         PiStatusQuery::create()
             ->filterByPersonId($person_id)
             ->update(["Online" => false]);
     }
 
-    public static function updateCurrentInstructionToAll() {
+    public static function updateCurrentInstructionToAll()
+    {
         PiStatusQuery::create()
             ->where("PiStatus.EnterAt + '1 hour'::interval < current_timestamp(0)")
             ->update(["Online" => false]);
-    }
-
-    /**
-     * @noAuth
-     * @url OPTIONS /instruction
-     */
-    public function optionsGetInstruction()
-    {
-        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -120,15 +115,6 @@ class InstructionCtrl
             Util::adjustArrayCase(Util::namespacedArrayToNormal($lectures, ["Instruction", "Lecture", "PiLink"]), "lower")
         ];
         echo json_encode($lectures);
-    }
-
-    /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/info
-     */
-    public function optionsGetInfo($instruction_id)
-    {
-        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -170,15 +156,6 @@ class InstructionCtrl
     }
 
     /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/participants
-     */
-    public function optionsGetParticipants($instruction_id)
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url GET /instruction/$instruction_id/participants
      */
     public function getParticipants($instruction_id)
@@ -212,15 +189,6 @@ class InstructionCtrl
     }
 
     /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/material
-     */
-    public function optionsMaterial($instruction_id)
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url POST /instruction/$instruction_id/material
      */
     public function newMaterial($instruction_id)
@@ -244,15 +212,6 @@ class InstructionCtrl
         } else {
             throw new RestException(401, "Unauthorized");
         }
-    }
-
-    /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/material/$material_id
-     */
-    public function optionsGetMaterial($instruction_id, $material_id)
-    {
-        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -305,5 +264,18 @@ class InstructionCtrl
         } else {
             throw new RestException(401, "Unauthorized");
         }
+    }
+
+    /**
+     * @noAuth
+     * @url OPTIONS /instruction
+     * @url OPTIONS /instruction/$instruction_id/info
+     * @url OPTIONS /instruction/$instruction_id/participants
+     * @url OPTIONS /instruction/$instruction_id/material
+     * @url OPTIONS /instruction/$instruction_id/material/$material_id
+     */
+    public function options($instruction_id = null, $material_id = null)
+    {
+        AuthCtrl::preFlightResponse();
     }
 }

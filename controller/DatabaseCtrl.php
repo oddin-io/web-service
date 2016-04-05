@@ -28,15 +28,6 @@ class DatabaseCtrl
     }
 
     /**
-     * @noAuth
-     * @url OPTIONS /$class
-     */
-    public function optionsDatabase($class)
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url GET /$class
      */
     public function get($class)
@@ -113,5 +104,14 @@ class DatabaseCtrl
         } else {
             $query->deleteAll();
         }
+    }
+
+    /**
+     * @noAuth
+     * @url OPTIONS /$class
+     */
+    public function options($class)
+    {
+        AuthCtrl::preFlightResponse();
     }
 }

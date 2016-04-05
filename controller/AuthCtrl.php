@@ -10,15 +10,6 @@ use Jacwright\RestServer\RestException;
 class AuthCtrl
 {
     /**
-     * @noAuth
-     * @url OPTIONS /login
-     */
-    public function optionsLogin()
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url POST /login
      */
     public function login()
@@ -41,15 +32,6 @@ class AuthCtrl
         } catch (\Exception $ex) {
             throw new RestException(401, $ex->getMessage());
         }
-    }
-
-    /**
-     * @noAuth
-     * @url OPTIONS /logout
-     */
-    public function optionsLogout()
-    {
-        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -136,5 +118,15 @@ class AuthCtrl
         if (isset($_COOKIE[self::getCookieName()])) return $_COOKIE[self::getCookieName()];
 
         return null;
+    }
+
+    /**
+     * @noAuth
+     * @url OPTIONS /login
+     * @url OPTIONS /logout
+     */
+    public function options()
+    {
+        AuthCtrl::preFlightResponse();
     }
 }

@@ -22,7 +22,8 @@ class PresentationCtrl
             ->findOne();
     }
 
-    public static function getInstructionId($presentation_id) {
+    public static function getInstructionId($presentation_id)
+    {
         return (int) PresentationQuery::create()
             ->filterById($presentation_id)
             ->select("InstructionId")
@@ -32,15 +33,6 @@ class PresentationCtrl
     public function authorize()
     {
         return AuthCtrl::check();
-    }
-
-    /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation
-     */
-    public function optionsPresentation($instruction_id)
-    {
-        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -117,15 +109,6 @@ class PresentationCtrl
     }
 
     /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id
-     */
-    public function optionsGetPresentation($instruction_id, $presentation_id)
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url GET /instruction/$instruction_id/presentation/$presentation_id
      */
     public function getPresentation($instruction_id, $presentation_id)
@@ -157,21 +140,12 @@ class PresentationCtrl
     }
 
     /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/info
-     */
-    public function optionsGetInfo($instruction_id, $presentation_id)
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url GET /instruction/$instruction_id/presentation/$presentation_id/info
      */
     public function getInfo($instruction_id, $presentation_id)
     {
         header("Content-Type: application/json");
-        
+
         $presentation_id = urldecode($presentation_id);
         $person = AuthCtrl::getSession()["id"];
 
@@ -205,15 +179,6 @@ class PresentationCtrl
     }
 
     /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/material
-     */
-    public function optionsMaterial($instruction_id, $presentation_id)
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url POST /instruction/$instruction_id/presentation/$presentation_id/material
      */
     public function newMaterial($instruction_id, $presentation_id)
@@ -237,15 +202,6 @@ class PresentationCtrl
         } else {
             throw new RestException(401, "Unauthorized");
         }
-    }
-
-    /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/material/$material_id
-     */
-    public function optionsGetMaterial($instruction_id, $presentation_id, $material_id)
-    {
-        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -301,15 +257,6 @@ class PresentationCtrl
     }
 
     /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/close
-     */
-    public function optionsClosePresentation($instruction_id, $presentation_id)
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url POST /instruction/$instruction_id/presentation/$presentation_id/close
      */
     public function closePresentation($instruction_id, $presentation_id)
@@ -326,5 +273,19 @@ class PresentationCtrl
         } else {
             throw new RestException(401, "Unauthorized");
         }
+    }
+
+    /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/info
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/close
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/material
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/material/$material_id
+     */
+    public function options($instruction_id, $presentation_id = null, $material_id = null)
+    {
+        AuthCtrl::preFlightResponse();
     }
 }

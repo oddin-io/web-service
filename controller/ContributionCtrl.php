@@ -33,15 +33,6 @@ class ContributionCtrl
     }
 
     /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution
-     */
-    public function optionsContribution($instruction_id, $presentation_id, $doubt_id)
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution
      */
     public function newContribution($instruction_id, $presentation_id, $doubt_id)
@@ -115,15 +106,6 @@ class ContributionCtrl
     }
 
     /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id
-     */
-    public function optionsGetContribution($instruction_id, $presentation_id, $doubt_id, $contribution_id)
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id
      */
     public function getContribution($instruction_id, $presentation_id, $doubt_id, $contribution_id)
@@ -157,15 +139,6 @@ class ContributionCtrl
     }
 
     /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id/materials
-     */
-    public function optionsGetContributionsMaterial($instruction_id, $presentation_id, $doubt_id, $contribution_id)
-    {
-        AuthCtrl::preFlightResponse();
-    }
-
-    /**
      * @url GET /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id/materials
      */
     public function getContributionMaterials($instruction_id, $presentation_id, $doubt_id, $contribution_id)
@@ -187,15 +160,6 @@ class ContributionCtrl
         } else {
             throw new RestException(401, "Unauthorized");
         }
-    }
-
-    /**
-     * @noAuth
-     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id/materials/$material_id
-     */
-    public function optionsGetContributionMaterial($instruction_id, $presentation_id, $doubt_id, $contribution_id, $material_id)
-    {
-        AuthCtrl::preFlightResponse();
     }
 
     /**
@@ -225,5 +189,17 @@ class ContributionCtrl
         } else {
             throw new RestException(401, "Unauthorized");
         }
+    }
+
+    /**
+     * @noAuth
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id/materials
+     * @url OPTIONS /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution/$contribution_id/materials/$material_id
+     */
+    public function options($instruction_id, $presentation_id, $doubt_id, $contribution_id = null, $material_id = null)
+    {
+        AuthCtrl::preFlightResponse();
     }
 }
