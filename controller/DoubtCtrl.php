@@ -291,9 +291,9 @@ class DoubtCtrl
     }
 
     /**
-     * @url POST /presentation/$presentation_id/doubt/$doubt_id/change-status
+     * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/change-status
      */
-    public function changeStatus($presentation_id, $doubt_id)
+    public function changeStatus($instruction_id, $presentation_id, $doubt_id)
     {
         header("Content-Type: application/json");
 
