@@ -228,6 +228,7 @@ class InstructionCtrl
                 ->findOneById($material_id);
 
             if ($material_id) {
+                header("Access-Control-Expose-Headers: Content-Disposition");
                 header("Content-Type: ".$material_id->getMime());
                 header("Content-Disposition: attachment; filename=\"".$material_id->getName()."\"");
                 header("Cache-Control: no-cache, no-store, must-revalidate");
