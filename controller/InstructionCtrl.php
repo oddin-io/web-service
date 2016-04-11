@@ -196,7 +196,7 @@ class InstructionCtrl
         $instruction_id = urldecode($instruction_id);
         $person = AuthCtrl::getSession()["id"];
 
-        if (PresentationCtrl::auth($instruction_id, $person, 2)) {
+        if (InstructionCtrl::auth($instruction_id, $person, 2)) {
             $file = $_FILES["file"];
 
             if ($file["error"]) {
@@ -223,7 +223,7 @@ class InstructionCtrl
         $person = AuthCtrl::getSession()["id"];
         $material_id = urldecode($material_id);
 
-        if (PresentationCtrl::auth($instruction_id, $person, 0)) {
+        if (InstructionCtrl::auth($instruction_id, $person, 0)) {
             $material_id = MiMaterialQuery::create()
                 ->findOneById($material_id);
 
@@ -251,7 +251,7 @@ class InstructionCtrl
         $instruction_id = urldecode($instruction_id);
         $person = AuthCtrl::getSession()["id"];
 
-        if (PresentationCtrl::auth($instruction_id, $person, 0)) {
+        if (InstructionCtrl::auth($instruction_id, $person, 0)) {
             $materials = MiMaterialQuery::create()
                 ->filterByInstructionId($instruction_id)
                 ->select(["Id", "Name", "Mime"])
