@@ -227,7 +227,7 @@
   <table name="contribution">
     <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
     <column name="status" type="integer" defaultValue="0" />
-    <column name="text" type="varchar" size="140" required="true" />
+    <column name="text" type="varchar" size="140" />
     <column name="created_at" type="timestamp" defaultExpr="current_timestamp(0)" defaultValue="now" />
     <column name="anonymous" type="boolean" defaultValue="false" />
     <column name="doubt_id" type="integer" defaultValue="false" required="true" />

@@ -32,6 +32,21 @@ class ContributionCtrl
         }
     }
 
+    private function reArrayFiles(&$file_post) {
+
+        $file_ary = array();
+        $file_count = count($file_post['name']);
+        $file_keys = array_keys($file_post);
+
+        for ($i=0; $i<$file_count; $i++) {
+            foreach ($file_keys as $key) {
+                $file_ary[$i][$key] = $file_post[$key][$i];
+            }
+        }
+
+        return $file_ary;
+    }
+
     /**
      * @url POST /instruction/$instruction_id/presentation/$presentation_id/doubt/$doubt_id/contribution
      */
@@ -44,26 +59,28 @@ class ContributionCtrl
         $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 1)) {
-            $data = Util::getPostContents("lower");
+            $data = $_POST;
             $contribution = new Contribution();
             $contribution->fromArray($data, ContributionTableMap::TYPE_FIELDNAME);
             $contribution->setDoubtId($doubt_id);
             $contribution->setPersonId($person);
             $contribution->save();
 
-//            $commentId = $contribution->getId();
-//
-//            if (isset($_FILES) && !empty($_FILES)) {
-//                $video = $_FILES["video"];
-//                $audio = $_FILES["audio"];
-//
-//                $this->insertFile($video, $commentId);
-//                $this->insertFile($audio, $commentId);
-//
-//                foreach ($_FILES["misc"] as $key => $value) {
-//                    $this->insertFile($value, $commentId);
-//                }
-//            }
+            $commentId = $contribution->getId();
+
+            if (isset($_FILES["file"]) && !empty($_FILES["file"])) {
+                $files = $_FILES["file"];
+
+                if (is_array($files["name"])) {
+                    $files = $this->reArrayFiles($files);
+
+                    for ($i = 0, $length = count($files); $i < $length; $i++) {
+                        $this->insertFile($files[$i], $commentId);
+                    }
+                } else {
+                    $this->insertFile($files, $commentId);
+                }
+            }
 
             echo json_encode($contribution->toArray());
         } else {
@@ -118,7 +135,7 @@ class ContributionCtrl
         $person = AuthCtrl::getSession()["id"];
 
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
-            $contributions = ContributionQuery::create()
+            $contribution = ContributionQuery::create()
                 ->join("Contribution.Person")
                 ->filterByDoubtId($doubt_id)
                 ->filterById($contribution_id)
@@ -130,9 +147,9 @@ class ContributionCtrl
                 ])
                 ->findOne();
 
-            $contributions = Util::adjustArrayCase(Util::namespacedArrayToNormal($contributions, ["Contribution", "Person"]), "lower");
+            $contribution = Util::adjustArrayCase(Util::namespacedArrayToNormal($contribution, ["Contribution", "Person"]), "lower");
 
-            echo json_encode($contributions);
+            echo json_encode($contribution);
         } else {
             throw new RestException(401, "Unauthorized");
         }
@@ -156,6 +173,7 @@ class ContributionCtrl
             $materials = ["materials" =>
                 Util::adjustArrayCase($materials, "lower")
             ];
+
             echo json_encode($materials);
         } else {
             throw new RestException(401, "Unauthorized");
