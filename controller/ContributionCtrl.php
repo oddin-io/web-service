@@ -102,12 +102,16 @@ class ContributionCtrl
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $contributions = ContributionQuery::create()
                 ->join("Contribution.Person")
+                ->join("Contribution.McMaterial")
                 ->filterByDoubtId($doubt_id)
                 ->select([
                     "Contribution.Id"
                     , "Contribution.Text"
                     , "Person.Name"
                     , "Contribution.CreatedAt"
+                    , "Material.Id"
+                    , "Material.Nome"
+                    , "Material.Mime"
                 ])
                 ->find()
                 ->toArray();
@@ -137,13 +141,16 @@ class ContributionCtrl
         if (PresentationCtrl::auth($presentation_id, $person, 0)) {
             $contribution = ContributionQuery::create()
                 ->join("Contribution.Person")
-                ->filterByDoubtId($doubt_id)
+                ->join("Contribution.McMaterial")
                 ->filterById($contribution_id)
                 ->select([
                     "Contribution.Id"
                     , "Contribution.Text"
                     , "Person.Name"
                     , "Contribution.CreatedAt"
+                    , "Material.Id"
+                    , "Material.Nome"
+                    , "Material.Mime"
                 ])
                 ->findOne();
 
