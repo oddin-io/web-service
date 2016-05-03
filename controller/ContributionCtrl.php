@@ -109,12 +109,14 @@ class ContributionCtrl
                     , "Contribution.Text"
                     , "Person.Name"
                     , "Contribution.CreatedAt"
-                    , "Material.Id"
-                    , "Material.Nome"
-                    , "Material.Mime"
+                    , "McMaterial.Id"
+                    , "McMaterial.Name"
+                    , "McMaterial.Mime"
                 ])
                 ->find()
                 ->toArray();
+
+
 
             $contributions = ["contributions" =>
                 Util::adjustArrayCase(Util::namespacedArrayToNormal($contributions, ["Contribution"]), "lower")
@@ -148,9 +150,9 @@ class ContributionCtrl
                     , "Contribution.Text"
                     , "Person.Name"
                     , "Contribution.CreatedAt"
-                    , "Material.Id"
-                    , "Material.Nome"
-                    , "Material.Mime"
+                    , "McMaterial.Id"
+                    , "McMaterial.Name"
+                    , "McMaterial.Mime"
                 ])
                 ->findOne();
 

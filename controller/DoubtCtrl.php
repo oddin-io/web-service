@@ -40,12 +40,11 @@ class DoubtCtrl
             $doubt = DoubtQuery::create()
                 ->join("Doubt.Person")
                 ->filterById($doubt->getId())
-                ->withColumn("Doubt.CreatedAt::date", "\"Doubt.Date\"")
-                ->withColumn("Doubt.CreatedAt::time", "\"Doubt.Time\"")
                 ->select([
                     "Doubt.Id"
                     , "Doubt.Status"
                     , "Doubt.Text"
+                    , "Doubt.CreatedAt"
                     , "Doubt.Anonymous"
                     , "Doubt.Understand"
                     , "Doubt.PresentationId"
@@ -82,6 +81,7 @@ class DoubtCtrl
                     "Doubt.Id"
                     , "Doubt.Status"
                     , "Doubt.Text"
+                    , "Doubt.CreatedAt"
                     , "Doubt.Anonymous"
                     , "Doubt.PresentationId"
                     , "Person.Id"
@@ -90,8 +90,6 @@ class DoubtCtrl
                 ->withColumn("count(PdLike.DoubtId)", "\"Doubt.Likes\"")
                 ->withColumn("(select count(doubt_id) from contribution where doubt_id = Doubt.Id)", "\"Doubt.Contributions\"")
                 ->withColumn($person." in(select person_id from pd_like where doubt_id = Doubt.Id)", "\"Doubt.Like\"")
-                ->withColumn("Doubt.CreatedAt::date", "\"Doubt.Date\"")
-                ->withColumn("Doubt.CreatedAt::time", "\"Doubt.Time\"")
                 ->groupByDoubtId()
                 ->groupByPersonId()
                 ->find()

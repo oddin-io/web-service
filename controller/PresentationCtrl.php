@@ -56,11 +56,10 @@ class PresentationCtrl
 
             $presentation = PresentationQuery::create()
                 ->filterById($presentation->getId())
-                ->withColumn("Presentation.CreatedAt::date", "\"Presentation.Date\"")
-                ->withColumn("Presentation.CreatedAt::time", "\"Presentation.Time\"")
                 ->select([
                     "Presentation.Id"
                     , "Presentation.Status"
+                    , "Presentation.CreatedAt"
                     , "Presentation.InstructionId"
                     , "Presentation.PersonId"
                     , "Presentation.Subject"
@@ -87,11 +86,10 @@ class PresentationCtrl
             $presentation = PresentationQuery::create()
                 ->join("Presentation.Person")
                 ->filterByInstructionId($instruction_id)
-                ->withColumn("Presentation.CreatedAt::date", "\"Presentation.Date\"")
-                ->withColumn("Presentation.CreatedAt::time", "\"Presentation.Time\"")
                 ->select([
                     "Person.Name"
                     , "Presentation.Status"
+                    , "Presentation.CreatedAt"
                     , "Presentation.Id"
                     , "Presentation.Subject"
                 ])
