@@ -24,17 +24,13 @@ ActiveRecord::Schema.define(version: 20160524043344) do
     t.integer  "person_id",                               null: false
   end
 
-  add_index "answers", ["person_id"], name: "index_answers_on_person_id", using: :btree
-  add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
-
   create_table "enrolls", force: :cascade do |t|
     t.integer "profile",        null: false
     t.integer "person_id",      null: false
     t.integer "instruction_id", null: false
   end
 
-  add_index "enrolls", ["instruction_id"], name: "index_enrolls_on_instruction_id", using: :btree
-  add_index "enrolls", ["person_id"], name: "index_enrolls_on_person_id", using: :btree
+  add_index "enrolls", ["person_id", "instruction_id"], name: "index_enrolls_on_person_id_and_instruction_id", unique: true, using: :btree
 
   create_table "events", force: :cascade do |t|
     t.string  "code",     limit: 30,                                        null: false
@@ -52,9 +48,6 @@ ActiveRecord::Schema.define(version: 20160524043344) do
     t.integer "lecture_id",             null: false
   end
 
-  add_index "instructions", ["event_id"], name: "index_instructions_on_event_id", using: :btree
-  add_index "instructions", ["lecture_id"], name: "index_instructions_on_lecture_id", using: :btree
-
   create_table "lectures", force: :cascade do |t|
     t.string  "code",     limit: 30,                                        null: false
     t.string  "name",     limit: 100,                                       null: false
@@ -68,8 +61,6 @@ ActiveRecord::Schema.define(version: 20160524043344) do
     t.integer "user_id",             null: false
   end
 
-  add_index "people", ["user_id"], name: "index_people_on_user_id", using: :btree
-
   create_table "presentations", force: :cascade do |t|
     t.string   "subject",        limit: 30, null: false
     t.integer  "status",                    null: false
@@ -78,9 +69,6 @@ ActiveRecord::Schema.define(version: 20160524043344) do
     t.integer  "person_id",                 null: false
   end
 
-  add_index "presentations", ["instruction_id"], name: "index_presentations_on_instruction_id", using: :btree
-  add_index "presentations", ["person_id"], name: "index_presentations_on_person_id", using: :btree
-
   create_table "questions", force: :cascade do |t|
     t.string   "text",            limit: 140,                 null: false
     t.boolean  "anonymous",                   default: false, null: false
@@ -88,9 +76,6 @@ ActiveRecord::Schema.define(version: 20160524043344) do
     t.integer  "presentation_id",                             null: false
     t.integer  "person_id",                                   null: false
   end
-
-  add_index "questions", ["person_id"], name: "index_questions_on_person_id", using: :btree
-  add_index "questions", ["presentation_id"], name: "index_questions_on_presentation_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string "email",    limit: 100, null: false

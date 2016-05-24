@@ -3,8 +3,9 @@ class CreateEnrolls < ActiveRecord::Migration
     create_table :enrolls do |t|
       t.integer :profile, null: false
 
-      t.references :person, index: true, foreign_key: true, null: false
-      t.references :instruction, index: true, foreign_key: true, null: false
+      t.references :person, foreign_key: true, null: false
+      t.references :instruction, foreign_key: true, null: false
     end
+    add_index :enrolls, [:person_id, :instruction_id], unique: true
   end
 end

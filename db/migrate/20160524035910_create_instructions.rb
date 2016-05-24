@@ -5,8 +5,8 @@ class CreateInstructions < ActiveRecord::Migration
       t.date :start_date, null: false
       t.date :end_date, null: false
 
-      t.references :event, index: true, foreign_key: true, null: false
-      t.references :lecture, index: true, foreign_key: true, null: false
+      t.references :event, foreign_key: true, null: false
+      t.references :lecture, foreign_key: true, null: false
     end
   end
 end

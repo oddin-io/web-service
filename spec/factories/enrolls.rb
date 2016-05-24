@@ -8,7 +8,8 @@
 #  instruction_id :integer          not null
 #
 
-class Enroll < ActiveRecord::Base
-  has_one :person
-  has_one :instruction
+FactoryGirl.define do
+  factory :enroll do
+    
+  end
 end

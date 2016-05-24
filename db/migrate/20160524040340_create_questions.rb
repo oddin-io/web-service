@@ -5,8 +5,8 @@ class CreateQuestions < ActiveRecord::Migration
       t.boolean :anonymous, null: false, default: false
       t.datetime :created_at, null: false
 
-      t.references :presentation, index: true, foreign_key: true, null: false
-      t.references :person, index: true, foreign_key: true, null: false
+      t.references :presentation, foreign_key: true, null: false
+      t.references :person, foreign_key: true, null: false
     end
   end
 end

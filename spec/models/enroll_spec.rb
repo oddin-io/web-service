@@ -8,7 +8,8 @@
 #  instruction_id :integer          not null
 #
 
-class Enroll < ActiveRecord::Base
-  has_one :person
-  has_one :instruction
+require 'rails_helper'
+
+RSpec.describe Enroll, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
 end
