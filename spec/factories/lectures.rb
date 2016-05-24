@@ -10,6 +10,8 @@
 
 FactoryGirl.define do
   factory :lecture do
-    
+    code {Faker::Name.name}
+    name {Faker::Name.name}
+    workload {Faker::Number.decimal(5, 2)}
   end
 end

@@ -10,4 +10,6 @@
 
 class Event < ActiveRecord::Base
   has_many :instructions
+
+  validates :code, :name, :workload, presence: true
 end
