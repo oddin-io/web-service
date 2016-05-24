@@ -1,0 +1,27 @@
+# == Schema Information
+#
+# Table name: instructions
+#
+#  id         :integer          not null, primary key
+#  class      :integer          default(1), not null
+#  start_date :date             not null
+#  end_date   :date             not null
+#  event_id   :integer          not null
+#  lecture_id :integer          not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  class: 1
+  start_date: 2016-05-24
+  end_date: 2016-05-24
+  event_id: 
+  lecture_id: 
+
+two:
+  class: 1
+  start_date: 2016-05-24
+  end_date: 2016-05-24
+  event_id: 
+  lecture_id: 
