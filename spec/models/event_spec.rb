@@ -13,6 +13,8 @@ require 'rails_helper'
 RSpec.describe Event, type: :model do
   it { is_expected.to validate_presence_of(:code) }
   it { is_expected.to validate_presence_of(:name) }
+  it { is_expected.to validate_length_of(:code).is_at_most(30) }
+  it { is_expected.to validate_length_of(:name).is_at_most(100) }
   it { is_expected.to have_many(:instructions) }
 
   context 'is valid' do
@@ -22,16 +24,14 @@ RSpec.describe Event, type: :model do
   end
 
   context 'is invalid' do
-    it 'whitout code' do
+    it 'without code' do
       event = build(:event, code: nil)
-      event.valid?
-      expect(event.errors[:code]).to include('can\'t be blank')
+      expect(event.valid?).to be false
     end
 
-    it 'whitout name' do
+    it 'without name' do
       event = build(:event, name: nil)
-      event.valid?
-      expect(event.errors[:name]).to include('can\'t be blank')
+      expect(event.valid?).to be_falsy
     end
   end
 end

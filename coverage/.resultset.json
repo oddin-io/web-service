@@ -566,6 +566,8 @@
         2,
         2,
         2,
+        2,
+        2,
         null,
         1,
         1,
@@ -577,10 +579,8 @@
         1,
         1,
         1,
-        1,
         null,
         null,
-        1,
         1,
         1,
         1,
@@ -602,6 +602,8 @@
         1,
         1,
         null,
+        1,
+        1,
         1,
         null
       ],
@@ -658,7 +660,11 @@
         1,
         null,
         1,
-        1,
+        2,
+        2,
+        2,
+        2,
+        2,
         null
       ],
       "C:/Repository/BitBucket/Mirage/web-service/app/models/lecture.rb": [
@@ -672,6 +678,10 @@
         null,
         null,
         null,
+        1,
+        1,
+        null,
+        1,
         1,
         1,
         null
@@ -816,6 +826,6 @@
         null
       ]
     },
-    "timestamp": 1464121514
+    "timestamp": 1464197091
   }
 }

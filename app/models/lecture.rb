@@ -10,4 +10,8 @@
 
 class Lecture < ActiveRecord::Base
   has_many :instructions
+
+  validates :code, :name, :workload, presence: true
+  validates :code, length: {maximum: 30}
+  validates :name, length: {maximum: 100}
 end
