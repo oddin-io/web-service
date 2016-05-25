@@ -8,7 +8,7 @@
 #
 
 class Person < ActiveRecord::Base
-  has_one :user
+  belongs_to :user
   has_many :questions
   has_many :answers
   has_many :presentations

@@ -9,6 +9,6 @@
 #
 
 class Enroll < ActiveRecord::Base
-  has_one :person
-  has_one :instruction
+  belongs_to :person
+  belongs_to :instruction
 end

@@ -5,8 +5,8 @@ class CreatePresentations < ActiveRecord::Migration
       t.integer :status, null: false
       t.datetime :created_at, null: false
 
-      t.references :instruction, foreign_key: true, null: false
-      t.references :person, foreign_key: true, null: false
+      t.belongs_to :instruction, foreign_key: true, null: false
+      t.belongs_to :person, foreign_key: true, null: false
     end
   end
 end

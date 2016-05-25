@@ -11,6 +11,6 @@
 #
 
 class Presentation < ActiveRecord::Base
-  has_one :instruction
-  has_one :person
+  belongs_to :instruction
+  belongs_to :person
 end

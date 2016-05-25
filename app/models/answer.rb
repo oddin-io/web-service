@@ -11,6 +11,6 @@
 #
 
 class Answer < ActiveRecord::Base
-  has_one :question
-  has_one :person
+  belongs_to :question
+  belongs_to :person
 end
