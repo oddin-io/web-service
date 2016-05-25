@@ -13,5 +13,12 @@
 require 'rails_helper'
 
 RSpec.describe Question, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { is_expected.to validate_presence_of(:text) }
+  it { is_expected.to validate_presence_of(:anonymous) }
+  it { is_expected.to validate_presence_of(:created_at) }
+  it { is_expected.to validate_length_of(:text).is_at_most(140) }
+
+  it { is_expected.to belong_to(:presentation) }
+  it { is_expected.to belong_to(:person) }
+  it { is_expected.to have_many(:answers) }
 end

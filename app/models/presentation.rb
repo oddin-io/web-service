@@ -13,4 +13,8 @@
 class Presentation < ActiveRecord::Base
   belongs_to :instruction
   belongs_to :person
+  has_many :questions
+
+  validates :subject, :status, :created_at, presence: true
+  validates :subject, length: {maximum: 100}
 end

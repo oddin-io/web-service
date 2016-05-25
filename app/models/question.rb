@@ -13,4 +13,8 @@
 class Question < ActiveRecord::Base
   belongs_to :presentation
   belongs_to :person
+  has_many :answers
+
+  validates :text, :anonymous, :created_at, presence: true
+  validates :text, length: {maximum: 140}
 end

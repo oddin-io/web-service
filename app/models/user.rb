@@ -9,4 +9,8 @@
 
 class User < ActiveRecord::Base
   has_one :person
+
+  validates :email, :password, presence: true
+  validates :email, length: {maximum: 100}
+  validates :password, length: {maximum: 16}
 end

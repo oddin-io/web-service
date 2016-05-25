@@ -11,4 +11,6 @@
 class Enroll < ActiveRecord::Base
   belongs_to :person
   belongs_to :instruction
+
+  validates :profile, presence: true
 end

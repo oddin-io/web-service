@@ -13,5 +13,12 @@
 require 'rails_helper'
 
 RSpec.describe Presentation, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { is_expected.to validate_presence_of(:subject) }
+  it { is_expected.to validate_presence_of(:status) }
+  it { is_expected.to validate_presence_of(:created_at) }
+  it { is_expected.to validate_length_of(:subject).is_at_most(100) }
+
+  it { is_expected.to belong_to(:person) }
+  it { is_expected.to belong_to(:instruction) }
+  it { is_expected.to have_many(:questions) }
 end

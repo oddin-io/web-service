@@ -11,5 +11,8 @@
 require 'rails_helper'
 
 RSpec.describe Enroll, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { is_expected.to validate_presence_of(:profile) }
+
+  it { is_expected.to belong_to(:person) }
+  it { is_expected.to belong_to(:instruction) }
 end

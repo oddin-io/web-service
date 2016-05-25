@@ -14,4 +14,7 @@ class Person < ActiveRecord::Base
   has_many :presentations
   has_many :enrolls
   has_many :instructions, through: :enrolls
+
+  validates :name, presence: true
+  validates :name, length: {maximum: 100}
 end

@@ -62,11 +62,11 @@ ActiveRecord::Schema.define(version: 20160524043344) do
   end
 
   create_table "presentations", force: :cascade do |t|
-    t.string   "subject",        limit: 30, null: false
-    t.integer  "status",                    null: false
-    t.datetime "created_at",                null: false
-    t.integer  "instruction_id",            null: false
-    t.integer  "person_id",                 null: false
+    t.string   "subject",        limit: 100, null: false
+    t.integer  "status",                     null: false
+    t.datetime "created_at",                 null: false
+    t.integer  "instruction_id",             null: false
+    t.integer  "person_id",                  null: false
   end
 
   create_table "questions", force: :cascade do |t|
