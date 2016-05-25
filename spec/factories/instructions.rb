@@ -12,10 +12,6 @@
 
 FactoryGirl.define do
   factory :instruction do
-    class_number {Faker::Number.number 5}
-    start_date {Faker::Date.backward 60}
-    end_date {Faker::Date.forward 0}
-    event
-    lecture
+
   end
 end
