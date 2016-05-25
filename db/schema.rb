@@ -41,11 +41,11 @@ ActiveRecord::Schema.define(version: 20160524043344) do
   add_index "events", ["code"], name: "index_events_on_code", unique: true, using: :btree
 
   create_table "instructions", force: :cascade do |t|
-    t.integer "class",      default: 1, null: false
-    t.date    "start_date",             null: false
-    t.date    "end_date",               null: false
-    t.integer "event_id",               null: false
-    t.integer "lecture_id",             null: false
+    t.integer "class_number", default: 1, null: false
+    t.date    "start_date",               null: false
+    t.date    "end_date",                 null: false
+    t.integer "event_id",                 null: false
+    t.integer "lecture_id",               null: false
   end
 
   create_table "lectures", force: :cascade do |t|

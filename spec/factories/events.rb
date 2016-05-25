@@ -12,6 +12,6 @@ FactoryGirl.define do
   factory :event do
     code {Faker::Name.name}
     name {Faker::Name.name}
-    workload {Faker::Number.decimal(5, 2)}
+    workload {Faker::Number.decimal 5, 2}
   end
 end
