@@ -5,7 +5,7 @@ class CreateQuestions < ActiveRecord::Migration
       t.boolean :anonymous, null: false, default: false
       t.datetime :created_at, null: false
 
-      t.belongs_to :presentation, foreign_key: true, null: false
+      t.belongs_to :presentation, foreign_key: true, null: true
       t.belongs_to :person, foreign_key: true, null: false
     end
   end

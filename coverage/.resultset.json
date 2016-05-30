@@ -124,6 +124,7 @@
         null,
         null,
         null,
+        null,
         1,
         null,
         1,
@@ -196,19 +197,6 @@
         null,
         null,
         1,
-        null,
-        null,
-        null,
-        null
-      ],
-      "C:/Repository/BitBucket/Mirage/web-service/config/initializers/assets.rb": [
-        null,
-        null,
-        null,
-        1,
-        null,
-        null,
-        null,
         null,
         null,
         null,
@@ -873,6 +861,6 @@
         null
       ]
     },
-    "timestamp": 1464205495
+    "timestamp": 1464635795
   }
 }

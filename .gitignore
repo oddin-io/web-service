@@ -4,16 +4,13 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
-# Bundler config.
+# Ignore bundler config.
 /.bundle
 
-# Logfiles and tempfiles.
+# Ignore all logfiles and tempfiles.
 /log/*
-!**.keep
+!/log/.keep
 /tmp
-
-# Vendor files
-vendor/
 
 # IDE
 .idea/
