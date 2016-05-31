@@ -19,6 +19,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Use AMS for JSON rendering
+gem 'active_model_serializers', '~> 0.10.0'
+
+# Rails API
+gem 'rails-api'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

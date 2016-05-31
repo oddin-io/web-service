@@ -32,11 +32,17 @@ module WebService
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
+    config.api_only = true
+
     config.generators do |g|
-      g.hidden_namespaces << :test_unit << :js
+      g.hidden_namespaces << :test_unit << :js << :erb
       g.test_framework :rspec
 
       g.integration_tool :rspec
+
+      g.assets  false
+      g.helper false
+      g.stylesheets false
     end
   end
 end
