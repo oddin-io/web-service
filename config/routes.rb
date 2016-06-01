@@ -55,4 +55,9 @@ Rails.application.routes.draw do
   #   end
 
   resources :events, :lectures
+  resources :instructions do
+    resources :questions, shallow: true do
+      resources :answers, shallow: true
+    end
+  end
 end

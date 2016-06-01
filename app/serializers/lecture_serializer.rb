@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: events
+# Table name: lectures
 #
 #  id       :integer          not null, primary key
 #  code     :string(30)       not null
@@ -8,8 +8,6 @@
 #  workload :decimal(7, 2)    default(0.0), not null
 #
 
-FactoryGirl.define do
-  factory :events do
-
-  end
+class LectureSerializer < ActiveModel::Serializer
+  attributes :id, :code, :name, :workload
 end

@@ -8,8 +8,6 @@
 #  workload :decimal(7, 2)    default(0.0), not null
 #
 
-FactoryGirl.define do
-  factory :events do
-
-  end
+class EventSerializer < ActiveModel::Serializer
+  attributes :id, :code, :name, :workload
 end
