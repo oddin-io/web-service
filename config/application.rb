@@ -1,15 +1,15 @@
 require File.expand_path('../boot', __FILE__)
 
-require "rails"
+require 'rails'
 # Pick the frameworks you want:
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "action_view/railtie"
-# require "sprockets/railtie"
-# require "rails/test_unit/railtie"
+require 'active_model/railtie'
+require 'active_job/railtie'
+require 'active_record/railtie'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
+require 'action_view/railtie'
+# require 'sprockets/railtie'
+# require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -32,17 +32,20 @@ module WebService
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
+    # Configure timezone as UTC
+    config.active_record.default_timezone = :utc
+
     config.api_only = true
 
-    config.generators do |g|
-      g.hidden_namespaces << :test_unit << :js << :erb
-      g.test_framework :rspec
+    config.generators do |with|
+      with.hidden_namespaces << :test_unit << :js << :erb
+      with.test_framework :rspec
 
-      g.integration_tool :rspec
+      with.integration_tool :rspec
 
-      g.assets  false
-      g.helper false
-      g.stylesheets false
+      with.assets  false
+      with.helper false
+      with.stylesheets false
     end
   end
 end

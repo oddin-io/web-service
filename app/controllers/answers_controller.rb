@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   def index
-    render plain: 'I list all entities'
+    render json: Answer.all
   end
 
   def new
@@ -8,11 +8,17 @@ class AnswersController < ApplicationController
   end
 
   def create
-    render plain: 'I create new entity'
+    question = Question.find params[:question_id]
+    person = Person.find params[:person_id]
+
+    answer = Question.new text: params[:text], anonymous: params[:anonymous] || false, created_at: DateTime.now,
+                            question: question, person: person
+    answer.save!
+    render json: answer
   end
 
   def show
-    render plain: 'I show one entity'
+    render json: Answer.find(params[:id])
   end
 
   def edit

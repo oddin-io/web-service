@@ -14,6 +14,7 @@ class Answer < ActiveRecord::Base
   belongs_to :question
   belongs_to :person
 
-  validates :text, :anonymous, :created_at, presence: true
+  validates :text, :created_at, presence: true
+  validates :anonymous, exclusion: {in: [nil]}
   validates :text, length: {maximum: 140}
 end

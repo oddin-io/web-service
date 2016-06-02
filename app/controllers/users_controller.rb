@@ -1,6 +1,6 @@
-class LecturesController < ApplicationController
+class UsersController < ApplicationController
   def index
-    render json: Lecture.all
+    render json: User.all
   end
 
   def new
@@ -8,13 +8,13 @@ class LecturesController < ApplicationController
   end
 
   def create
-    lecture = Lecture.new name: params[:name], code: params[:code], workload: [:workload]
-    lecture.save!
-    render json: lecture
+    user = User.new email: params[:email], password: params[:password]
+    user.save!
+    render json: user
   end
 
   def show
-    render json: Lecture.find(params[:id])
+    render json: User.find(params[:id])
   end
 
   def edit

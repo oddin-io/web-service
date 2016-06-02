@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   def index
-    render plain: 'I list all entities'
+    render json: Event.all
   end
 
   def new
@@ -8,11 +8,13 @@ class EventsController < ApplicationController
   end
 
   def create
-    render plain: 'I create new entity'
+    event = Event.new name: params[:name], code: params[:code], workload: [:workload]
+    event.save!
+    render json: event
   end
 
   def show
-    render plain: 'I show one entity'
+    render json: Event.find(params[:id])
   end
 
   def edit

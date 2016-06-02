@@ -14,9 +14,9 @@ require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
   it { is_expected.to validate_presence_of(:text) }
-  it { is_expected.to validate_presence_of(:anonymous) }
   it { is_expected.to validate_presence_of(:created_at) }
   it { is_expected.to validate_length_of(:text).is_at_most(140) }
+  it { is_expected.to validate_exclusion_of(:anonymous).in_array([nil]) }
 
   it { is_expected.to belong_to(:question) }
   it { is_expected.to belong_to(:person) }

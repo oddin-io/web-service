@@ -1,6 +1,6 @@
 class InstructionsController < ApplicationController
   def index
-    render plain: 'I list all entities'
+    render json: Instruction.all
   end
 
   def new
@@ -8,11 +8,17 @@ class InstructionsController < ApplicationController
   end
 
   def create
-    render plain: 'I create new entity'
+    event = Event.find params[:event_id]
+    lecture = Lecture.find params[:lecture_id]
+    instruction = Instruction.new class_number: params[:class_number],
+                                  start_date: params[:start_date], end_date: params[:end_date],
+                                  event: event, lecture: lecture
+    instruction.save!
+    render json: instruction
   end
 
   def show
-    render plain: 'I show one entity'
+    render json: Instruction.find(params[:id])
   end
 
   def edit

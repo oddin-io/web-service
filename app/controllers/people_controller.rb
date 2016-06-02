@@ -1,6 +1,6 @@
-class LecturesController < ApplicationController
+class PeopleController < ApplicationController
   def index
-    render json: Lecture.all
+    render json: Person.all
   end
 
   def new
@@ -8,13 +8,14 @@ class LecturesController < ApplicationController
   end
 
   def create
-    lecture = Lecture.new name: params[:name], code: params[:code], workload: [:workload]
-    lecture.save!
-    render json: lecture
+    user = User.find params[:user_id]
+    person = Person.new name: params[:name], user: user
+    person.save!
+    render json: person
   end
 
   def show
-    render json: Lecture.find(params[:id])
+    render json: Person.find(params[:id])
   end
 
   def edit
