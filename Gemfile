@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-
+ruby '2.2.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.6'
@@ -25,10 +25,17 @@ gem 'active_model_serializers', '~> 0.10.0'
 # Rails API
 gem 'rails-api'
 
+group :development do
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console', '~> 2.0'
+end
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+end
 
+group :test do
   # Test Suite
   gem 'factory_girl_rails'
   gem 'faker'
@@ -37,11 +44,6 @@ group :development, :test do
   gem 'simplecov', require: false
   gem 'database_cleaner'
   gem 'shoulda-matchers', require: false
-end
-
-group :development do
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
