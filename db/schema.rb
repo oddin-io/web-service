@@ -73,13 +73,13 @@ ActiveRecord::Schema.define(version: 20160524043344) do
     t.string   "text",            limit: 140,                 null: false
     t.boolean  "anonymous",                   default: false, null: false
     t.datetime "created_at",                                  null: false
-    t.integer  "presentation_id",                             null: false
+    t.integer  "presentation_id"
     t.integer  "person_id",                                   null: false
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email",    limit: 100, null: false
-    t.string "password", limit: 16,  null: false
+    t.string "email",           limit: 100, null: false
+    t.string "password_digest", limit: 16,  null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

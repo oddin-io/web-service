@@ -8,9 +8,10 @@
 #
 
 class User < ActiveRecord::Base
+  has_secure_password
   has_one :person
 
   validates :email, :password, presence: true
   validates :email, length: {maximum: 100}
-  validates :password, length: {maximum: 16}
+  validates :password, length: {in: 8..32}, allow_nil: true
 end
