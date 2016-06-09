@@ -6,7 +6,7 @@
 #  text            :string(140)      not null
 #  anonymous       :boolean          default(FALSE), not null
 #  created_at      :datetime         not null
-#  presentation_id :integer          not null
+#  presentation_id :integer
 #  person_id       :integer          not null
 #
 

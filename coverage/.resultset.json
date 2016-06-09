@@ -1,21 +1,10 @@
 {
   "RSpec": {
     "coverage": {
-      "C:/Repository/BitBucket/Mirage/web-service/spec/models/user_spec.rb": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
+      "C:/Repository/BitBucket/Mirage/web-service/spec/models/session_spec.rb": [
         1,
         null,
         1,
-        2,
-        2,
         2,
         2,
         null,
@@ -501,9 +490,17 @@
         null,
         1,
         1,
+        null,
         null
       ],
       "C:/Repository/BitBucket/Mirage/web-service/app/helpers/application_helper.rb": [
+        1,
+        null
+      ],
+      "C:/Repository/BitBucket/Mirage/web-service/app/models/session.rb": [
+        1,
+        1,
+        null,
         1,
         null
       ],
@@ -525,30 +522,8 @@
         1,
         1,
         null
-      ],
-      "C:/Repository/BitBucket/Mirage/web-service/app/models/person.rb": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        null,
-        1,
-        1,
-        null
       ]
     },
-    "timestamp": 1465326543
+    "timestamp": 1465498136
   }
 }
