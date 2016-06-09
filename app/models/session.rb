@@ -10,7 +10,7 @@
 #
 
 class Session < ActiveRecord::Base
-  validates :token, length: {is: 192}, presence: true
+  validates :token, length: {maximum: 192}, presence: true
 
   belongs_to :user
 end

@@ -2,6 +2,17 @@
   "RSpec": {
     "coverage": {
       "C:/Repository/BitBucket/Mirage/web-service/spec/models/session_spec.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         1,
         null,
         1,
@@ -490,7 +501,7 @@
         null,
         1,
         1,
-        null,
+        1,
         null
       ],
       "C:/Repository/BitBucket/Mirage/web-service/app/helpers/application_helper.rb": [
@@ -498,6 +509,17 @@
         null
       ],
       "C:/Repository/BitBucket/Mirage/web-service/app/models/session.rb": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         1,
         1,
         null,
@@ -524,6 +546,6 @@
         null
       ]
     },
-    "timestamp": 1465498136
+    "timestamp": 1465501634
   }
 }

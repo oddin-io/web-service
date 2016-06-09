@@ -67,5 +67,11 @@ Rails.application.routes.draw do
 
   resources :users
   resources :people
-  resource :session
+  resource :session do
+    member do
+      get 'destroy-all'
+      post 'destroy-all'
+      delete 'destroy-all'
+    end
+  end
 end
