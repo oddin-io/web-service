@@ -12,5 +12,8 @@
 !/log/.keep
 /tmp
 
+# Environment variables
+.env
+
 # IDE
 .idea/
