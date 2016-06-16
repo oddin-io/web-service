@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  skip_before_action :valid_session, only: [:create]
+
   def new
     puts 'I display a form for creating new entity'
   end
@@ -17,7 +19,7 @@ class SessionsController < ApplicationController
   end
 
   def show
-    session = Session.find_by_token params[:token]
+    session = get_session
     render json: session
   end
 
@@ -30,12 +32,12 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    Session.find_by_token(params[:token]).destroy
+    get_session.destroy
     render nothing: true, status: 200
   end
 
   def destroy_all
-    Session.destroy_all(user_id: params[:user_id])
+    Session.destroy_all user_id: current_user.id
     render nothing: true, status: 200
   end
 end
