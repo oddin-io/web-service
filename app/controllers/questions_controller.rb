@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   def index
-    render json: Question.all
+    render json: Question.includes(presentation: {instruction: :people}).where(people: {user_id: current_user.id})
   end
 
   def new
@@ -10,7 +10,6 @@ class QuestionsController < ApplicationController
   def create
     presentation = Presentation.find params[:presentation_id]
     person = Person.find params[:person_id]
-    puts params[:anonymous]
     question = Question.new text: params[:text], anonymous: params[:anonymous] || false, created_at: DateTime.now,
                             presentation: presentation, person: person
     question.save!

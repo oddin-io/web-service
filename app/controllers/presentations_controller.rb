@@ -1,6 +1,8 @@
 class PresentationsController < ApplicationController
   def index
-    render json: Presentation.all
+    presentations = Presentation.includes(instruction: :people).where(people: {user_id: current_user.id})
+
+    render json: presentations
   end
 
   def new
@@ -9,7 +11,7 @@ class PresentationsController < ApplicationController
 
   def create
     instruction = Instruction.find params[:instruction_id]
-    person = Person.find params[:person_id]
+    person = Person.find current_user.person.id
     presentation = Presentation.new subject: params[:subject], status: 0, created_at: DateTime.now,
                                     instruction: instruction, person: person
     presentation.save!

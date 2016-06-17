@@ -12,4 +12,6 @@
 
 class QuestionSerializer < ActiveModel::Serializer
   attributes :id, :text, :created_at, :anonymous
+
+  has_one :presentation
 end

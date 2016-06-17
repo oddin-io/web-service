@@ -12,4 +12,6 @@
 
 class PresentationSerializer < ActiveModel::Serializer
   attributes :id, :subject, :status, :created_at
+
+  has_one :instruction
 end

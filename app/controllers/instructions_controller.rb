@@ -1,6 +1,6 @@
 class InstructionsController < ApplicationController
   def index
-    render json: Instruction.joins(enrolls: :person).where(people: {user_id: current_user.id})
+    render json: Instruction.includes(:people).where(people: {user_id: current_user.id})
   end
 
   def new

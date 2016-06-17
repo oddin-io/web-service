@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   def index
-    render json: Answer.all
+    render json: Answer.includes(question: {presentation: {instruction: :people}}).where(people: {user_id: current_user})
   end
 
   def new
