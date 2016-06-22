@@ -8,10 +8,6 @@
 #  file_url :text             not null
 #
 
-class Material < ActiveRecord::Base
-  has_and_belongs_to_many :instructions
-  has_and_belongs_to_many :presentations
-  has_and_belongs_to_many :answers
-
-  validates :name, :mime, :file_url, presence: true
+class MaterialSerializer < ActiveModel::Serializer
+  attributes :id, :name, :mime, :file_url
 end

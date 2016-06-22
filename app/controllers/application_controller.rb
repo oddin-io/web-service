@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
   # For APIs, you may want to use :null_session instead.
   # protect_from_forgery with: :exception
 
-  before_action :valid_session, except: [:new]
+  # before_action :valid_session, except: [:new]
 
   def current_user
     session = get_session

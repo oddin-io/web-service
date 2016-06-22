@@ -54,12 +54,20 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
+  concern :can_have_materials do
+
+  end
+
   resources :events, :lectures
   resources :instructions do
     shallow do
+      resources :materials
       resources :presentations do
+        resources :materials
         resources :questions do
-          resources :answers
+          resources :answers do
+            resources :materials
+          end
         end
       end
     end
