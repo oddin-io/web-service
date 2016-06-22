@@ -956,6 +956,7 @@
         1,
         1,
         1,
+        1,
         null,
         1,
         1,
@@ -1086,6 +1087,7 @@
         1,
         1,
         1,
+        1,
         null,
         1,
         1,
@@ -1139,10 +1141,18 @@
         2,
         2,
         2,
+        null,
+        2,
+        2,
+        2,
         null
       ],
       "/home/bruno/Repository/BitBucket/Mirage/web-service/app/models/material.rb": [
         1,
+        1,
+        1,
+        1,
+        null,
         1,
         null
       ],
@@ -1231,6 +1241,7 @@
         null,
         null,
         null,
+        1,
         1,
         1,
         1,
@@ -1369,6 +1380,6 @@
         null
       ]
     },
-    "timestamp": 1466612434
+    "timestamp": 1466621149
   }
 }

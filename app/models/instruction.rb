@@ -15,6 +15,7 @@ class Instruction < ActiveRecord::Base
   belongs_to :lecture
   has_many :enrolls
   has_many :people, through: :enrolls
+  has_many :materials
 
   validates :class_number, :start_date, :end_date, presence: true
   validates :class_number, numericality: {only_integer: true}

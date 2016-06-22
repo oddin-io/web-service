@@ -4,7 +4,8 @@ class CreateLectures < ActiveRecord::Migration
       t.string :code, limit: 30, null: false
       t.string :name, limit: 100, null: false
       t.decimal :workload, precision: 7, scale: 2, null: false, default: 0
+
+      t.index :code, unique: true
     end
-    add_index :lectures, :code, unique: true
   end
 end

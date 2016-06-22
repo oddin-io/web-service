@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160621195938) do
+ActiveRecord::Schema.define(version: 20160622180031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,13 @@ ActiveRecord::Schema.define(version: 20160621195938) do
     t.integer  "question_id",                             null: false
     t.integer  "person_id",                               null: false
   end
+
+  create_table "answers_materials", id: false, force: :cascade do |t|
+    t.integer "material_id", null: false
+    t.integer "answer_id",   null: false
+  end
+
+  add_index "answers_materials", ["answer_id", "material_id"], name: "uk_answers_materials", unique: true, using: :btree
 
   create_table "enrolls", force: :cascade do |t|
     t.integer "profile",        null: false
@@ -48,6 +55,13 @@ ActiveRecord::Schema.define(version: 20160621195938) do
     t.integer "lecture_id",               null: false
   end
 
+  create_table "instructions_materials", id: false, force: :cascade do |t|
+    t.integer "material_id",    null: false
+    t.integer "instruction_id", null: false
+  end
+
+  add_index "instructions_materials", ["instruction_id", "material_id"], name: "uk_instructions_materials", unique: true, using: :btree
+
   create_table "lectures", force: :cascade do |t|
     t.string  "code",     limit: 30,                                        null: false
     t.string  "name",     limit: 100,                                       null: false
@@ -61,6 +75,13 @@ ActiveRecord::Schema.define(version: 20160621195938) do
     t.string "mime", limit: 50
     t.binary "file"
   end
+
+  create_table "materials_presentations", id: false, force: :cascade do |t|
+    t.integer "material_id",     null: false
+    t.integer "presentation_id", null: false
+  end
+
+  add_index "materials_presentations", ["presentation_id", "material_id"], name: "uk_presentations_materials", unique: true, using: :btree
 
   create_table "people", force: :cascade do |t|
     t.string  "name",    limit: 100, null: false
@@ -101,10 +122,16 @@ ActiveRecord::Schema.define(version: 20160621195938) do
 
   add_foreign_key "answers", "people"
   add_foreign_key "answers", "questions"
+  add_foreign_key "answers_materials", "answers"
+  add_foreign_key "answers_materials", "materials"
   add_foreign_key "enrolls", "instructions"
   add_foreign_key "enrolls", "people"
   add_foreign_key "instructions", "events"
   add_foreign_key "instructions", "lectures"
+  add_foreign_key "instructions_materials", "instructions"
+  add_foreign_key "instructions_materials", "materials"
+  add_foreign_key "materials_presentations", "materials"
+  add_foreign_key "materials_presentations", "presentations"
   add_foreign_key "people", "users"
   add_foreign_key "presentations", "instructions"
   add_foreign_key "presentations", "people"

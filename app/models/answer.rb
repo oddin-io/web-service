@@ -13,6 +13,7 @@
 class Answer < ActiveRecord::Base
   belongs_to :question
   belongs_to :person
+  has_many :materials
 
   validates :text, :created_at, presence: true
   validates :anonymous, exclusion: {in: [nil]}

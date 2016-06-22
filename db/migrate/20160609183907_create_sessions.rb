@@ -5,7 +5,8 @@ class CreateSessions < ActiveRecord::Migration
       t.belongs_to :user, foreign_key: true, null: false
 
       t.timestamps null: false
+
+      t.index :token, unique: true
     end
-    add_index :sessions, :token, unique: true
   end
 end
