@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160609183907) do
+ActiveRecord::Schema.define(version: 20160621195938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,12 @@ ActiveRecord::Schema.define(version: 20160609183907) do
   end
 
   add_index "lectures", ["code"], name: "index_lectures_on_code", unique: true, using: :btree
+
+  create_table "materials", force: :cascade do |t|
+    t.string "name", limit: 50
+    t.string "mime", limit: 50
+    t.binary "file"
+  end
 
   create_table "people", force: :cascade do |t|
     t.string  "name",    limit: 100, null: false
