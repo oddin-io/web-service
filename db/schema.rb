@@ -71,12 +71,13 @@ ActiveRecord::Schema.define(version: 20160622180031) do
   add_index "lectures", ["code"], name: "index_lectures_on_code", unique: true, using: :btree
 
   create_table "materials", force: :cascade do |t|
-    t.string "name",     limit: 50, null: false
-    t.string "mime",     limit: 50, null: false
-    t.text   "file_url",            null: false
+    t.string   "file_file_name",    null: false
+    t.string   "file_content_type", null: false
+    t.integer  "file_file_size",    null: false
+    t.datetime "file_updated_at",   null: false
   end
 
-  add_index "materials", ["name"], name: "index_materials_on_name", unique: true, using: :btree
+  add_index "materials", ["file_file_name"], name: "index_materials_on_file_file_name", unique: true, using: :btree
 
   create_table "materials_presentations", id: false, force: :cascade do |t|
     t.integer "material_id",     null: false

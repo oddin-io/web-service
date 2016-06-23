@@ -2,12 +2,17 @@
 #
 # Table name: materials
 #
-#  id       :integer          not null, primary key
-#  name     :string(50)       not null
-#  mime     :string(50)       not null
-#  file_url :text             not null
+#  id                :integer          not null, primary key
+#  file_file_name    :string           not null
+#  file_content_type :string           not null
+#  file_file_size    :integer          not null
+#  file_updated_at   :datetime         not null
 #
 
 class MaterialSerializer < ActiveModel::Serializer
-  attributes :id, :name, :mime, :file_url
+  attribute :id
+  attribute :file_file_name, key: :name
+  attribute :file_content_type, key: :mime
+  attribute :file_file_size, key: :size
+  attribute :file_updated_at, key: :updated_at
 end

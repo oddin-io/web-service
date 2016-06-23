@@ -73,6 +73,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :materials
+
   resources :users
   resources :people
   resource :session do

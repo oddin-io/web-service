@@ -8,13 +8,14 @@ class MaterialsController < ApplicationController
   end
 
   def create
-    material = Material.new name: params[:name], mime: params[:mime], file_url: params[:file_url]
+    material = Material.new file: params[:file]
     material.save!
     render json: material
   end
 
   def show
-    render json: Material.find(params[:id])
+    material = Material.find(params[:id])
+    render json: material
   end
 
   def edit
