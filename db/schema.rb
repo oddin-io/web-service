@@ -71,13 +71,13 @@ ActiveRecord::Schema.define(version: 20160622180031) do
   add_index "lectures", ["code"], name: "index_lectures_on_code", unique: true, using: :btree
 
   create_table "materials", force: :cascade do |t|
-    t.string   "file_file_name",    null: false
-    t.string   "file_content_type", null: false
-    t.integer  "file_file_size",    null: false
-    t.datetime "file_updated_at",   null: false
+    t.string   "upload_file_name",    null: false
+    t.string   "upload_content_type", null: false
+    t.integer  "upload_file_size",    null: false
+    t.datetime "upload_updated_at",   null: false
+    t.text     "download_url",        null: false
+    t.integer  "person_id",           null: false
   end
-
-  add_index "materials", ["file_file_name"], name: "index_materials_on_file_file_name", unique: true, using: :btree
 
   create_table "materials_presentations", id: false, force: :cascade do |t|
     t.integer "material_id",     null: false
@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(version: 20160622180031) do
   add_foreign_key "instructions", "lectures"
   add_foreign_key "instructions_materials", "instructions"
   add_foreign_key "instructions_materials", "materials"
+  add_foreign_key "materials", "people"
   add_foreign_key "materials_presentations", "materials"
   add_foreign_key "materials_presentations", "presentations"
   add_foreign_key "people", "users"

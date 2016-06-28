@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  skip_before_action :valid_session, only: [:create]
+
   def index
     render json: User.all
   end

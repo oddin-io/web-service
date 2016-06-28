@@ -1,8 +1,6 @@
 class PresentationsController < ApplicationController
   def index
-    presentations = Presentation.includes(instruction: :people).where(people: {user_id: current_user.id})
-
-    render json: presentations
+    render json: Presentation.includes(instruction: :people).where(people: {user_id: current_user.id})
   end
 
   def new

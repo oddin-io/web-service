@@ -1,6 +1,6 @@
 class InstructionsController < ApplicationController
   def index
-    render json: Instruction.includes(:people).where(people: {user_id: current_user.id})
+    render json: current_user.person.instructions
   end
 
   def new

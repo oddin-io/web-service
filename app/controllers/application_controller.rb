@@ -1,16 +1,19 @@
 class ApplicationController < ActionController::API
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  # protect_from_forgery with: :exception
+  # Authentication check
+  before_action :valid_session
 
-  # before_action :valid_session, except: [:new]
-
+  # Get the request current user
+  #
+  # @return [User]
   def current_user
     session = get_session
 
     session ? session.user : nil
   end
 
+  # Check if the session is valid, if isn't output 401 error code
+  #
+  # @return [boolean]
   def valid_session
     session = get_session
 
@@ -21,10 +24,17 @@ class ApplicationController < ActionController::API
     true
   end
 
+  # Get the session of the request
+  #
+  # @return [Session]
   def get_session
     Session.find_by_token session_token
   end
 
+
+  # Get request session token
+  #
+  # @return [String | nil]
   def session_token
     request.headers['X-Session-Token']
   end

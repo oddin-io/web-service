@@ -10,12 +10,13 @@
 #
 
 class Material < ActiveRecord::Base
-  has_attached_file :file
+  has_attached_file :upload, path: 'system/materials/:id_partition/:filename'
 
+  belongs_to :person
   has_and_belongs_to_many :instructions
   has_and_belongs_to_many :presentations
   has_and_belongs_to_many :answers
 
-  validates_attachment_content_type :file, content_type: /\Aapplication\/octet-stream\Z/
-  validates_attachment_presence :file
+  validates_attachment_content_type :upload, content_type: /^application\/octet-stream$/
+  validates_attachment_presence :upload
 end

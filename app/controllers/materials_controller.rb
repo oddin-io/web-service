@@ -1,6 +1,6 @@
 class MaterialsController < ApplicationController
   def index
-    render json: Material.all
+    render json: current_user.person.materials
   end
 
   def new

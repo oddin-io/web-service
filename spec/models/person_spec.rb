@@ -19,4 +19,5 @@ RSpec.describe Person, type: :model do
   it { is_expected.to have_many(:presentations) }
   it { is_expected.to have_many(:questions) }
   it { is_expected.to have_many(:answers) }
+  it { is_expected.to have_many(:materials) }
 end

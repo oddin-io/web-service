@@ -27,6 +27,9 @@ group :development, :test do
 
   # Use Capistrano for deployment
   # gem 'capistrano-rails', group: :development
+
+  # YARD for document
+  gem 'yard'
 end
 
 group :development do

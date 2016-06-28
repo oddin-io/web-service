@@ -19,8 +19,7 @@ class SessionsController < ApplicationController
   end
 
   def show
-    session = get_session
-    render json: session
+    render json: get_session
   end
 
   def edit
