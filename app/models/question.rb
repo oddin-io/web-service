@@ -10,7 +10,7 @@
 #  person_id       :integer          not null
 #
 
-class Question < ActiveRecord::Base
+class Question < ApplicationRecord
   belongs_to :presentation
   belongs_to :person
   has_many :answers

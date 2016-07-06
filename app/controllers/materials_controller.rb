@@ -8,7 +8,8 @@ class MaterialsController < ApplicationController
   end
 
   def create
-    material = Material.new file: params[:file]
+    material = Material.new url: params[:url], name: params[:filename], size: params[:filesize],
+                            type: params[:filetype], updated_at: DateTime.now
     material.save!
     render json: material
   end

@@ -21,4 +21,5 @@ RSpec.describe Presentation, type: :model do
   it { is_expected.to belong_to(:person) }
   it { is_expected.to belong_to(:instruction) }
   it { is_expected.to have_many(:questions) }
+  it { is_expected.to have_many(:materials) }
 end

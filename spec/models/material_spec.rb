@@ -2,21 +2,25 @@
 #
 # Table name: materials
 #
-#  id                :integer          not null, primary key
-#  file_file_name    :string           not null
-#  file_content_type :string           not null
-#  file_file_size    :integer          not null
-#  file_updated_at   :datetime         not null
+#  id         :integer          not null, primary key
+#  name       :string(50)       not null
+#  type       :text             not null
+#  size       :integer          not null
+#  url        :text             not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 
 require 'rails_helper'
 
 RSpec.describe Material, type: :model do
-  it { is_expected.to have_attached_file(:upload) }
-  it { is_expected.to validate_attachment_presence(:upload) }
+  it { is_expected.to validate_presence_of(:name) }
+  it { is_expected.to validate_presence_of(:type) }
+  it { is_expected.to validate_presence_of(:size) }
+  it { is_expected.to validate_presence_of(:url) }
 
   it { is_expected.to belong_to(:person) }
-  it { is_expected.to have_and_belong_to_many(:answers) }
-  it { is_expected.to have_and_belong_to_many(:instructions) }
-  it { is_expected.to have_and_belong_to_many(:presentations) }
+  it { is_expected.to have_many(:answers) }
+  it { is_expected.to have_many(:instructions) }
+  it { is_expected.to have_many(:presentations) }
 end

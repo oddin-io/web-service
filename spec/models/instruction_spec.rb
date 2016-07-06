@@ -22,4 +22,5 @@ RSpec.describe Instruction, type: :model do
   it { is_expected.to belong_to(:lecture) }
   it { is_expected.to have_many(:enrolls) }
   it { is_expected.to have_many(:people) }
+  it { is_expected.to have_many(:materials) }
 end

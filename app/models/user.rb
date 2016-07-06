@@ -7,7 +7,7 @@
 #  password_digest :string           not null
 #
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   has_secure_password
   has_one :person
 

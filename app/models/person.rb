@@ -7,7 +7,7 @@
 #  user_id :integer          not null
 #
 
-class Person < ActiveRecord::Base
+class Person < ApplicationRecord
   belongs_to :user
   has_many :questions
   has_many :answers

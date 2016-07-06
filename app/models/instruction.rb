@@ -10,12 +10,13 @@
 #  lecture_id   :integer          not null
 #
 
-class Instruction < ActiveRecord::Base
+class Instruction < ApplicationRecord
   belongs_to :event
   belongs_to :lecture
   has_many :enrolls
   has_many :people, through: :enrolls
-  has_many :materials
+  has_many :instructions_materials
+  has_many :materials, through: :instructions_materials
 
   validates :class_number, :start_date, :end_date, presence: true
   validates :class_number, numericality: {only_integer: true}

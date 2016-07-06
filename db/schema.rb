@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160622180031) do
+ActiveRecord::Schema.define(version: 20160705200629) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,28 +23,26 @@ ActiveRecord::Schema.define(version: 20160622180031) do
     t.integer  "person_id",                               null: false
   end
 
-  create_table "answers_materials", id: false, force: :cascade do |t|
-    t.integer "material_id", null: false
+  create_table "answers_materials", force: :cascade do |t|
     t.integer "answer_id",   null: false
+    t.integer "material_id", null: false
+    t.index ["answer_id"], name: "index_answers_materials_on_answer_id", using: :btree
+    t.index ["material_id"], name: "index_answers_materials_on_material_id", using: :btree
   end
-
-  add_index "answers_materials", ["answer_id", "material_id"], name: "uk_answers_materials", unique: true, using: :btree
 
   create_table "enrolls", force: :cascade do |t|
     t.integer "profile",        null: false
     t.integer "person_id",      null: false
     t.integer "instruction_id", null: false
+    t.index ["person_id", "instruction_id"], name: "index_enrolls_on_person_id_and_instruction_id", unique: true, using: :btree
   end
-
-  add_index "enrolls", ["person_id", "instruction_id"], name: "index_enrolls_on_person_id_and_instruction_id", unique: true, using: :btree
 
   create_table "events", force: :cascade do |t|
-    t.string  "code",     limit: 30,                                        null: false
-    t.string  "name",     limit: 100,                                       null: false
-    t.decimal "workload",             precision: 7, scale: 2, default: 0.0, null: false
+    t.string  "code",     limit: 30,                                          null: false
+    t.string  "name",     limit: 100,                                         null: false
+    t.decimal "workload",             precision: 7, scale: 2, default: "0.0", null: false
+    t.index ["code"], name: "index_events_on_code", unique: true, using: :btree
   end
-
-  add_index "events", ["code"], name: "index_events_on_code", unique: true, using: :btree
 
   create_table "instructions", force: :cascade do |t|
     t.integer "class_number", default: 1, null: false
@@ -55,36 +52,29 @@ ActiveRecord::Schema.define(version: 20160622180031) do
     t.integer "lecture_id",               null: false
   end
 
-  create_table "instructions_materials", id: false, force: :cascade do |t|
-    t.integer "material_id",    null: false
+  create_table "instructions_materials", force: :cascade do |t|
     t.integer "instruction_id", null: false
+    t.integer "material_id",    null: false
+    t.index ["instruction_id"], name: "index_instructions_materials_on_instruction_id", using: :btree
+    t.index ["material_id"], name: "index_instructions_materials_on_material_id", using: :btree
   end
-
-  add_index "instructions_materials", ["instruction_id", "material_id"], name: "uk_instructions_materials", unique: true, using: :btree
 
   create_table "lectures", force: :cascade do |t|
-    t.string  "code",     limit: 30,                                        null: false
-    t.string  "name",     limit: 100,                                       null: false
-    t.decimal "workload",             precision: 7, scale: 2, default: 0.0, null: false
+    t.string  "code",     limit: 30,                                          null: false
+    t.string  "name",     limit: 100,                                         null: false
+    t.decimal "workload",             precision: 7, scale: 2, default: "0.0", null: false
+    t.index ["code"], name: "index_lectures_on_code", unique: true, using: :btree
   end
-
-  add_index "lectures", ["code"], name: "index_lectures_on_code", unique: true, using: :btree
 
   create_table "materials", force: :cascade do |t|
-    t.string   "upload_file_name",    null: false
-    t.string   "upload_content_type", null: false
-    t.integer  "upload_file_size",    null: false
-    t.datetime "upload_updated_at",   null: false
-    t.text     "download_url",        null: false
-    t.integer  "person_id",           null: false
+    t.string   "name",       limit: 50, null: false
+    t.text     "type",                  null: false
+    t.integer  "size",                  null: false
+    t.text     "url",                   null: false
+    t.datetime "updated_at",            null: false
+    t.integer  "person_id",             null: false
+    t.index ["person_id"], name: "index_materials_on_person_id", using: :btree
   end
-
-  create_table "materials_presentations", id: false, force: :cascade do |t|
-    t.integer "material_id",     null: false
-    t.integer "presentation_id", null: false
-  end
-
-  add_index "materials_presentations", ["presentation_id", "material_id"], name: "uk_presentations_materials", unique: true, using: :btree
 
   create_table "people", force: :cascade do |t|
     t.string  "name",    limit: 100, null: false
@@ -97,6 +87,13 @@ ActiveRecord::Schema.define(version: 20160622180031) do
     t.datetime "created_at",                 null: false
     t.integer  "instruction_id",             null: false
     t.integer  "person_id",                  null: false
+  end
+
+  create_table "presentations_materials", force: :cascade do |t|
+    t.integer "presentation_id", null: false
+    t.integer "material_id",     null: false
+    t.index ["material_id"], name: "index_presentations_materials_on_material_id", using: :btree
+    t.index ["presentation_id"], name: "index_presentations_materials_on_presentation_id", using: :btree
   end
 
   create_table "questions", force: :cascade do |t|
@@ -112,16 +109,14 @@ ActiveRecord::Schema.define(version: 20160622180031) do
     t.integer  "user_id",                null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.index ["token"], name: "index_sessions_on_token", unique: true, using: :btree
   end
-
-  add_index "sessions", ["token"], name: "index_sessions_on_token", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string "email",           limit: 100, null: false
     t.string "password_digest",             null: false
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
   add_foreign_key "answers", "people"
   add_foreign_key "answers", "questions"
@@ -134,11 +129,11 @@ ActiveRecord::Schema.define(version: 20160622180031) do
   add_foreign_key "instructions_materials", "instructions"
   add_foreign_key "instructions_materials", "materials"
   add_foreign_key "materials", "people"
-  add_foreign_key "materials_presentations", "materials"
-  add_foreign_key "materials_presentations", "presentations"
   add_foreign_key "people", "users"
   add_foreign_key "presentations", "instructions"
   add_foreign_key "presentations", "people"
+  add_foreign_key "presentations_materials", "materials"
+  add_foreign_key "presentations_materials", "presentations"
   add_foreign_key "questions", "people"
   add_foreign_key "questions", "presentations"
   add_foreign_key "sessions", "users"

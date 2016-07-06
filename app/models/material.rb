@@ -2,21 +2,24 @@
 #
 # Table name: materials
 #
-#  id                :integer          not null, primary key
-#  file_file_name    :string           not null
-#  file_content_type :string           not null
-#  file_file_size    :integer          not null
-#  file_updated_at   :datetime         not null
+#  id         :integer          not null, primary key
+#  name       :string(50)       not null
+#  type       :text             not null
+#  size       :integer          not null
+#  url        :text             not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 
-class Material < ActiveRecord::Base
-  has_attached_file :upload, path: 'system/materials/:id_partition/:filename'
-
+class Material < ApplicationRecord
   belongs_to :person
-  has_and_belongs_to_many :instructions
-  has_and_belongs_to_many :presentations
-  has_and_belongs_to_many :answers
 
-  validates_attachment_content_type :upload, content_type: /^application\/octet-stream$/
-  validates_attachment_presence :upload
+  has_many :presentations_materials
+  has_many :presentations, through: :presentations_materials
+  has_many :instructions_materials
+  has_many :instructions, through:  :instructions_materials
+  has_many :answers_materials
+  has_many :answers, through: :answers_materials
+
+  validates :name, :type, :size, :url, :updated_at, presence: true
 end

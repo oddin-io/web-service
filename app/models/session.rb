@@ -9,7 +9,7 @@
 #  updated_at :datetime         not null
 #
 
-class Session < ActiveRecord::Base
+class Session < ApplicationRecord
   validates :token, length: {maximum: 192}, presence: true
 
   belongs_to :user

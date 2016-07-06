@@ -16,7 +16,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    render json: User.find(params[:id])
+    render json: current_user
   end
 
   def edit

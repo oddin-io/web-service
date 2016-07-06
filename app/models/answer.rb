@@ -10,10 +10,11 @@
 #  person_id   :integer          not null
 #
 
-class Answer < ActiveRecord::Base
+class Answer < ApplicationRecord
   belongs_to :question
   belongs_to :person
-  has_many :materials
+  has_many :answers_materials
+  has_many :materials, through: :answers_materials
 
   validates :text, :created_at, presence: true
   validates :anonymous, exclusion: {in: [nil]}

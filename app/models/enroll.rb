@@ -8,7 +8,7 @@
 #  instruction_id :integer          not null
 #
 
-class Enroll < ActiveRecord::Base
+class Enroll < ApplicationRecord
   belongs_to :person
   belongs_to :instruction
 

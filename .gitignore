@@ -9,14 +9,12 @@
 
 # Ignore all logfiles and tempfiles.
 /log/*
+/tmp/*
 !/log/.keep
-/tmp
+!/tmp/.keep
 
-# Environment variables
-.env
+# Ignore Byebug command history file.
+.byebug_history
 
 # IDE
-.idea/
-
-# Test coverage
-coverage
+.idea
