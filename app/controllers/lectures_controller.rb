@@ -3,10 +3,6 @@ class LecturesController < ApplicationController
     render json: Lecture.includes(instructions: :people).where(people: {user_id: current_user.id})
   end
 
-  def new
-    render plain: 'I display a form for creating new entity'
-  end
-
   def create
     lecture = Lecture.new name: params[:name], code: params[:code], workload: [:workload]
     lecture.save!
@@ -15,10 +11,6 @@ class LecturesController < ApplicationController
 
   def show
     render json: Lecture.find(params[:id])
-  end
-
-  def edit
-    render plain: 'I display a form for editing an entity'
   end
 
   def update

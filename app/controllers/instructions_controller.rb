@@ -3,10 +3,6 @@ class InstructionsController < ApplicationController
     render json: current_user.person.instructions
   end
 
-  def new
-    render plain: 'I display a form for creating new entity'
-  end
-
   def create
     event = Event.find params[:event_id]
     lecture = Lecture.find params[:lecture_id]
@@ -19,10 +15,6 @@ class InstructionsController < ApplicationController
 
   def show
     render json: Instruction.find(params[:id])
-  end
-
-  def edit
-    render plain: 'I display a form for editing an entity'
   end
 
   def update

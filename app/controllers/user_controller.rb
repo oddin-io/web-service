@@ -1,13 +1,5 @@
-class UsersController < ApplicationController
+class UserController < ApplicationController
   skip_before_action :valid_session, only: [:create]
-
-  def index
-    render json: User.all
-  end
-
-  def new
-    render plain: 'I display a form for creating new entity'
-  end
 
   def create
     user = User.new email: params[:email], password: params[:password]
@@ -17,10 +9,6 @@ class UsersController < ApplicationController
 
   def show
     render json: current_user
-  end
-
-  def edit
-    render plain: 'I display a form for editing an entity'
   end
 
   def update

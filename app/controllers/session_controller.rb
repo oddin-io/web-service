@@ -1,9 +1,5 @@
-class SessionsController < ApplicationController
+class SessionController < ApplicationController
   skip_before_action :valid_session, only: [:create]
-
-  def new
-    puts 'I display a form for creating new entity'
-  end
 
   def create
     user = User.find_by email: params[:email]
@@ -20,10 +16,6 @@ class SessionsController < ApplicationController
 
   def show
     render json: get_session
-  end
-
-  def edit
-    puts 'I display a form for editing the entity'
   end
 
   def update

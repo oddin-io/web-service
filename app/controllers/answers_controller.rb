@@ -3,10 +3,6 @@ class AnswersController < ApplicationController
     render json: current_user.person.answers
   end
 
-  def new
-    render plain: 'I display a form for creating new entity'
-  end
-
   def create
     question = Question.find params[:question_id]
     person = Person.find params[:person_id]
@@ -19,10 +15,6 @@ class AnswersController < ApplicationController
 
   def show
     render json: Answer.find(params[:id])
-  end
-
-  def edit
-    render plain: 'I display a form for editing an entity'
   end
 
   def update

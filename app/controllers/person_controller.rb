@@ -1,10 +1,6 @@
-class PeopleController < ApplicationController
+class PersonController < ApplicationController
   def index
     render json: Person.all
-  end
-
-  def new
-    render plain: 'I display a form for creating new entity'
   end
 
   def create
@@ -16,10 +12,6 @@ class PeopleController < ApplicationController
 
   def show
     render json: Person.find(params[:id])
-  end
-
-  def edit
-    render plain: 'I display a form for editing an entity'
   end
 
   def update

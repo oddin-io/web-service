@@ -3,10 +3,6 @@ class PresentationsController < ApplicationController
     render json: Presentation.includes(instruction: :people).where(people: {user_id: current_user.id})
   end
 
-  def new
-    render plain: 'I display a form for creating new entity'
-  end
-
   def create
     instruction = Instruction.find params[:instruction_id]
     person = Person.find current_user.person.id
@@ -18,10 +14,6 @@ class PresentationsController < ApplicationController
 
   def show
     render json: Presentation.find(params[:id])
-  end
-
-  def edit
-    render plain: 'I display a form for editing an entity'
   end
 
   def update
