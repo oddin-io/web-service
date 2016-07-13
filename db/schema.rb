@@ -67,12 +67,12 @@ ActiveRecord::Schema.define(version: 20160705200629) do
   end
 
   create_table "materials", force: :cascade do |t|
-    t.string   "name",       limit: 50, null: false
-    t.text     "type",                  null: false
-    t.integer  "size",                  null: false
-    t.text     "url",                   null: false
-    t.datetime "updated_at",            null: false
-    t.integer  "person_id",             null: false
+    t.string   "name"
+    t.string   "mime"
+    t.text     "key",                         null: false
+    t.boolean  "checked",     default: false
+    t.datetime "uploaded_at"
+    t.integer  "person_id",                   null: false
     t.index ["person_id"], name: "index_materials_on_person_id", using: :btree
   end
 

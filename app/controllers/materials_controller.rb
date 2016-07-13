@@ -4,30 +4,47 @@ class MaterialsController < ApplicationController
   end
 
   def new
-    render plain: 'I display a form for creating new entity'
+    material = Material.new key: SecureRandom.uuid, person: current_user.person
+    material.save!
+
+    obj = get_bucket.object material.key + '/${filename}'
+    post = obj.presigned_post
+
+    resp = {fields: post.fields, url: post.url}
+    render json: resp
   end
 
   def create
-    material = Material.new url: params[:url], name: params[:filename], size: params[:filesize],
-                            type: params[:filetype], updated_at: DateTime.now
+    material = Material.find_by_key params[:key]
+    material.name = params[:name]
+    material.mime = params[:mime]
+    material.checked = true
+    material.uploaded_at = DateTime.now
     material.save!
-    render json: material
+
+    url = get_bucket.object(material.key + '/' + material.name).presigned_url(:get)
+    resp = {material: material, url: url}
+    render json: resp
   end
 
   def show
     material = Material.find(params[:id])
-    render json: material
-  end
 
-  def edit
-    render plain: 'I display a form for editing an entity'
-  end
-
-  def update
-    render plain: 'I update one entity'
+    url = get_bucket.object(material.key + '/' + material.name).presigned_url(:get)
+    resp = {material: material, url: url}
+    render json: resp
   end
 
   def destroy
-    render plain: 'I destroy one entity'
+    material = Material.find(params[:id])
+    object = get_bucket.object material.key + '/' + material.name
+    object.delete
+  end
+
+  private
+
+  # @return [Bucket]
+  def get_bucket
+    Aws::S3::Resource.new(region: 'us-west-2').bucket('oddin')
   end
 end
