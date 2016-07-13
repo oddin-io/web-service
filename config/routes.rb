@@ -10,9 +10,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :materials, only: [:show, :destroy]
+  resources :materials, only: [:show, :destroy, :update]
   concern :materializable do
-    resources :materials, except: [:show, :destroy, :update] do
+    resources :materials, except: [:create, :show, :destroy, :update] do
       collection do
         get 'new'
       end

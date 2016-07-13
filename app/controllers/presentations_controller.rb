@@ -1,6 +1,10 @@
 class PresentationsController < ApplicationController
   def index
-    render json: Presentation.includes(instruction: :people).where(people: {user_id: current_user.id})
+    resp = Presentation.includes(instruction: :people).where(people: {user_id: current_user.id})
+
+    resp = Instruction.find(params[:instruction_id]).presentations if params[:instruction_id]
+
+    render json: resp
   end
 
   def create

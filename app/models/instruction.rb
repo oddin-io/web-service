@@ -13,6 +13,7 @@
 class Instruction < ApplicationRecord
   belongs_to :event
   belongs_to :lecture
+  has_many :presentations
   has_many :enrolls
   has_many :people, through: :enrolls
   has_many :instructions_materials

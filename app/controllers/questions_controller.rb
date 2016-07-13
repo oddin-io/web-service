@@ -1,6 +1,10 @@
 class QuestionsController < ApplicationController
   def index
-    render json: current_user.person.questions
+    resp = current_user.person.questions
+
+    resp = Presentation.find(params[:presentation_id]).questions if params[:presentation_id]
+
+    render json: resp
   end
 
   def create
