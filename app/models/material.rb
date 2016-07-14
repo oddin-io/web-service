@@ -13,13 +13,7 @@
 
 class Material < ApplicationRecord
   belongs_to :person
-
-  has_many :presentations_materials
-  has_many :presentations, through: :presentations_materials
-  has_many :instructions_materials
-  has_many :instructions, through:  :instructions_materials
-  has_many :answers_materials
-  has_many :answers, through: :answers_materials
+  belongs_to :attachable, polymorphic: true
 
   validates :person, :key, presence: true
 end

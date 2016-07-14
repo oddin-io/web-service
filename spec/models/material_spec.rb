@@ -18,7 +18,5 @@ RSpec.describe Material, type: :model do
   it { is_expected.to validate_presence_of(:person) }
 
   it { is_expected.to belong_to(:person) }
-  it { is_expected.to have_many(:answers) }
-  it { is_expected.to have_many(:instructions) }
-  it { is_expected.to have_many(:presentations) }
+  it { is_expected.to belong_to(:attachable) }
 end

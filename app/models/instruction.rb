@@ -16,8 +16,7 @@ class Instruction < ApplicationRecord
   has_many :presentations
   has_many :enrolls
   has_many :people, through: :enrolls
-  has_many :instructions_materials
-  has_many :materials, through: :instructions_materials
+  has_many :materials, as: :attachable
 
   validates :class_number, :start_date, :end_date, presence: true
   validates :class_number, numericality: {only_integer: true}

@@ -1,4 +1,4 @@
-class CreateEnrolls < ActiveRecord::Migration
+class CreateEnrolls < ActiveRecord::Migration[5.0]
   def change
     create_table :enrolls do |t|
       t.integer :profile, null: false

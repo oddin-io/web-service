@@ -6,6 +6,7 @@ class CreateMaterials < ActiveRecord::Migration[5.0]
       t.text :key, null: false, unique: true
       t.boolean :checked, default: false
       t.datetime :uploaded_at
+      t.references :attachable, polymorphic: true , index: true
 
       t.belongs_to :person, foreign_key: true, null: false
     end

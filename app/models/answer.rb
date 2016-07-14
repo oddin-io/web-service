@@ -13,8 +13,7 @@
 class Answer < ApplicationRecord
   belongs_to :question
   belongs_to :person
-  has_many :answers_materials
-  has_many :materials, through: :answers_materials
+  has_many :materials, as: :attachable
 
   validates :text, :created_at, presence: true
   validates :anonymous, exclusion: {in: [nil]}

@@ -14,14 +14,11 @@ class MaterialsController < ApplicationController
     material.save!
 
     if params[:instruction_id]
-      instruction = Instruction.find params[:instruction_id]
-      InstructionsMaterial.new(material: material, instruction: instruction).save
+      Instruction.find(params[:instruction_id]).materials.push material
     elsif params[:presentation_id]
-      presentation = Presentation.find params[:presentation_id]
-      PresentationsMaterial.new(material: material, presentation: presentation).save
+      Presentation.find(params[:presentation_id]).materials.push material
     elsif params[:answer_id]
-      answer = Answer.find param[:answer_id]
-      AnswersMaterial.new(material: material, answer: answer).save
+      Answer.find(param[:answer_id]).materials.push material
     end
 
     obj = get_bucket.object material.key + '/${filename}'
