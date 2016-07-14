@@ -14,6 +14,7 @@ class Question < ApplicationRecord
   belongs_to :presentation
   belongs_to :person
   has_many :answers
+  has_many :votes, as: :votable
 
   validates :text, :created_at, presence: true
   validates :anonymous, exclusion: {in: [nil]}

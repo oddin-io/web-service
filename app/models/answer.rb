@@ -14,6 +14,7 @@ class Answer < ApplicationRecord
   belongs_to :question
   belongs_to :person
   has_many :materials, as: :attachable
+  has_many :votes, as: :votable
 
   validates :text, :created_at, presence: true
   validates :anonymous, exclusion: {in: [nil]}

@@ -1,8 +1,4 @@
-class PersonController < ApplicationController
-  def index
-    render json: Person.all
-  end
-
+class PeopleController < ApplicationController
   def create
     user = User.find params[:user_id]
     person = Person.new name: params[:name], user: user

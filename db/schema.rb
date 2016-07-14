@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160621195938) do
+ActiveRecord::Schema.define(version: 20160714173009) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,6 +112,16 @@ ActiveRecord::Schema.define(version: 20160621195938) do
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
   end
 
+  create_table "votes", force: :cascade do |t|
+    t.boolean "up",           default: true, null: false
+    t.integer "person_id",                   null: false
+    t.string  "votable_type",                null: false
+    t.integer "votable_id",                  null: false
+    t.index ["person_id", "votable_id", "votable_type"], name: "index_votes_on_person_id_and_votable_id_and_votable_type", unique: true, using: :btree
+    t.index ["person_id"], name: "index_votes_on_person_id", using: :btree
+    t.index ["votable_type", "votable_id"], name: "index_votes_on_votable_type_and_votable_id", using: :btree
+  end
+
   add_foreign_key "answers", "people"
   add_foreign_key "answers", "questions"
   add_foreign_key "enrolls", "instructions"
@@ -125,4 +135,5 @@ ActiveRecord::Schema.define(version: 20160621195938) do
   add_foreign_key "questions", "people"
   add_foreign_key "questions", "presentations"
   add_foreign_key "sessions", "users"
+  add_foreign_key "votes", "people"
 end

@@ -19,12 +19,20 @@ Rails.application.routes.draw do
     end
   end
 
+  concern :votable do
+    member do
+      post 'upvote'
+      post 'downvote'
+      delete 'vote'
+    end
+  end
+
   resources :events, :lectures
   resources :instructions, concerns: :materializable do
     shallow do
       resources :presentations, concerns: :materializable do
-        resources :questions do
-          resources :answers, concerns: :materializable do
+        resources :questions, concerns: :votable do
+          resources :answers, concerns: [:materializable, :votable] do
           end
         end
       end

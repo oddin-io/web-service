@@ -27,4 +27,26 @@ class QuestionsController < ApplicationController
   def destroy
     render plain: 'I destroy one entity'
   end
+
+  def upvote
+    vote = Vote.find_or_create_by(person: current_user.person, votable: Question.find(params[:id]))
+    vote.up = true
+    vote.save!
+
+    render json: vote
+  end
+
+  def downvote
+    vote = Vote.find_or_create_by(person: current_user.person, votable: Question.find(params[:id]))
+    vote.up = false
+    vote.save!
+
+    render json: vote
+  end
+
+  def vote
+    Vote.find(person: current_user.person, votable: Question.find(params[:id])).delete
+
+    render status: 200, nothing: true
+  end
 end
