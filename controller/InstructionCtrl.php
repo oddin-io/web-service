@@ -215,32 +215,26 @@ class InstructionCtrl
     }
 
     /**
+     * @noAuth
      * @url GET /instruction/$instruction_id/material/$material_id
      */
     public function getMaterial($instruction_id, $material_id)
     {
-        $instruction_id = urldecode($instruction_id);
-        $person = AuthCtrl::getSession()["id"];
         $material_id = urldecode($material_id);
+        $material_id = MiMaterialQuery::create()
+            ->findOneById($material_id);
 
-        if (InstructionCtrl::auth($instruction_id, $person, 0)) {
-            $material_id = MiMaterialQuery::create()
-                ->findOneById($material_id);
-
-            if ($material_id) {
-                header("Access-Control-Expose-Headers: Content-Disposition");
-                header("Content-Type: ".$material_id->getMime());
-                header("Content-Disposition: attachment; filename=\"".$material_id->getName()."\"");
-                header("Cache-Control: no-cache, no-store, must-revalidate");
-                header("Pragma: no-cache");
-                header("Expires: 0");
-                fpassthru($material_id->getFile());
-                exit(0);
-            } else {
-                throw new RestException(404, "Arquivo");
-            }
+        if ($material_id) {
+            header("Access-Control-Expose-Headers: Content-Disposition");
+            header("Content-Type: ".$material_id->getMime());
+            header("Content-Disposition: attachment; filename=\"".$material_id->getName()."\"");
+            header("Cache-Control: no-cache, no-store, must-revalidate");
+            header("Pragma: no-cache");
+            header("Expires: 0");
+            fpassthru($material_id->getFile());
+            exit(0);
         } else {
-            throw new RestException(401, "Unauthorized");
+            throw new RestException(404, "Arquivo");
         }
     }
 
