@@ -1,0 +1,18 @@
+postgres:
+  image: postgres:9.5.3
+  environment:
+    POSTGRES_USER: ws-oddin
+    POSTGRES_PASSWORD: 123
+  ports:
+    - '5432:5432'
+  volumes:
+    - ws-oddin:/var/lib/postgresql/data
+
+ws-oddin:
+  build: .
+  links:
+    - postgres
+  ports:
+    - '80:3000'
+  environment:
+    DATABASE_URL: postgresql://ws-oddin:123@postgres:5432/ws-oddin?encoding=utf8&pool=5&timeout=5000
