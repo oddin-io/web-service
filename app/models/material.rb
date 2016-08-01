@@ -2,13 +2,15 @@
 #
 # Table name: materials
 #
-#  id          :integer          not null, primary key
-#  name        :string           not null
-#  type        :string           not null
-#  key         :text             not null
-#  checked     :boolean          default(FALSE), not null
-#  uploaded_at :datetime         not null
-#  person_id   :integer          not null
+#  id              :integer          not null, primary key
+#  name            :string
+#  mime            :string
+#  key             :text             not null
+#  checked         :boolean          default(FALSE)
+#  uploaded_at     :datetime
+#  attachable_type :string
+#  attachable_id   :integer
+#  person_id       :integer          not null
 #
 
 class Material < ApplicationRecord

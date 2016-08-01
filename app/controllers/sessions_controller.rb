@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
       session.save!
       render json: session, status: 201
     else
-      render nothing: true, status: 401
+      render body: nil, status: 401
     end
   end
 
@@ -24,11 +24,11 @@ class SessionsController < ApplicationController
 
   def destroy
     get_session.destroy
-    render nothing: true, status: 200
+    render body: nil, status: 200
   end
 
   def destroy_all
     Session.destroy_all user_id: current_user.id
-    render nothing: true, status: 200
+    render body: nil, status: 200
   end
 end
