@@ -4,9 +4,7 @@ Rails.application.routes.draw do
   resource :person
   resource :session do
     member do
-      get 'destroy-all'
-      post 'destroy-all'
-      delete 'destroy-all'
+      delete 'delete-all', method: 'destroy_all'
     end
   end
 

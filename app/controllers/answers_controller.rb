@@ -5,8 +5,7 @@ class AnswersController < ApplicationController
 
   def create
     question = Question.find params[:question_id]
-    person = Person.find params[:person_id]
-
+    person = current_user.person
     answer = Answer.new text: params[:text], anonymous: params[:anonymous] || false, created_at: DateTime.now,
                             question: question, person: person
     answer.save!

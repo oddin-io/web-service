@@ -1,13 +1,13 @@
 class PeopleController < ApplicationController
   def create
-    user = User.find params[:user_id]
+    user = current_user
     person = Person.new name: params[:name], user: user
     person.save!
     render json: person
   end
 
   def show
-    render json: Person.find(params[:id])
+    render json: current_user.person
   end
 
   def update

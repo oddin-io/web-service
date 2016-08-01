@@ -11,5 +11,8 @@
 #
 
 class AnswerSerializer < ActiveModel::Serializer
-  attributes :id
+  attributes :id, :text, :anonymous, :created_at
+
+  has_one :question
+  has_one :person
 end
