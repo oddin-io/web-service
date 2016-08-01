@@ -10,7 +10,9 @@
 #
 
 class Session < ApplicationRecord
-  validates :token, length: {maximum: 192}, presence: true
+  TOKEN_MAX_LENGTH = 192
 
   belongs_to :user
+
+  validates :token, length: {maximum: self::TOKEN_MAX_LENGTH}, presence: true
 end

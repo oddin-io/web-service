@@ -11,6 +11,8 @@
 #
 
 class Answer < ApplicationRecord
+  TEXT_MAX_LENGTH = 140
+
   belongs_to :question
   belongs_to :person
   has_many :materials, as: :attachable
@@ -18,5 +20,5 @@ class Answer < ApplicationRecord
 
   validates :text, :created_at, presence: true
   validates :anonymous, exclusion: {in: [nil]}
-  validates :text, length: {maximum: 140}
+  validates :text, length: {maximum: self::TEXT_MAX_LENGTH}
 end

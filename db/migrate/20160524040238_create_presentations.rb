@@ -1,7 +1,7 @@
 class CreatePresentations < ActiveRecord::Migration[5.0]
   def change
     create_table :presentations do |t|
-      t.string :subject, limit: 100, null: false
+      t.string :subject, limit: Presentation::SUBJECT_MAX_LENGTH, null: false
       t.integer :status, null: false
       t.datetime :created_at, null: false
 

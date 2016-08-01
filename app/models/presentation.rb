@@ -11,11 +11,13 @@
 #
 
 class Presentation < ApplicationRecord
+  SUBJECT_MAX_LENGTH = 100
+
   belongs_to :instruction
   belongs_to :person
   has_many :questions
   has_many :materials, as: :attachable
 
   validates :subject, :status, :created_at, presence: true
-  validates :subject, length: {maximum: 100}
+  validates :subject, length: {maximum: self::SUBJECT_MAX_LENGTH}
 end

@@ -8,10 +8,14 @@
 #
 
 class User < ApplicationRecord
+  EMAIL_MAX_LENGTH = 100
+  PASSWORD_MIN_LENGTH = 8
+  PASSWORD_MAX_LENGTH = 32
+
   has_secure_password
   has_one :person
 
   validates :email, :password, presence: true
-  validates :email, length: {maximum: 100}
-  validates :password, length: {in: 8..32}, allow_nil: true
+  validates :email, length: {maximum: self::EMAIL_MAX_LENGTH}
+  validates :password, length: {in: self::PASSWORD_MIN_LENGTH..self::PASSWORD_MAX_LENGTH}, allow_nil: true
 end

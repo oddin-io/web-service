@@ -8,6 +8,8 @@
 #
 
 class Person < ApplicationRecord
+  NAME_MAX_LENGTH = 100
+
   belongs_to :user
   has_many :questions
   has_many :answers
@@ -17,5 +19,5 @@ class Person < ApplicationRecord
   has_many :materials
 
   validates :name, presence: true
-  validates :name, length: {maximum: 100}
+  validates :name, length: {maximum: self::NAME_MAX_LENGTH}
 end
