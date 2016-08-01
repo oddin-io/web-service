@@ -16,11 +16,11 @@ francisco_user = User.create email: 'francisco@gmail.com', password: '12345678'
 leonardo_user = User.create email: 'leonardo@gmail.com', password: '12345678'
 ana_user = User.create email: 'ana@gmail.com', password: '12345678'
 
-miriam_person = Person.create name: 'Eloize', user_id: miriam_user.id
-pablo_person = Person.create name: 'Silvana', user_id: pablo_user.id
-celia_person = Person.create name: 'Miriam', user_id: celia_user.id
-silvana_person = Person.create name: 'Célia', user_id: silvana_user.id
-eloize_person = Person.create name: 'Pablo', user_id: eloize_user.id
+miriam_person = Person.create name: 'Miriam', user_id: miriam_user.id
+pablo_person = Person.create name: 'Pablo', user_id: pablo_user.id
+celia_person = Person.create name: 'Célia', user_id: celia_user.id
+silvana_person = Person.create name: 'Silvana', user_id: silvana_user.id
+eloize_person = Person.create name: 'Eloize', user_id: eloize_user.id
 bruno_person = Person.create name: 'Bruno', user_id: bruno_user.id
 francisco_person = Person.create name: 'Francisco', user_id: francisco_user.id
 leonardo_person = Person.create name: 'Leonardo', user_id: leonardo_user.id
