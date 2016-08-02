@@ -14,8 +14,7 @@
 #
 
 class MaterialSerializer < ActiveModel::Serializer
-  attributes :id, :name, :mime, :checked, :uploaded_at
+  attributes :id, :name, :mime, :checked, :attachable_type, :attachable_id, :uploaded_at
 
   has_one :person
-  has_one :attachable
 end

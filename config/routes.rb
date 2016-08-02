@@ -27,6 +27,10 @@ Rails.application.routes.draw do
 
   resources :events, :lectures
   resources :instructions, concerns: :materializable do
+    member do
+      get 'profile'
+      get 'participants'
+    end
     shallow do
       resources :presentations, concerns: :materializable do
         resources :questions, concerns: :votable do
