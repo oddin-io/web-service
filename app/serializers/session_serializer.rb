@@ -11,4 +11,11 @@
 
 class SessionSerializer < ActiveModel::Serializer
   attributes :id, :token, :user_id, :created_at
+
+  has_one :person
+  has_one :user
+
+  def person
+    object.user.person
+  end
 end
