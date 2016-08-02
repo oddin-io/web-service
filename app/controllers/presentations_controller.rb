@@ -27,4 +27,11 @@ class PresentationsController < ApplicationController
   def destroy
     render plain: 'I destroy one entity'
   end
+
+  def close
+    presentation = Presentation.find params[:id]
+    presentation.status = 0
+
+    render json: presentation
+  end
 end
