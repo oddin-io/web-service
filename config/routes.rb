@@ -33,6 +33,9 @@ Rails.application.routes.draw do
     end
     shallow do
       resources :presentations, concerns: :materializable do
+        member do
+          post 'close'
+        end
         resources :questions, concerns: :votable do
           resources :answers, concerns: [:materializable, :votable] do
           end

@@ -30,7 +30,7 @@ class PresentationsController < ApplicationController
 
   def close
     presentation = Presentation.find params[:id]
-    presentation.status = 0
+    presentation.status = 1
 
     render json: presentation
   end
