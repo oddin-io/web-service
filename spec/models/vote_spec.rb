@@ -12,7 +12,7 @@
 require 'rails_helper'
 
 RSpec.describe Vote, type: :model do
-  it { is_expected.to validate_presence_of(:up) }
+  it { is_expected.to validate_exclusion_of(:up).in_array([nil]) }
   it { is_expected.to validate_presence_of(:person) }
   it { is_expected.to validate_presence_of(:votable) }
 

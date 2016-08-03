@@ -18,7 +18,7 @@ class Question < ApplicationRecord
   has_many :answers
   has_many :votes, as: :votable
 
-  validates :text, :created_at, presence: true
+  validates :text, presence: true
   validates :anonymous, exclusion: {in: [nil]}
   validates :text, length: {maximum: self::TEXT_MAX_LENGTH}
 end

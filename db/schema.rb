@@ -78,11 +78,11 @@ ActiveRecord::Schema.define(version: 20160714173009) do
   end
 
   create_table "presentations", force: :cascade do |t|
-    t.string   "subject",        limit: 100, null: false
-    t.integer  "status",                     null: false
-    t.datetime "created_at",                 null: false
-    t.integer  "instruction_id",             null: false
-    t.integer  "person_id",                  null: false
+    t.string   "subject",        limit: 100,             null: false
+    t.integer  "status",                     default: 0, null: false
+    t.datetime "created_at",                             null: false
+    t.integer  "instruction_id",                         null: false
+    t.integer  "person_id",                              null: false
     t.index ["instruction_id"], name: "index_presentations_on_instruction_id", using: :btree
     t.index ["person_id"], name: "index_presentations_on_person_id", using: :btree
   end

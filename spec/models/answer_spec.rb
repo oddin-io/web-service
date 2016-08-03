@@ -14,7 +14,6 @@ require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
   it { is_expected.to validate_presence_of(:text) }
-  it { is_expected.to validate_presence_of(:created_at) }
   it { is_expected.to validate_length_of(:text).is_at_most(Answer::TEXT_MAX_LENGTH) }
   it { is_expected.to validate_exclusion_of(:anonymous).in_array([nil]) }
 
