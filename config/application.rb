@@ -31,5 +31,12 @@ module WsOddin
       with.hidden_namespaces << :test_unit
       with.test_framework :rspec
     end
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource '*', headers: :any, methods: :any
+      end
+    end
   end
 end
