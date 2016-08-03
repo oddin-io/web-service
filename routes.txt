@@ -1,0 +1,72 @@
+                   Prefix Verb   URI Pattern                                             Controller#Action
+                     user POST   /user(.:format)                                         users#create
+                          GET    /user(.:format)                                         users#show
+                          PATCH  /user(.:format)                                         users#update
+                          PUT    /user(.:format)                                         users#update
+                          DELETE /user(.:format)                                         users#destroy
+                   person POST   /person(.:format)                                       people#create
+                          GET    /person(.:format)                                       people#show
+                          PATCH  /person(.:format)                                       people#update
+                          PUT    /person(.:format)                                       people#update
+                          DELETE /person(.:format)                                       people#destroy
+       delete_all_session DELETE /session/delete-all(.:format)                           sessions#delete_all {:method=>"destroy_all"}
+                  session POST   /session(.:format)                                      sessions#create
+                          GET    /session(.:format)                                      sessions#show
+                          PATCH  /session(.:format)                                      sessions#update
+                          PUT    /session(.:format)                                      sessions#update
+                          DELETE /session(.:format)                                      sessions#destroy
+                 material GET    /materials/:id(.:format)                                materials#show
+                          PATCH  /materials/:id(.:format)                                materials#update
+                          PUT    /materials/:id(.:format)                                materials#update
+                          DELETE /materials/:id(.:format)                                materials#destroy
+                   events GET    /events(.:format)                                       events#index
+                          POST   /events(.:format)                                       events#create
+                    event GET    /events/:id(.:format)                                   events#show
+                          PATCH  /events/:id(.:format)                                   events#update
+                          PUT    /events/:id(.:format)                                   events#update
+                          DELETE /events/:id(.:format)                                   events#destroy
+                 lectures GET    /lectures(.:format)                                     lectures#index
+                          POST   /lectures(.:format)                                     lectures#create
+                  lecture GET    /lectures/:id(.:format)                                 lectures#show
+                          PATCH  /lectures/:id(.:format)                                 lectures#update
+                          PUT    /lectures/:id(.:format)                                 lectures#update
+                          DELETE /lectures/:id(.:format)                                 lectures#destroy
+      profile_instruction GET    /instructions/:id/profile(.:format)                     instructions#profile
+ participants_instruction GET    /instructions/:id/participants(.:format)                instructions#participants
+       close_presentation POST   /presentations/:id/close(.:format)                      presentations#close
+         answer_materials GET    /answers/:answer_id/materials/new(.:format)             materials#new
+                          GET    /answers/:answer_id/materials(.:format)                 materials#index
+            upvote_answer POST   /answers/:id/upvote(.:format)                           answers#upvote
+          downvote_answer POST   /answers/:id/downvote(.:format)                         answers#downvote
+              vote_answer DELETE /answers/:id/vote(.:format)                             answers#vote
+         question_answers GET    /questions/:question_id/answers(.:format)               answers#index
+                          POST   /questions/:question_id/answers(.:format)               answers#create
+                   answer GET    /answers/:id(.:format)                                  answers#show
+                          PATCH  /answers/:id(.:format)                                  answers#update
+                          PUT    /answers/:id(.:format)                                  answers#update
+                          DELETE /answers/:id(.:format)                                  answers#destroy
+          upvote_question POST   /questions/:id/upvote(.:format)                         questions#upvote
+        downvote_question POST   /questions/:id/downvote(.:format)                       questions#downvote
+            vote_question DELETE /questions/:id/vote(.:format)                           questions#vote
+   presentation_questions GET    /presentations/:presentation_id/questions(.:format)     questions#index
+                          POST   /presentations/:presentation_id/questions(.:format)     questions#create
+                 question GET    /questions/:id(.:format)                                questions#show
+                          PATCH  /questions/:id(.:format)                                questions#update
+                          PUT    /questions/:id(.:format)                                questions#update
+                          DELETE /questions/:id(.:format)                                questions#destroy
+   presentation_materials GET    /presentations/:presentation_id/materials/new(.:format) materials#new
+                          GET    /presentations/:presentation_id/materials(.:format)     materials#index
+instruction_presentations GET    /instructions/:instruction_id/presentations(.:format)   presentations#index
+                          POST   /instructions/:instruction_id/presentations(.:format)   presentations#create
+             presentation GET    /presentations/:id(.:format)                            presentations#show
+                          PATCH  /presentations/:id(.:format)                            presentations#update
+                          PUT    /presentations/:id(.:format)                            presentations#update
+                          DELETE /presentations/:id(.:format)                            presentations#destroy
+    instruction_materials GET    /instructions/:instruction_id/materials/new(.:format)   materials#new
+                          GET    /instructions/:instruction_id/materials(.:format)       materials#index
+             instructions GET    /instructions(.:format)                                 instructions#index
+                          POST   /instructions(.:format)                                 instructions#create
+              instruction GET    /instructions/:id(.:format)                             instructions#show
+                          PATCH  /instructions/:id(.:format)                             instructions#update
+                          PUT    /instructions/:id(.:format)                             instructions#update
+                          DELETE /instructions/:id(.:format)                             instructions#destroy
