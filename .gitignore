@@ -1,6 +1,5 @@
 # Bundler config
 /.bundle
-Gemfile.lock
 
 # Logfiles and tempfiles
 /log/*

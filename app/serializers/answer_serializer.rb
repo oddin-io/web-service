@@ -12,8 +12,26 @@
 #
 
 class AnswerSerializer < ActiveModel::Serializer
-  attributes :id, :text, :anonymous, :created_at, :accepted
+  attributes :id, :text, :anonymous, :created_at, :accepted, :upvotes, :downvotes, :my_vote
 
   has_one :question
   has_one :person
+
+  def upvotes
+    object.votes.where(up: true).count
+  end
+
+  def downvotes
+    object.votes.where(up: false).count
+  end
+
+  def my_vote
+    vote = object.votes.where(person: current_user.person).first
+
+    if vote
+      vote.up ? 1 : -1
+    else
+      0
+    end
+  end
 end

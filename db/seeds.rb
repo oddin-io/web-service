@@ -18,7 +18,7 @@ pablo_person = Person.create name: 'Pablo', user: pablo_user
 celia_person = Person.create name: 'Célia', user: celia_user
 miriam_person = Person.create name: 'Miriam', user: miriam_user
 bruno_person = Person.create name: 'Bruno', user: bruno_user
-heitor_person = Person.create name: 'Francisco', user: heitor_user
+heitor_person = Person.create name: 'Heitor', user: heitor_user
 leonardo_person = Person.create name: 'Leonardo', user: leonardo_user
 ana_person = Person.create name: 'Ana', user: ana_user
 
