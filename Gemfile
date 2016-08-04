@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '2.3.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0'
@@ -46,7 +47,7 @@ group :development, :test do
 
   # Test support
   gem 'factory_girl_rails'
-  gem 'faker'
+  gem 'faker', group: :production
   gem 'database_cleaner'
   gem 'shoulda-matchers', require: false
 end

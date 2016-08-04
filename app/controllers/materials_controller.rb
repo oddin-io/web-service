@@ -11,15 +11,18 @@ class MaterialsController < ApplicationController
 
   def new
     material = Material.new key: SecureRandom.uuid, person: current_user.person
-    material.save!
+    attachable = nil
 
     if params[:instruction_id]
-      Instruction.find(params[:instruction_id]).materials.push material
+      attachable = Instruction.find(params[:instruction_id])
     elsif params[:presentation_id]
-      Presentation.find(params[:presentation_id]).materials.push material
+      attachable = Presentation.find(params[:presentation_id])
     elsif params[:answer_id]
-      Answer.find(param[:answer_id]).materials.push material
+      attachable = Answer.find(param[:answer_id])
     end
+
+    material.attachable = attachable
+    material.save!
 
     obj = get_bucket.object material.key + '/${filename}'
     post = obj.presigned_post
