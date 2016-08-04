@@ -43,6 +43,34 @@ class AnswersController < ApplicationController
   def vote
     Vote.find(person: current_user.person, votable: Answer.find(params[:id])).delete
 
-    render status: 200, nothing: true
+    render status: 200, body: nil
+  end
+
+  def accept
+    answer = Answer.find params[:id]
+    question = answer.question
+
+    if !question.answer
+      answer.accepted = true
+      answer.save!
+
+      render status: 200, body: nil
+    else
+      render status: 401, body: nil
+    end
+  end
+
+  def undo_accept
+    answer = Answer.find params[:id]
+    question = answer.question
+
+    if question.answer == answer
+      answer.accepted = false
+      answer.save!
+
+      render status: 200, body: nil
+    else
+      render status: 401, body: nil
+    end
   end
 end

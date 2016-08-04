@@ -6,8 +6,9 @@
 #  text            :string(140)      not null
 #  anonymous       :boolean          default(FALSE), not null
 #  created_at      :datetime         not null
-#  presentation_id :integer
+#  presentation_id :integer          not null
 #  person_id       :integer          not null
+#  answer_id       :integer
 #
 
 class Question < ApplicationRecord
@@ -16,6 +17,7 @@ class Question < ApplicationRecord
   belongs_to :presentation
   belongs_to :person
   has_many :answers
+  has_one  :answer, -> { where(accepted: true) }
   has_many :votes, as: :votable
 
   validates :text, presence: true

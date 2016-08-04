@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20160714173009) do
   create_table "answers", force: :cascade do |t|
     t.string   "text",        limit: 140,                 null: false
     t.boolean  "anonymous",               default: false, null: false
+    t.boolean  "accepted",                default: false
     t.datetime "created_at",                              null: false
     t.integer  "question_id",                             null: false
     t.integer  "person_id",                               null: false
@@ -91,7 +92,7 @@ ActiveRecord::Schema.define(version: 20160714173009) do
     t.string   "text",            limit: 140,                 null: false
     t.boolean  "anonymous",                   default: false, null: false
     t.datetime "created_at",                                  null: false
-    t.integer  "presentation_id"
+    t.integer  "presentation_id",                             null: false
     t.integer  "person_id",                                   null: false
     t.index ["person_id"], name: "index_questions_on_person_id", using: :btree
     t.index ["presentation_id"], name: "index_questions_on_presentation_id", using: :btree

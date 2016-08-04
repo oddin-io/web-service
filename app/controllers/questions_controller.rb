@@ -17,7 +17,11 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    render plain: 'I show one entity'
+    question = Question.find(params[:id])
+
+    puts question.answer
+
+    render json: question
   end
 
   def update

@@ -61,6 +61,6 @@ class MaterialsController < ApplicationController
   # @return [Bucket]
   def get_bucket
     # noinspection RubyArgCount
-    Aws::S3::Resource.new(region: 'us-west-2').bucket('oddin')
+    Aws::S3::Resource.new(region: ENV['AWS_REGION']).bucket(ENV['BUCKET_NAME'])
   end
 end

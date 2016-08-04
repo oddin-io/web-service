@@ -6,8 +6,9 @@
 #  text            :string(140)      not null
 #  anonymous       :boolean          default(FALSE), not null
 #  created_at      :datetime         not null
-#  presentation_id :integer
+#  presentation_id :integer          not null
 #  person_id       :integer          not null
+#  answer_id       :integer
 #
 
 class QuestionSerializer < ActiveModel::Serializer
@@ -15,4 +16,6 @@ class QuestionSerializer < ActiveModel::Serializer
 
   has_one :presentation
   has_one :person
+  has_many :answers
+  has_one :answer
 end

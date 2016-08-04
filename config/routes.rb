@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resource :person
   resource :session do
     member do
-      delete 'delete-all', method: 'destroy_all'
+      delete 'delete-all'
     end
   end
 
@@ -38,6 +38,10 @@ Rails.application.routes.draw do
         end
         resources :questions, concerns: :votable do
           resources :answers, concerns: [:materializable, :votable] do
+            member do
+              post 'accept'
+              delete 'accept', to: 'answers#undo_accept'
+            end
           end
         end
       end

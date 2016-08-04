@@ -105,6 +105,10 @@ answer_1 = Answer.create person: ana_person, text: Faker::StarWars.quote, questi
 answer_2 = Answer.create person: ana_person, text: Faker::StarWars.quote, question: question_2
 answer_3 = Answer.create person: bruno_person, text: Faker::StarWars.quote, question: question_3
 answer_4 = Answer.create person: bruno_person, text: Faker::StarWars.quote, question: question_4
+answer_5 = Answer.create person: heitor_person, text: Faker::StarWars.quote, question: question_1
+answer_6 = Answer.create person: heitor_person, text: Faker::StarWars.quote, question: question_2
+answer_7 = Answer.create person: heitor_person, text: Faker::StarWars.quote, question: question_3
+answer_8 = Answer.create person: heitor_person, text: Faker::StarWars.quote, question: question_4
 
 # Votes
 # ======================================================================================================================
