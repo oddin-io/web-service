@@ -12,19 +12,13 @@
 #
 
 class QuestionSerializer < ActiveModel::Serializer
-  attributes :id, :text, :anonymous, :created_at, :upvotes, :downvotes, :my_vote
+  attributes :id, :text, :anonymous, :created_at, :upvotes, :my_vote, :answer
 
   has_one :presentation
   has_one :person
-  has_many :answers
-  has_one :answer
 
   def upvotes
     object.votes.where(up: true).count
-  end
-
-  def downvotes
-    object.votes.where(up: false).count
   end
 
   def my_vote
@@ -35,5 +29,9 @@ class QuestionSerializer < ActiveModel::Serializer
     else
       0
     end
+  end
+
+  def answer
+    !!object.answer
   end
 end
