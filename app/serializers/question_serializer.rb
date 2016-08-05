@@ -12,7 +12,7 @@
 #
 
 class QuestionSerializer < ActiveModel::Serializer
-  attributes :id, :text, :anonymous, :created_at, :upvotes, :my_vote, :answer
+  attributes :id, :text, :anonymous, :created_at, :upvotes, :my_vote, :answered, :has_answer
 
   has_one :presentation
   has_one :person
@@ -31,7 +31,11 @@ class QuestionSerializer < ActiveModel::Serializer
     end
   end
 
-  def answer
+  def has_answer
+    !object.answers.size.zero?
+  end
+
+  def answered
     !!object.answer
   end
 end
