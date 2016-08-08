@@ -1,6 +1,14 @@
 class AnswersController < ApplicationController
   def index
-    render json: current_user.person.answers
+    answers = nil
+
+    if params[:question_id]
+      answers = Answer.all.where question_id: params[:question_id]
+    else
+      answers = current_user.person.answers
+    end
+
+    render json: answers
   end
 
   def create
