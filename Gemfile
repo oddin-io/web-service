@@ -31,6 +31,9 @@ gem 'rack-cors'
 # AWS SDK for update files
 gem 'aws-sdk', '~> 2'
 
+# Mailgun to send emails
+gem 'mailgun-ruby', '~>1.1.0', require: 'mailgun'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
