@@ -9,7 +9,7 @@
 
 class User < ApplicationRecord
   EMAIL_MAX_LENGTH = 100
-  PASSWORD_MIN_LENGTH = 8
+  PASSWORD_MIN_LENGTH = 6
   PASSWORD_MAX_LENGTH = 32
 
   has_secure_password
