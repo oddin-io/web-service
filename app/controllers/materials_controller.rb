@@ -6,6 +6,8 @@ class MaterialsController < ApplicationController
     resp = Presentation.find(params[:presentation_id]).materials if params[:presentation_id]
     resp = Answer.find(params[:answer_id]).materials if params[:answer_id]
 
+    resp = resp.where checked: true
+
     render json: resp
   end
 
