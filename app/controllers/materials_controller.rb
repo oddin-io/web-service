@@ -35,19 +35,30 @@ class MaterialsController < ApplicationController
 
   def update
     material = Material.find params[:id]
+
+    if !material
+      render status: 404, body: nil and return
+    end
+
+    object = get_bucket.object(material.key + '/' + material.name)
+
+    if !object.exists?
+      render status: 404, body: nil and return
+    end
+
     material.name = params[:name]
     material.mime = params[:mime]
     material.checked = true
     material.uploaded_at = DateTime.now
     material.save!
 
-    url = get_bucket.object(material.key + '/' + material.name).presigned_url(:get)
+    url = object.presigned_url :get
     resp = {material: material, url: url}
     render json: resp
   end
 
   def show
-    material = Material.find(params[:id])
+    material = Material.find params[:id]
 
     url = get_bucket.object(material.key + '/' + material.name).presigned_url(:get)
     resp = {material: material, url: url}
@@ -55,7 +66,7 @@ class MaterialsController < ApplicationController
   end
 
   def destroy
-    material = Material.find(params[:id])
+    material = Material.find params[:id]
     object = get_bucket.object material.key + '/' + material.name
     object.delete
     material.delete
