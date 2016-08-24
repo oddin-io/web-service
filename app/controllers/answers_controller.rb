@@ -5,7 +5,7 @@ class AnswersController < ApplicationController
     if params[:question_id]
       answers = Answer.all.where question_id: params[:question_id]
     else
-      answers = current_user.person.answers
+      answers = current_person.answers
     end
 
     render json: answers
@@ -13,7 +13,7 @@ class AnswersController < ApplicationController
 
   def create
     question = Question.find params[:question_id]
-    person = current_user.person
+    person = current_person
     answer = Answer.new text: params[:text], anonymous: params[:anonymous] || false, created_at: DateTime.now,
                             question: question, person: person
     answer.save!
@@ -33,7 +33,7 @@ class AnswersController < ApplicationController
   end
 
   def upvote
-    vote = Vote.find_or_create_by(person: current_user.person, votable: Answer.find(params[:id]))
+    vote = Vote.find_or_create_by(person: current_person, votable: Answer.find(params[:id]))
     vote.up = true
     vote.save!
 
@@ -41,7 +41,7 @@ class AnswersController < ApplicationController
   end
 
   def downvote
-    vote = Vote.find_or_create_by(person: current_user.person, votable: Answer.find(params[:id]))
+    vote = Vote.find_or_create_by(person: current_person, votable: Answer.find(params[:id]))
     vote.up = false
     vote.save!
 
@@ -49,7 +49,7 @@ class AnswersController < ApplicationController
   end
 
   def vote
-    Vote.find_by(person: current_user.person, votable: Answer.find(params[:id])).delete
+    Vote.find_by(person: current_person, votable: Answer.find(params[:id])).delete
 
     render status: 200, body: nil
   end

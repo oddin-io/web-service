@@ -1,5 +1,5 @@
 class RedefineToken < ApplicationRecord
-  belongs_to :user
+  belongs_to :person
 
-  validates :user, :token, presence: true
+  validates :person, :token, presence: true
 end

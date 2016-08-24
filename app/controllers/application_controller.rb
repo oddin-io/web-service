@@ -2,13 +2,13 @@ class ApplicationController < ActionController::API
   # Authentication check
   before_action :valid_session
 
-  # Get the request current user
+  # Get the request current person
   #
-  # @return [User]
-  def current_user
+  # @return [Person]
+  def current_person
     session = get_session
 
-    session ? session.user : nil
+    session ? session.person : nil
   end
 
   # Check if the session is valid, if isn't output 401 error code

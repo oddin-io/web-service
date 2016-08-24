@@ -8,7 +8,5 @@
 #
 
 class PersonSerializer < ActiveModel::Serializer
-  attributes :id, :name
-
-  has_one :user
+  attributes :id, :name, :email
 end

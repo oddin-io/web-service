@@ -1,6 +1,6 @@
 class InstructionsController < ApplicationController
   def index
-    render json: current_user.person.instructions
+    render json: current_person.instructions
   end
 
   def create
@@ -27,7 +27,7 @@ class InstructionsController < ApplicationController
 
   def profile
     instruction = Instruction.find params[:id]
-    enroll = instruction.enrolls.find_by person: current_user.person
+    enroll = instruction.enrolls.find_by person: current_person
 
     render json: enroll
   end

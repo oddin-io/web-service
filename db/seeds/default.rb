@@ -1,26 +1,14 @@
-# Users
-# ======================================================================================================================
-eloize_user = User.create email: 'eloize@ifsp.com', password: '12345678'
-silvana_user = User.create email: 'silvana@ifsp.com', password: '12345678'
-pablo_user = User.create email: 'pablo@ifsp.com', password: '12345678'
-celia_user = User.create email: 'celia@ifsp.com', password: '12345678'
-miriam_user = User.create email: 'miriam@ifsp.com', password: '12345678'
-bruno_user = User.create email: 'bruno@gmail.com', password: '12345678'
-heitor_user = User.create email: 'heitor@gmail.com', password: '12345678'
-leonardo_user = User.create email: 'leonardo@gmail.com', password: '12345678'
-ana_user = User.create email: 'ana@gmail.com', password: '12345678'
-
 # People
 # ======================================================================================================================
-eloize_person = Person.create name: 'Eloize', user: eloize_user
-silvana_person = Person.create name: 'Silvana', user: silvana_user
-pablo_person = Person.create name: 'Pablo', user: pablo_user
-celia_person = Person.create name: 'Célia', user: celia_user
-miriam_person = Person.create name: 'Miriam', user: miriam_user
-bruno_person = Person.create name: 'Bruno', user: bruno_user
-heitor_person = Person.create name: 'Heitor', user: heitor_user
-leonardo_person = Person.create name: 'Leonardo', user: leonardo_user
-ana_person = Person.create name: 'Ana', user: ana_user
+eloize_person = Person.create name: 'Eloize', email: 'eloize@ifsp.com', password: '12345678'
+silvana_person = Person.create name: 'Silvana', email: 'silvana@ifsp.com', password: '12345678'
+pablo_person = Person.create name: 'Pablo', email: 'pablo@ifsp.com', password: '12345678'
+celia_person = Person.create name: 'Célia', email: 'celia@ifsp.com', password: '12345678'
+miriam_person = Person.create name: 'Miriam', email: 'miriam@ifsp.com', password: '12345678'
+bruno_person = Person.create name: 'Bruno', email: 'bruno@gmail.com', password: '12345678'
+heitor_person = Person.create name: 'Heitor', email: 'heitor@gmail.com', password: '12345678'
+leonardo_person = Person.create name: 'Leonardo', email: 'leonardo@gmail.com', password: '12345678'
+ana_person = Person.create name: 'Ana', email: 'ana@gmail.com', password: '12345678'
 
 # Events
 # ======================================================================================================================

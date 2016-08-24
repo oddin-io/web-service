@@ -1,6 +1,6 @@
 class MaterialsController < ApplicationController
   def index
-    resp = current_user.person.materials
+    resp = current_person.materials
 
     resp = Instruction.find(params[:instruction_id]).materials if params[:instruction_id]
     resp = Presentation.find(params[:presentation_id]).materials if params[:presentation_id]
@@ -12,7 +12,7 @@ class MaterialsController < ApplicationController
   end
 
   def new
-    material = Material.new key: SecureRandom.uuid, person: current_user.person
+    material = Material.new key: SecureRandom.uuid, person: current_person
     attachable = nil
 
     if params[:instruction_id]

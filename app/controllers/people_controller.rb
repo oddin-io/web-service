@@ -1,13 +1,14 @@
 class PeopleController < ApplicationController
+  skip_before_action :valid_session, only: [:create, :recover_password, :redefine_password]
+
   def create
-    user = current_user
-    person = Person.new name: params[:name], user: user
+    person = Person.new name: params[:name], email: params[:email], password: params[:password]
     person.save!
     render json: person
   end
 
   def show
-    render json: current_user.person
+    render json: current_person
   end
 
   def update
@@ -16,5 +17,53 @@ class PeopleController < ApplicationController
 
   def destroy
     render plain: 'I destroy one entity'
+  end
+
+  def redefine_password
+    token = RedefineToken.find_by token: params[:token]
+
+    if token && (token.created_at + 1.hour) > Time.now
+      user = token.user
+      user.password = params[:password]
+      user.save!
+
+      render body: nil, status: 200
+    else
+      render body: nil, status: 401
+    end
+  end
+
+  def recover_password
+    user = User.find_by email: params[:email]
+
+    if user
+      token = SecureRandom.uuid
+      url = "#{ENV['REDEFINE_PASSWORD_URL']}?token=#{token}"
+
+      send_email user.email, 'Redefine your password', url
+
+      token = RedefineToken.new token: token, user: user
+      token.save!
+
+      render body: nil, status: 200
+    else
+      render body: nil, status: 401
+    end
+  end
+
+  private
+
+  def send_email(to, subject, text)
+    mg_client = Mailgun::Client.new ENV['MAILGUN_API_KEY']
+    domain = ENV['MAILGUN_DOMAIN']
+
+    message_params = {
+        from: "noreply@#{domain}",
+        to: to,
+        subject: subject,
+        text: text
+    }
+
+    mg_client.send_message domain, message_params
   end
 end

@@ -17,7 +17,7 @@ class InstructionSerializer < ActiveModel::Serializer
   has_one :lecture
 
   def profile
-    profile = object.enrolls.find_by person: current_user.person
+    profile = object.enrolls.find_by person: current_person
 
     if profile
       profile.profile

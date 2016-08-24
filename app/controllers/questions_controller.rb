@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   def index
-    resp = current_user.person.questions
+    resp = current_person.person.questions
 
     resp = Presentation.find(params[:presentation_id]).questions if params[:presentation_id]
 
@@ -9,7 +9,7 @@ class QuestionsController < ApplicationController
 
   def create
     presentation = Presentation.find params[:presentation_id]
-    person = current_user.person
+    person = current_person.person
     question = Question.new text: params[:text], anonymous: params[:anonymous] || false, created_at: DateTime.now,
                             presentation: presentation, person: person
     question.save!
@@ -33,7 +33,7 @@ class QuestionsController < ApplicationController
   end
 
   def upvote
-    vote = Vote.find_or_create_by(person: current_user.person, votable: Question.find(params[:id]))
+    vote = Vote.find_or_create_by(person: current_person, votable: Question.find(params[:id]))
     vote.up = true
     vote.save!
 
@@ -41,7 +41,7 @@ class QuestionsController < ApplicationController
   end
 
   def downvote
-    vote = Vote.find_or_create_by(person: current_user.person, votable: Question.find(params[:id]))
+    vote = Vote.find_or_create_by(person: current_person, votable: Question.find(params[:id]))
     vote.up = false
     vote.save!
 
@@ -49,7 +49,7 @@ class QuestionsController < ApplicationController
   end
 
   def vote
-    Vote.find_by(person: current_user.person, votable: Question.find(params[:id])).delete
+    Vote.find_by(person: current_person, votable: Question.find(params[:id])).delete
 
     render status: 200, body: nil
   end

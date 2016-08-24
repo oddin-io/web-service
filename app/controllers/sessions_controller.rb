@@ -2,11 +2,12 @@ class SessionsController < ApplicationController
   skip_before_action :valid_session, only: [:create]
 
   def create
-    user = User.find_by email: params[:email]
-    if user && user.authenticate(params[:password])
+    person = Person.find_by email: params[:email]
+
+    if person && person.authenticate(params[:password])
       session = Session.new
       session.token = SecureRandom.uuid
-      session.user = user
+      session.user = person
       session.save!
       render json: session, status: 201
     else
@@ -28,7 +29,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy_all
-    Session.destroy_all user_id: current_user.id
+    Session.destroy_all person: current_person
     render body: nil, status: 200
   end
 end

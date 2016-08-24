@@ -73,9 +73,10 @@ ActiveRecord::Schema.define(version: 20160809193349) do
   end
 
   create_table "people", force: :cascade do |t|
-    t.string  "name",    limit: 100, null: false
-    t.integer "user_id",             null: false
-    t.index ["user_id"], name: "index_people_on_user_id", using: :btree
+    t.string "name",            limit: 100, null: false
+    t.string "email",           limit: 100, null: false
+    t.string "password_digest",             null: false
+    t.index ["email"], name: "index_people_on_email", unique: true, using: :btree
   end
 
   create_table "presentations", force: :cascade do |t|
@@ -100,25 +101,19 @@ ActiveRecord::Schema.define(version: 20160809193349) do
 
   create_table "redefine_tokens", force: :cascade do |t|
     t.string   "token",      limit: 192, null: false
-    t.integer  "user_id",                null: false
+    t.integer  "person_id",              null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
-    t.index ["user_id"], name: "index_redefine_tokens_on_user_id", using: :btree
+    t.index ["person_id"], name: "index_redefine_tokens_on_person_id", using: :btree
   end
 
   create_table "sessions", force: :cascade do |t|
     t.string   "token",      limit: 192, null: false
-    t.integer  "user_id",                null: false
+    t.integer  "person_id",              null: false
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.index ["person_id"], name: "index_sessions_on_person_id", using: :btree
     t.index ["token"], name: "index_sessions_on_token", unique: true, using: :btree
-    t.index ["user_id"], name: "index_sessions_on_user_id", using: :btree
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string "email",           limit: 100, null: false
-    t.string "password_digest",             null: false
-    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
   end
 
   create_table "votes", force: :cascade do |t|
@@ -138,12 +133,11 @@ ActiveRecord::Schema.define(version: 20160809193349) do
   add_foreign_key "instructions", "events"
   add_foreign_key "instructions", "lectures"
   add_foreign_key "materials", "people"
-  add_foreign_key "people", "users"
   add_foreign_key "presentations", "instructions"
   add_foreign_key "presentations", "people"
   add_foreign_key "questions", "people"
   add_foreign_key "questions", "presentations"
-  add_foreign_key "redefine_tokens", "users"
-  add_foreign_key "sessions", "users"
+  add_foreign_key "redefine_tokens", "people"
+  add_foreign_key "sessions", "people"
   add_foreign_key "votes", "people"
 end

@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
-  post '/recover-password', to: 'users#recover_password'
-  post '/redefine-password', to: 'users#redefine_password'
+  post '/recover-password', to: 'people#recover_password'
+  post '/redefine-password', to: 'people#redefine_password'
 
-  resource :user
   resource :person
   resource :session do
     member do

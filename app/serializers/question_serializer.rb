@@ -22,7 +22,7 @@ class QuestionSerializer < ActiveModel::Serializer
   end
 
   def my_vote
-    vote = object.votes.where(person: current_user.person).first
+    vote = object.votes.where(person: current_person).first
 
     if vote
       vote.up ? 1 : -1
