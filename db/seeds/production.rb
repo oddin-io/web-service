@@ -1,39 +1,42 @@
 # Users
 # ======================================================================================================================
 silvana_affonso = User.create email: 'silaffonso@ifsp.edu.br', password: '030771'
-beatriz_maia = User.create email: 'beatriz.maia@email.com', password: '1601652'
-bruno_batista = User.create email: 'bruno.batista@email.com', password: '1601067'
-bruno_avelino = User.create email: 'bruno.avelino@email.com', password: '1600478'
+beatriz_maia = User.create email: 'bia_mmaia@hotmail.com', password: '1601652'
+bruno_batista = User.create email: 'brunobatista98@hotmail.com', password: '1601067'
+bruno_avelino = User.create email: 'bruno_souza_avelino@hotmail.com', password: '1600478'
+cendy_oliveira = User.create email: 'cendyandreoli@gmail.com', password: '1601741'
+edipo_lohmann = User.create email: 'edipo.rh@gmail.com', password: '1600281'
+estevao_lourenco = User.create email: 'estevaofl@live.com', password: '1600991'
+ezequiel_junior = User.create email: 'eskiel.sj@gmail.com', password: '1301047'
+hiago_souza = User.create email: 'hiago.rafael.souza@hotmail.com', password: '1600559'
+hugo_ciarrocchi = User.create email: 'hugoabstrato@gmail.com', password: '160046X'
+joel_ruivo = User.create email: 'joel.rodrigues.09@hotmail.com', password: '1600346'
+katio_pequeno = User.create email: 'katioalmeida@gmail.com', password: '110246X'
+lucas_melo = User.create email: 'lucasferreiramelo@outlook.com', password: '1402064'
+matheus_braz = User.create email: 'mattmbraz@hotmail.com', password: '1102028'
+nayly_carvalho = User.create email: 'nayly-rc@hotmail.com', password: '1301179'
+paulo_fios = User.create email: 'paulohenriquefios@outlook.com', password: '1601687'
+rafael_brito = User.create email: 'rafaelbrito144@gmail.com', password: '1601695'
+renato_aldrighi = User.create email: 'renato.aldrighi@gmail.com', password: '160032X'
+ricardo_carvalho = User.create email: 'ricardo.tks.best@gmail.com', password: '1600427'
+rodrigo_silva = User.create email: 'rodrigorhts@hotmail.com', password: '1601091'
+thon_ataide = User.create email: 'thom_ataide10@hotmail.com', password: '150102X'
+willian_correa = User.create email: 'willianthoshio14@gmail.com', password: '1401891'
+yudji_oliveira = User.create email: 'yudji.nkm@hotmail.com', password: '160161X'
+jeanderson_nascimento = User.create email: 'jeandersonlineker@gmail.com', password: '1600745'
+
 bruno_trevisan = User.create email: 'bruno.trevisan@email.com', password: '160077X'
 carolina_sartorelli = User.create email: 'carolina.sartorelli@email.com', password: '1201484'
-cendy_oliveira = User.create email: 'cendy.oliveira@email.com', password: '1601741'
-edipo_lohmann = User.create email: 'edipo.lohmann@email.com', password: '1600281'
-estevao_lourenco = User.create email: 'estevao.lourenco@email.com', password: '1600991'
-ezequiel_junior = User.create email: 'ezequiel.junior@email.com', password: '1301047'
 gabriel_silva = User.create email: 'gabriel.silva@email.com', password: '1600354'
-hiago_souza = User.create email: 'hiago.souza@email.com', password: '1600559'
-hugo_ciarrocchi = User.create email: 'hugo.ciarrocchi@email.com', password: '160046X'
 isabella_silva = User.create email: 'isabella.silva@email.com', password: '1504045'
-joel_ruivo = User.create email: 'joel.ruivo@email.com', password: '1600346'
 joyce_trindade = User.create email: 'joyce.trindade@email.com', password: '1600389'
-katio_pequeno = User.create email: 'katio.pequeno@email.com', password: '110246X'
-lucas_melo = User.create email: 'lucas.melo@email.com', password: '1402064'
 lucas_silva = User.create email: 'lucas.silva@email.com', password: '1000322'
 luciano_ferreira = User.create email: 'luciano.ferreira@email.com', password: '1600648'
 marcelo_oliveira = User.create email: 'marcelo.oliveira@email.com', password: '1401971'
-matheus_braz = User.create email: 'matheus.braz@email.com', password: '1102028'
 monica_pelicano = User.create email: 'monica.pelicano@email.com', password: '1600591'
-nayly_carvalho = User.create email: 'nayly.carvalho@email.com', password: '1301179'
-paulo_fios = User.create email: 'paulo.fios@email.com', password: '1601687'
 pedro_santos = User.create email: 'pedro.santos@email.com', password: '150357X'
-rafael_brito = User.create email: 'rafael.brito@email.com', password: '1601695'
-renato_aldrighi = User.create email: 'renato.aldrighi@email.com', password: '160032X'
-ricardo_carvalho = User.create email: 'ricardo.carvalho@email.com', password: '1600427'
-rodrigo_silva = User.create email: 'rodrigo.silva@email.com', password: '1601091'
-thon_ataide = User.create email: 'thon.ataide@email.com', password: '150102X'
 tiago_spana = User.create email: 'tiago.spana@email.com', password: '1301781'
-willian_correa = User.create email: 'willian.correa@email.com', password: '1401891'
-yudji_oliveira = User.create email: 'yudji.oliveira@email.com', password: '160161X'
+
 
 # People
 # ======================================================================================================================
@@ -71,6 +74,7 @@ thon_ataide = Person.create name: 'Thon Christopher Ataide', user: thon_ataide
 tiago_spana = Person.create name: 'Tiago Spana', user: tiago_spana
 willian_correa = Person.create name: 'Willian Toshio Nogiri Correa', user: willian_correa
 yudji_oliveira = Person.create name: 'Yudji Nakaema Oliveira', user: yudji_oliveira
+jeanderson_nascimento = Person.create name: 'Jeanderson Lineker do Nascimento', user: jeanderson_nascimento
 
 # Events
 # ======================================================================================================================
@@ -120,3 +124,4 @@ Enroll.create person: thon_ataide, instruction: bd1_instruction, profile: 0
 Enroll.create person: tiago_spana, instruction: bd1_instruction, profile: 0
 Enroll.create person: willian_correa, instruction: bd1_instruction, profile: 0
 Enroll.create person: yudji_oliveira, instruction: bd1_instruction, profile: 0
+Enroll.create person: jeanderson_nascimento, instruction: bd1_instruction, profile: 0

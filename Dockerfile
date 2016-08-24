@@ -1,4 +1,4 @@
-FROM ruby
+FROM ruby:2.3.0
 
 MAINTAINER Bruno Felipe Leal Delfino <bruno.delfino1995@gmail.com>
 
@@ -17,9 +17,6 @@ ENV INSTALL_PATH /app
 # Set the context of where commands will be ran in and is documented
 # on Docker's website extensively.
 WORKDIR $INSTALL_PATH
-
-# Install bundle for gem dependencies
-RUN gem install bundler && gem update --system
 
 # Ensure gems are cached and only get updated when they change. This will
 # drastically increase build times when your gems do not change.

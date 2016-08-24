@@ -49,8 +49,8 @@ class QuestionsController < ApplicationController
   end
 
   def vote
-    Vote.find(person: current_user.person, votable: Question.find(params[:id])).delete
+    Vote.find_by(person: current_user.person, votable: Question.find(params[:id])).delete
 
-    render status: 200, nothing: true
+    render status: 200, body: nil
   end
 end
