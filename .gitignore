@@ -1,0 +1,18 @@
+# Bundler config
+/.bundle
+
+# Logfiles and tempfiles
+/log/*
+/tmp/*
+
+# Keep files
+!**.keep
+
+# Byebug command history file
+.byebug_history
+
+# IDE
+.idea
+
+# Environment
+*.env

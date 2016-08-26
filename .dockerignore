@@ -1,0 +1,25 @@
+# IDE
+.idea
+
+# Bundler config
+.bundle
+Gemfile.lock
+
+# Logfiles and tempfiles
+log
+tmp
+
+# Keep files
+**.keep
+
+# Byebug command history file
+.byebug_history
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
