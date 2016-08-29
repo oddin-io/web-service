@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   def index
-    resp = current_person.person.questions
+    resp = current_person.questions
 
     resp = Presentation.find(params[:presentation_id]).questions if params[:presentation_id]
 
@@ -9,7 +9,7 @@ class QuestionsController < ApplicationController
 
   def create
     presentation = Presentation.find params[:presentation_id]
-    person = current_person.person
+    person = current_person
     question = Question.new text: params[:text], anonymous: params[:anonymous] || false, created_at: DateTime.now,
                             presentation: presentation, person: person
     question.save!

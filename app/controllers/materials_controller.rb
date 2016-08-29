@@ -68,6 +68,7 @@ class MaterialsController < ApplicationController
   def destroy
     material = Material.find params[:id]
     object = get_bucket.object material.key + '/' + material.name
+
     object.delete
     material.delete
   end

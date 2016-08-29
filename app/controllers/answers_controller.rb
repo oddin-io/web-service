@@ -32,6 +32,22 @@ class AnswersController < ApplicationController
     render plain: 'I destroy one entity'
   end
 
+  def create_only_material
+    question = Question.find params[:question_id]
+    person = current_person
+    answer = Answer.new text: params[:text] || '', anonymous: params[:anonymous] || false, created_at: DateTime.now,
+                            question: question, person: person
+    answer.save!
+
+    material = Material.new key: SecureRandom.uuid, person: current_person, attachable: answer
+    material.save!
+
+    obj = get_bucket.object material.key + '/${filename}'
+    post = obj.presigned_post
+
+    render json: {fields: post.fields, url: post.url, id: material.id, answer: answer}
+  end
+
   def upvote
     vote = Vote.find_or_create_by(person: current_person, votable: Answer.find(params[:id]))
     vote.up = true
@@ -80,5 +96,13 @@ class AnswersController < ApplicationController
     else
       render status: 401, body: nil
     end
+  end
+
+  private
+
+  # @return [Bucket]
+  def get_bucket
+    # noinspection RubyArgCount
+    Aws::S3::Resource.new(region: ENV['AWS_REGION']).bucket(ENV['BUCKET_NAME'])
   end
 end

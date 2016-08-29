@@ -2,6 +2,10 @@ class ApplicationController < ActionController::API
   # Authentication check
   before_action :valid_session
 
+  def current_user
+    current_person
+  end
+
   # Get the request current person
   #
   # @return [Person]

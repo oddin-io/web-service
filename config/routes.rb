@@ -11,11 +11,7 @@ Rails.application.routes.draw do
 
   resources :materials, only: [:show, :destroy, :update]
   concern :materializable do
-    resources :materials, except: [:create, :show, :destroy, :update] do
-      collection do
-        get 'new'
-      end
-    end
+    resources :materials
   end
 
   concern :votable do
@@ -39,6 +35,10 @@ Rails.application.routes.draw do
         end
         resources :questions, concerns: :votable do
           resources :answers, concerns: [:materializable, :votable] do
+            collection do
+              post 'materials', to: 'answers#create_only_material'
+            end
+
             member do
               post 'accept'
               delete 'accept', to: 'answers#undo_accept'
