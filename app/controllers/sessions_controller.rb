@@ -7,8 +7,9 @@ class SessionsController < ApplicationController
     if person && person.authenticate(params[:password])
       session = Session.new
       session.token = SecureRandom.uuid
-      session.user = person
+      session.person = person
       session.save!
+
       render json: session, status: 201
     else
       render body: nil, status: 401
@@ -30,6 +31,7 @@ class SessionsController < ApplicationController
 
   def destroy_all
     Session.destroy_all person: current_person
+
     render body: nil, status: 200
   end
 end

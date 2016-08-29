@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '2.3.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0'
@@ -39,6 +40,9 @@ group :development, :test do
 
   # Load .env files
   gem 'dotenv-rails'
+
+  # Comment models and related files
+  gem 'annotate', '~> 2.7', '>= 2.7.1'
 
   # Test frameworks
   gem 'cucumber-rails', require: false

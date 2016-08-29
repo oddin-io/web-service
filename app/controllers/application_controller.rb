@@ -18,7 +18,7 @@ class ApplicationController < ActionController::API
     session = get_session
 
     unless session
-      render nothing: true, status: 401 and return
+      render body: nil, status: 401 and return
     end
 
     true

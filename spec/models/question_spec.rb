@@ -8,7 +8,6 @@
 #  created_at      :datetime         not null
 #  presentation_id :integer          not null
 #  person_id       :integer          not null
-#  answer_id       :integer
 #
 
 require 'rails_helper'

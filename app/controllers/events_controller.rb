@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   def index
-    render json: Event.includes(instructions: :people).where(people: current_person)
+    render json: Event.includes(instructions: :people).where(people: {email: current_person.email})
   end
 
   def create

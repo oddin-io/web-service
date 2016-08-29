@@ -1,6 +1,6 @@
 class LecturesController < ApplicationController
   def index
-    render json: Lecture.includes(instructions: :people).where(people: current_person)
+    render json: Lecture.includes(instructions: :people).where(people: {email: current_person.email})
   end
 
   def create
