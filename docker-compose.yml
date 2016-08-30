@@ -1,24 +1,39 @@
 version: "2"
 services:
-  postgres:
+  database:
     image: postgres:9.5.3
     environment:
-      POSTGRES_USER: web-service
+      POSTGRES_USER: server
       POSTGRES_PASSWORD: 123
     volumes:
-      - web-service-database:/var/lib/postgresql/data
+      - database:/var/lib/postgresql/data
     expose:
       - 5432
 
-  web-service:
+  server:
     build: .
+    environment:
+      # Rails Settings
+      DATABASE_URL:
+      SECRET_KEY_BASE:
+
+      # AWS Settings
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
+      AWS_REGION:
+      BUCKET_NAME:
+
+      # Mailgun Settings
+      MAILGUN_API_KEY:
+      MAILGUN_DOMAIN:
+      REDEFINE_PASSWORD_URL:
     links:
-      - postgres
+      - database
     ports:
       - '80:3000'
     volumes:
-      - .:/app
+      - .:/home/app
 
 volumes:
-  web-service-database:
+  database:
     driver: local

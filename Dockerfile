@@ -10,9 +10,13 @@ RUN apt-get update && apt-get install -qq -y \
   build-essential libpq-dev postgresql-client-9.4 \
   --fix-missing --no-install-recommends
 
+# Add an user to prevent permissions errors
+RUN useradd --shell /bin/bash --create-home app
+USER app
+
 # Set an environment variable to store where the app is installed to inside
 # of the Docker image.
-ENV INSTALL_PATH /app
+ENV INSTALL_PATH /home/app
 
 # Set the context of where commands will be ran in and is documented
 # on Docker's website extensively.
@@ -29,7 +33,5 @@ COPY . .
 
 # Expose the server port
 EXPOSE 3000
-
-VOLUME $INSTALL_PATH
 
 CMD rails server -p 3000 -b 0.0.0.0

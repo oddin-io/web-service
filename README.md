@@ -1,24 +1,26 @@
-# README
+# Oddin Web Service
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Oddin is a platform which objective is to improve the interaction between the teacher
+and the students. This is the Web Service to manage the data in the main database and
+receive actions to save and print data.
 
-Things you may want to cover:
+## How to run
 
-* Ruby version
+Define the environment variables described in docker-compose.yml, following the
+Docker Compose requirements. You can define in a .env file on root, or set the
+values in the YAML file.
 
-* System dependencies
+After setting the environment variables, just start everything and setup the
+database on Docker.
 
-* Configuration
+```bash
+# Start the containers
+docker-compose up --build
 
-* Database creation
+# Create and setup the database
+docker-compose run server rake db:create
+docker-compose run server rake db:migrate
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# Populate the database with some example data
+docker-compose run server rake db:seed
+```
