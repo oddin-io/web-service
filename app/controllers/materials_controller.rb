@@ -11,7 +11,7 @@ class MaterialsController < ApplicationController
     render json: resp
   end
 
-  def new
+  def create
     material = Material.new key: SecureRandom.uuid, person: current_person
     attachable = nil
 
