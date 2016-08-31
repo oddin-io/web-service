@@ -18,5 +18,5 @@
 *.env
 
 # Generated files
-/db/schema.rb
-Gemfile.lock
+# /db/schema.rb
+# Gemfile.lock
