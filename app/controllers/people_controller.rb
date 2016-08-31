@@ -23,9 +23,9 @@ class PeopleController < ApplicationController
     token = RedefineToken.find_by token: params[:token]
 
     if token && (token.created_at + 1.hour) > Time.now
-      user = token.user
-      user.password = params[:password]
-      user.save!
+      person = token.person
+      person.password = params[:password]
+      person.save!
 
       render body: nil, status: 200
     else
@@ -34,15 +34,15 @@ class PeopleController < ApplicationController
   end
 
   def recover_password
-    user = User.find_by email: params[:email]
+    person = Person.find_by email: params[:email]
 
-    if user
+    if person
       token = SecureRandom.uuid
       url = "#{ENV['REDEFINE_PASSWORD_URL']}?token=#{token}"
 
-      send_email user.email, 'Redefine your password', url
+      send_email person.email, 'Redefine your password', url
 
-      token = RedefineToken.new token: token, user: user
+      token = RedefineToken.new token: token, person: person
       token.save!
 
       render body: nil, status: 200
