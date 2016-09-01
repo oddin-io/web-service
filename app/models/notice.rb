@@ -3,7 +3,8 @@
 # Table name: notices
 #
 #  id             :integer          not null, primary key
-#  text           :string(140)
+#  text           :string(100)
+#  subject        :string(50)
 #  instruction_id :integer          not null
 #  person_id      :integer          not null
 #  created_at     :datetime         not null

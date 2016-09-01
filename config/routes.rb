@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       end
 
       resources :notices
+      resources :informatives
       resources :presentations, concerns: :materializable do
         member do
           post 'close'
