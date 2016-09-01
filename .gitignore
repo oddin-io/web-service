@@ -11,6 +11,9 @@
 # Byebug command history file
 .byebug_history
 
+# Pry history
+.pry_history
+
 # IDE
 .idea
 

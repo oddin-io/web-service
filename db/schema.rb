@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160809193349) do
+ActiveRecord::Schema.define(version: 20160901025352) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,17 @@ ActiveRecord::Schema.define(version: 20160809193349) do
     t.integer  "person_id",                       null: false
     t.index ["attachable_type", "attachable_id"], name: "index_materials_on_attachable_type_and_attachable_id", using: :btree
     t.index ["person_id"], name: "index_materials_on_person_id", using: :btree
+  end
+
+  create_table "notices", force: :cascade do |t|
+    t.string   "text",           limit: 100
+    t.string   "subject",        limit: 50
+    t.integer  "instruction_id",             null: false
+    t.integer  "person_id",                  null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["instruction_id"], name: "index_notices_on_instruction_id", using: :btree
+    t.index ["person_id"], name: "index_notices_on_person_id", using: :btree
   end
 
   create_table "people", force: :cascade do |t|
@@ -133,6 +144,8 @@ ActiveRecord::Schema.define(version: 20160809193349) do
   add_foreign_key "instructions", "events"
   add_foreign_key "instructions", "lectures"
   add_foreign_key "materials", "people"
+  add_foreign_key "notices", "instructions"
+  add_foreign_key "notices", "people"
   add_foreign_key "presentations", "instructions"
   add_foreign_key "presentations", "people"
   add_foreign_key "questions", "people"

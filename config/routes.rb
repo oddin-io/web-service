@@ -23,12 +23,14 @@ Rails.application.routes.draw do
   end
 
   resources :events, :lectures
-  resources :instructions, concerns: :materializable do
-    member do
-      get 'profile'
-      get 'participants'
-    end
-    shallow do
+  shallow do
+    resources :instructions, concerns: :materializable do
+      member do
+        get 'profile'
+        get 'participants'
+      end
+
+      resources :notices
       resources :presentations, concerns: :materializable do
         member do
           post 'close'
