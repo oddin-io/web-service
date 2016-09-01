@@ -6,6 +6,8 @@
 #  name            :string(100)      not null
 #  email           :string(100)      not null
 #  password_digest :string           not null
+#  online          :boolean          default(FALSE)
+#  last_activity   :datetime
 #
 
 class Person < ApplicationRecord
@@ -23,8 +25,16 @@ class Person < ApplicationRecord
   has_many :instructions, through: :enrolls
   has_many :materials
 
-  validates :name, :email, :password, presence: true
-  validates :name, length: {maximum: self::NAME_MAX_LENGTH}
-  validates :email, length: {maximum: self::EMAIL_MAX_LENGTH}
-  validates :password, length: {in: self::PASSWORD_MIN_LENGTH..self::PASSWORD_MAX_LENGTH}, allow_nil: true
+  # validates :name, :email, :password, presence: true
+  # validates :name, length: {maximum: self::NAME_MAX_LENGTH}
+  # validates :email, length: {maximum: self::EMAIL_MAX_LENGTH}
+  # validates :password, length: {in: self::PASSWORD_MIN_LENGTH..self::PASSWORD_MAX_LENGTH}, allow_nil: true
+
+  def update_activity
+    update online: true, last_activity: Time.now
+  end
+
+  def self.update_status
+    Person.where('last_activity < ?', Time.now + 15.minutes).update_all(online: false)
+  end
 end

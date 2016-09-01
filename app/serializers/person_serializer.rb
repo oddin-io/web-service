@@ -6,8 +6,10 @@
 #  name            :string(100)      not null
 #  email           :string(100)      not null
 #  password_digest :string           not null
+#  online          :boolean          default(FALSE)
+#  last_activity   :datetime
 #
 
 class PersonSerializer < ActiveModel::Serializer
-  attributes :id, :name, :email
+  attributes :id, :name, :email, :online
 end

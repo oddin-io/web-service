@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160901025352) do
+ActiveRecord::Schema.define(version: 20160901040745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,16 @@ ActiveRecord::Schema.define(version: 20160901025352) do
     t.string  "name",     limit: 100,                                         null: false
     t.decimal "workload",             precision: 7, scale: 2, default: "0.0", null: false
     t.index ["code"], name: "index_events_on_code", unique: true, using: :btree
+  end
+
+  create_table "informatives", force: :cascade do |t|
+    t.string   "text",           limit: 50
+    t.integer  "instruction_id",            null: false
+    t.integer  "person_id",                 null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["instruction_id"], name: "index_informatives_on_instruction_id", using: :btree
+    t.index ["person_id"], name: "index_informatives_on_person_id", using: :btree
   end
 
   create_table "instructions", force: :cascade do |t|
@@ -84,9 +94,11 @@ ActiveRecord::Schema.define(version: 20160901025352) do
   end
 
   create_table "people", force: :cascade do |t|
-    t.string "name",            limit: 100, null: false
-    t.string "email",           limit: 100, null: false
-    t.string "password_digest",             null: false
+    t.string   "name",            limit: 100,                 null: false
+    t.string   "email",           limit: 100,                 null: false
+    t.string   "password_digest",                             null: false
+    t.boolean  "online",                      default: false
+    t.datetime "last_activity"
     t.index ["email"], name: "index_people_on_email", unique: true, using: :btree
   end
 
@@ -141,6 +153,8 @@ ActiveRecord::Schema.define(version: 20160901025352) do
   add_foreign_key "answers", "questions"
   add_foreign_key "enrolls", "instructions"
   add_foreign_key "enrolls", "people"
+  add_foreign_key "informatives", "instructions"
+  add_foreign_key "informatives", "people"
   add_foreign_key "instructions", "events"
   add_foreign_key "instructions", "lectures"
   add_foreign_key "materials", "people"

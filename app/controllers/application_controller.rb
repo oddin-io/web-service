@@ -12,7 +12,10 @@ class ApplicationController < ActionController::API
   def current_person
     session = get_session
 
-    session ? session.person : nil
+    person = session ? session.person : nil
+    # Person.update_status
+    person.update_activity
+    person
   end
 
   # Check if the session is valid, if isn't output 401 error code

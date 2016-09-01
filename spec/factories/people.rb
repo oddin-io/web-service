@@ -6,6 +6,8 @@
 #  name            :string(100)      not null
 #  email           :string(100)      not null
 #  password_digest :string           not null
+#  online          :boolean          default(FALSE)
+#  last_activity   :datetime
 #
 
 FactoryGirl.define do
