@@ -13,8 +13,10 @@ class ApplicationController < ActionController::API
     session = get_session
 
     person = session ? session.person : nil
-    # Person.update_status
-    person.update_activity
+    if person
+      Person.update_status
+      person.update_activity
+    end
     person
   end
 
