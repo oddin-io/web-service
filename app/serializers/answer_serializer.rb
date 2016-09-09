@@ -12,7 +12,7 @@
 #
 
 class AnswerSerializer < ActiveModel::Serializer
-  attributes :id, :text, :anonymous, :created_at, :accepted, :upvotes, :downvotes, :my_vote
+  attributes :id, :text, :anonymous, :created_at, :accepted, :upvotes, :downvotes, :my_vote, :materials
 
   has_one :question
   has_one :person
