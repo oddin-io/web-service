@@ -10,10 +10,6 @@ RUN apt-get update && apt-get install -qq -y \
   build-essential libpq-dev postgresql-client-9.4 \
   --fix-missing --no-install-recommends
 
-# Add an user to prevent permissions errors
-RUN useradd --shell /bin/bash --create-home app
-USER app
-
 # Set an environment variable to store where the app is installed to inside
 # of the Docker image.
 ENV INSTALL_PATH /home/app

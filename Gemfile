@@ -45,7 +45,6 @@ group :development, :test do
   gem 'annotate', '~> 2.7', '>= 2.7.1'
 
   # Test frameworks
-  gem 'cucumber-rails', require: false
   gem 'rspec-rails'
 
   # Test support

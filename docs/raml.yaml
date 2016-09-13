@@ -1,0 +1,1486 @@
+#%RAML 0.8
+title: Oddin Edu
+version: '0.1'
+protocols: [HTTP, HTTPS]
+baseUri: ws-edupanel.herokuapp.com
+mediaType: application/json
+
+/person:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/res-get-person"
+              }
+  put:
+    body:
+      application/json:
+        schema: |-
+          {
+              "$ref": "#/definitions/req-update-person"
+          }
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/res-get-person"
+              }
+  post:
+    body:
+      application/json:
+        schema: |-
+          {
+              "$ref": "#/definitions/req-create-person"
+          }
+    responses:
+      201:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/res-get-person"
+              }
+  delete:
+    responses:
+      204: {}
+/recover-password:
+  post:
+    body:
+      application/json:
+        schema: |-
+          {
+              "$ref": "#/definitions/req-recover-password"
+          }
+    responses: {}
+/redefine-password:
+  post:
+    body:
+      application/json:
+        schema: |-
+          {
+              "$ref": "#/definitions/req-redefine-password"
+          }
+    responses: {}
+    queryParameters:
+      token:
+        type: string
+        required: true
+/session:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/res-get-session"
+              }
+  post:
+    body:
+      application/json:
+        schema: |-
+          {
+              "$ref": "#/definitions/req-create-session"
+          }
+    responses:
+      201:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/res-get-session"
+              }
+  delete:
+    responses:
+      204: {}
+  /all:
+    delete:
+      responses: {}
+/events:
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-event"
+                }
+    put:
+      body:
+        application/json:
+          schema: |-
+            {
+                "$ref": "#/definitions/req-update-event"
+            }
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-event"
+                }
+    delete:
+      responses:
+        204: {}
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "type": "array",
+                  "items": {
+                      "$ref": "#/definitions/res-get-event"
+                  }
+              }
+  post:
+    body:
+      application/json:
+        schema: |-
+          {
+              "$ref": "#/definitions/req-create-event"
+          }
+    responses:
+      201:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/res-get-event"
+              }
+/lectures:
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-lecture"
+                }
+    put:
+      body:
+        application/json:
+          schema: |-
+            {
+                "$ref": "#/definitions/req-update-lecture"
+            }
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-lecture"
+                }
+    delete:
+      responses:
+        204: {}
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "type": "array",
+                  "items": {
+                      "$ref": "#/definitions/res-get-lecture"
+                  }
+              }
+  post:
+    body:
+      application/json:
+        schema: |-
+          {
+              "$ref": "#/definitions/req-create-lecture"
+          }
+    responses:
+      201:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/res-get-lecture"
+              }
+/instructions:
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-instruction"
+                }
+    put:
+      body:
+        application/json:
+          schema: |-
+            {
+                "$ref": "#/definitions/req-update-instruction"
+            }
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-instruction"
+                }
+    delete:
+      responses:
+        204: {}
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "type": "array",
+                  "items": {
+                      "$ref": "#/definitions/res-get-instruction"
+                  }
+              }
+  post:
+    body:
+      application/json:
+        schema: |-
+          {
+              "$ref": "#/definitions/req-create-instruction"
+          }
+    responses:
+      201:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/res-get-instruction"
+              }
+  /{instruction_id}:
+    /presentations:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                schema: |-
+                  {
+                      "type": "array",
+                      "items": {
+                          "$ref": "#/definitions/res-get-presentation"
+                      }
+                  }
+    /materials:
+      post:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "type": "object"
+              }
+        responses:
+          201:
+            body:
+              application/json:
+                schema: |-
+                  {
+                      "$ref": "#/definitions/res-create-material"
+                  }
+  /{presentation_id}:
+    /presentations:
+      post:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/req-create-presentation"
+              }
+        responses:
+          201:
+            body:
+              application/json:
+                schema: |-
+                  {
+                      "$ref": "#/definitions/res-get-presentation"
+                  }
+/presentations:
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-presentation"
+                }
+    put:
+      body:
+        application/json:
+          schema: |-
+            {
+                "$ref": "#/definitions/req-update-presentation"
+            }
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-presentation"
+                }
+    delete:
+      responses:
+        204: {}
+  /{presentation_id}:
+    /questions:
+      post:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/req-create-question"
+              }
+        responses:
+          201:
+            body:
+              application/json:
+                schema: |-
+                  {
+                      "$ref": "#/definitions/res-get-question"
+                  }
+    /materials:
+      post:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "type": "object"
+              }
+        responses:
+          201:
+            body:
+              application/json:
+                schema: |-
+                  {
+                      "$ref": "#/definitions/res-create-material"
+                  }
+/questions:
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-question"
+                }
+    put:
+      body:
+        application/json:
+          schema: |-
+            {
+                "$ref": "#/definitions/req-update-question"
+            }
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-question"
+                }
+    delete:
+      responses:
+        204: {}
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "type": "array",
+                  "items": {
+                      "$ref": "#/definitions/res-get-question"
+                  }
+              }
+  /{question_id}:
+    /upvote:
+      post:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "type": "object"
+              }
+        responses:
+          200:
+            body:
+              application/json:
+                schema: |-
+                  {
+                      "$ref": "#/definitions/res-get-vote"
+                  }
+    /downvote:
+      post:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "type": "object"
+              }
+        responses:
+          201:
+            body:
+              application/json:
+                schema: |-
+                  {
+                      "$ref": "#/definitions/res-get-vote"
+                  }
+    /vote:
+      delete:
+        responses:
+          204: {}
+    /answer:
+      /materials:
+        post:
+          body:
+            application/json:
+              example: |-
+                {
+                    "text": "Yes you can",
+                    "anonymous": false
+                }
+              schema: |-
+                {
+                    "$ref": "#/definitions/answer-with-material"
+                }
+          responses:
+            201:
+              body:
+                application/json:
+                  schema: |-
+                    {
+                        "$ref": "#/definitions/res-answer-with-material"
+                    }
+/answers:
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-answer"
+                }
+    put:
+      body:
+        application/json:
+          schema: |-
+            {
+                "$ref": "#/definitions/req-update-answer"
+            }
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-answer"
+                }
+    delete:
+      responses:
+        204: {}
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "type": "array",
+                  "items": {
+                      "$ref": "#/definitions/res-get-answer"
+                  }
+              }
+  post:
+    body:
+      application/json:
+        schema: |-
+          {
+              "$ref": "#/definitions/req-create-answer"
+          }
+    responses:
+      201:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/res-get-answer"
+              }
+  /{answer_id}:
+    /materials:
+      post:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "type": "object"
+              }
+        responses:
+          201:
+            body:
+              application/json:
+                schema: |-
+                  {
+                      "$ref": "#/definitions/res-create-material"
+                  }
+    /upvote:
+      post:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "type": "object"
+              }
+        responses:
+          200:
+            body:
+              application/json:
+                schema: |-
+                  {
+                      "$ref": "#/definitions/res-get-vote"
+                  }
+    /downvote:
+      post:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "type": "object"
+              }
+        responses:
+          201:
+            body:
+              application/json:
+                schema: |-
+                  {
+                      "$ref": "#/definitions/res-get-vote"
+                  }
+    /vote:
+      delete:
+        responses:
+          204: {}
+/materials:
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-material"
+                }
+    put:
+      body:
+        application/json:
+          example: |-
+            {
+                "id": 1,
+                "name": "example.pdf",
+                "mime": "application/pdf",
+                "checked": true,
+                "uploaded_at": "asdf",
+                "person": {
+                    "id": 1,
+                    "name": "Someone",
+                    "email": "someone@email.com"
+                }
+            }
+          schema: |-
+            {
+                "$ref": "#/definitions/res-get-material"
+            }
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-get-material"
+                }
+    delete:
+      responses:
+        204: {}
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "type": "array",
+                  "items": {
+                      "$ref": "#/definitions/res-get-material"
+                  }
+              }
+  /new:
+    post:
+      body:
+        application/json:
+          schema: |-
+            {
+                "type": "object"
+            }
+      responses:
+        201:
+          body:
+            application/json:
+              schema: |-
+                {
+                    "$ref": "#/definitions/res-create-material"
+                }
+/notices:
+/calendar:
+schemas:
+  - req-create-person: |-
+      {
+          "type": "object",
+          "properties": {
+              "name": {
+                  "type": "string",
+                  "maxLength": 100
+              },
+              "email": {
+                  "type": "string",
+                  "maxLength": 100,
+                  "format": "email"
+              },
+              "password": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 32
+              }
+          },
+          "required": [
+              "name",
+              "email",
+              "password"
+          ]
+      }
+  - res-get-person: |-
+      {
+          "type": "object",
+          "properties": {
+              "id": {
+                  "type": "integer"
+              },
+              "name": {
+                  "type": "string"
+              },
+              "email": {
+                  "type": "string"
+              }
+          }
+      }
+  - req-update-person: |-
+      {
+          "type": "object",
+          "properties": {
+              "name": {
+                  "type": "string",
+                  "maxLength": 100
+              },
+              "email": {
+                  "type": "string",
+                  "maxLength": 100,
+                  "format": "email"
+              },
+              "password": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 32
+              }
+          }
+      }
+  - res-get-session: |-
+      {
+          "type": "object",
+          "properties": {
+              "id": {
+                  "type": "integer"
+              },
+              "token": {
+                  "type": "string"
+              },
+              "created_at": {
+                  "type": "string"
+              },
+              "person": {
+                  "type": "object",
+                  "properties": {
+                      "id": {
+                          "type": "integer"
+                      },
+                      "name": {
+                          "type": "string"
+                      },
+                      "email": {
+                          "type": "string"
+                      }
+                  }
+              }
+          }
+      }
+  - req-create-session: |-
+      {
+          "type": "object",
+          "properties": {
+              "email": {
+                  "type": "string",
+                  "maxLength": 100,
+                  "format": "email"
+              },
+              "password": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 32
+              }
+          },
+          "required": [
+              "email",
+              "password"
+          ]
+      }
+  - res-get-event: |-
+      {
+          "type": "object",
+          "properties": {
+              "id": {
+                  "type": "integer"
+              },
+              "code": {
+                  "type": "string"
+              },
+              "name": {
+                  "type": "string"
+              },
+              "workload": {
+                  "type": "number"
+              }
+          }
+      }
+  - req-create-event: |-
+      {
+          "type": "object",
+          "properties": {
+              "code": {
+                  "type": "string",
+                  "maxLength": 30
+              },
+              "name": {
+                  "type": "string",
+                  "maxLength": 100
+              },
+              "workload": {
+                  "type": "number",
+                  "minimum": 0
+              }
+          },
+          "required": [
+              "code",
+              "name",
+              "workload"
+          ]
+      }
+  - req-update-event: |-
+      {
+          "type": "object",
+          "properties": {
+              "code": {
+                  "type": "string",
+                  "maxLength": 30
+              },
+              "name": {
+                  "type": "string",
+                  "maxLength": 100
+              },
+              "workload": {
+                  "type": "number",
+                  "minimum": 0
+              }
+          }
+      }
+  - req-create-lecture: |-
+      {
+          "type": "object",
+          "properties": {
+              "code": {
+                  "type": "string",
+                  "maxLength": 30
+              },
+              "name": {
+                  "type": "string",
+                  "maxLength": 100
+              },
+              "workload": {
+                  "type": "number",
+                  "minimum": 0
+              }
+          },
+          "required": [
+              "code",
+              "name",
+              "workload"
+          ]
+      }
+  - res-get-lecture: |-
+      {
+          "type": "object",
+          "properties": {
+              "id": {
+                  "type": "integer"
+              },
+              "code": {
+                  "type": "string"
+              },
+              "name": {
+                  "type": "string"
+              },
+              "workload": {
+                  "type": "number"
+              }
+          }
+      }
+  - req-update-lecture: |-
+      {
+          "type": "object",
+          "properties": {
+              "code": {
+                  "type": "string",
+                  "maxLength": 30
+              },
+              "name": {
+                  "type": "string",
+                  "maxLength": 100
+              },
+              "workload": {
+                  "type": "number",
+                  "minimum": 0
+              }
+          }
+      }
+  - res-get-instruction: |-
+      {
+          "type": "object",
+          "properties": {
+              "id": {
+                  "type": "integer"
+              },
+              "class_number": {
+                  "type": "integer"
+              },
+              "start_date": {
+                  "type": "string"
+              },
+              "end_date": {
+                  "type": "string"
+              },
+              "event": {
+                  "type": "object",
+                  "properties": {
+                      "id": {
+                          "type": "integer"
+                      },
+                      "code": {
+                          "type": "string"
+                      },
+                      "name": {
+                          "type": "string"
+                      },
+                      "workload": {
+                          "type": "number"
+                      }
+                  }
+              },
+              "lecture": {
+                  "type": "object",
+                  "properties": {
+                      "id": {
+                          "type": "integer"
+                      },
+                      "code": {
+                          "type": "string"
+                      },
+                      "name": {
+                          "type": "string"
+                      },
+                      "workload": {
+                          "type": "number"
+                      }
+                  }
+              }
+          }
+      }
+  - req-create-instruction: |-
+      {
+          "type": "object",
+          "properties": {
+              "class_number": {
+                  "type": "integer",
+                  "minimum": 1
+              },
+              "start_date": {
+                  "type": "string",
+                  "format": "date"
+              },
+              "end_date": {
+                  "type": "string",
+                  "format": "date"
+              },
+              "event_id": {
+                  "type": "integer",
+                  "minimum": 1
+              },
+              "lecture_id": {
+                  "type": "integer",
+                  "minimum": 1
+              }
+          },
+          "required": [
+              "class_number",
+              "start_date",
+              "end_date",
+              "event_id",
+              "lecture_id"
+          ]
+      }
+  - req-update-instruction: |-
+      {
+          "type": "object",
+          "properties": {
+              "class_number": {
+                  "type": "integer",
+                  "minimum": 1
+              },
+              "start_date": {
+                  "type": "string",
+                  "format": "date"
+              },
+              "end_date": {
+                  "type": "string",
+                  "format": "date"
+              },
+              "event_id": {
+                  "type": "integer",
+                  "minimum": 1
+              },
+              "lecture_id": {
+                  "type": "integer",
+                  "minimum": 1
+              }
+          }
+      }
+  - res-get-presentation: |-
+      {
+          "type": "object",
+          "properties": {
+              "id": {
+                  "type": "integer"
+              },
+              "subject": {
+                  "type": "string"
+              },
+              "status": {
+                  "type": "integer"
+              },
+              "created_at": {
+                  "type": "string"
+              },
+              "instruction": {
+                  "type": "object",
+                  "properties": {
+                      "id": {
+                          "type": "integer"
+                      },
+                      "class_number": {
+                          "type": "integer"
+                      },
+                      "start_date": {
+                          "type": "string"
+                      },
+                      "end_date": {
+                          "type": "string"
+                      }
+                  }
+              }
+          }
+      }
+  - req-create-presentation: |-
+      {
+          "type": "object",
+          "properties": {
+              "subject": {
+                  "type": "string",
+                  "maxLength": 100
+              }
+          },
+          "required": [
+              "subject"
+          ]
+      }
+  - req-update-presentation: |-
+      {
+          "type": "object",
+          "properties": {
+              "subject": {
+                  "type": "string",
+                  "maxLength": 100
+              }
+          }
+      }
+  - res-get-question: |-
+      {
+          "type": "object",
+          "properties": {
+              "id": {
+                  "type": "integer"
+              },
+              "text": {
+                  "type": "string"
+              },
+              "anonymous": {
+                  "type": "boolean"
+              },
+              "created_at": {
+                  "type": "string"
+              },
+              "votes": {
+                  "type": "object",
+                  "properties": {
+                      "down": {
+                          "type": "integer"
+                      },
+                      "up": {
+                          "type": "integer"
+                      },
+                      "ratio": {
+                          "type": "integer"
+                      },
+                      "total": {
+                          "type": "integer"
+                      },
+                      "my": {
+                          "type": "integer"
+                      }
+                  }
+              },
+              "presentation": {
+                  "type": "object",
+                  "properties": {
+                      "id": {
+                          "type": "integer"
+                      },
+                      "subject": {
+                          "type": "string"
+                      },
+                      "status": {
+                          "type": "integer"
+                      },
+                      "created_at": {
+                          "type": "string"
+                      }
+                  }
+              },
+              "person": {
+                  "type": "object",
+                  "properties": {
+                      "id": {
+                          "type": "integer"
+                      },
+                      "name": {
+                          "type": "string"
+                      },
+                      "email": {
+                          "type": "string"
+                      }
+                  }
+              }
+          }
+      }
+  - req-create-question: |-
+      {
+          "type": "object",
+          "properties": {
+              "text": {
+                  "type": "string",
+                  "maxLength": 140
+              },
+              "anonymous": {
+                  "type": "boolean"
+              }
+          },
+          "required": [
+              "text"
+          ]
+      }
+  - req-update-question: |-
+      {
+          "type": "object",
+          "properties": {
+              "text": {
+                  "type": "string",
+                  "maxLength": 140
+              },
+              "anonymous": {
+                  "type": "boolean"
+              }
+          }
+      }
+  - res-get-answer: |-
+      {
+          "type": "object",
+          "properties": {
+              "id": {
+                  "type": "integer"
+              },
+              "text": {
+                  "type": "string"
+              },
+              "anonymous": {
+                  "type": "boolean"
+              },
+              "created_at": {
+                  "type": "string"
+              },
+              "votes": {
+                  "type": "object",
+                  "properties": {
+                      "down": {
+                          "type": "integer"
+                      },
+                      "up": {
+                          "type": "integer"
+                      },
+                      "ratio": {
+                          "type": "integer"
+                      },
+                      "total": {
+                          "type": "integer"
+                      },
+                      "my": {
+                          "type": "integer"
+                      }
+                  }
+              },
+              "question": {
+                  "type": "object",
+                  "properties": {
+                      "id": {
+                          "type": "integer"
+                      },
+                      "text": {
+                          "type": "string"
+                      },
+                      "anonymous": {
+                          "type": "boolean"
+                      },
+                      "created_at": {
+                          "type": "string"
+                      }
+                  }
+              },
+              "person": {
+                  "type": "object",
+                  "properties": {
+                      "id": {
+                          "type": "integer"
+                      },
+                      "name": {
+                          "type": "string"
+                      },
+                      "email": {
+                          "type": "string"
+                      }
+                  }
+              }
+          }
+      }
+  - req-create-answer: |-
+      {
+          "type": "object",
+          "properties": {
+              "text": {
+                  "type": "string",
+                  "maxLength": 140
+              },
+              "anonymous": {
+                  "type": "boolean"
+              }
+          },
+          "required": [
+              "text"
+          ]
+      }
+  - req-update-answer: |-
+      {
+          "type": "object",
+          "properties": {
+              "text": {
+                  "type": "string",
+                  "maxLength": 140
+              },
+              "anonymous": {
+                  "type": "boolean"
+              }
+          }
+      }
+  - res-get-material: |-
+      {
+          "type": "object",
+          "properties": {
+              "id": {
+                  "type": "integer"
+              },
+              "name": {
+                  "type": "string"
+              },
+              "mime": {
+                  "type": "string"
+              },
+              "checked": {
+                  "type": "boolean"
+              },
+              "uploaded_at": {
+                  "type": "string"
+              },
+              "person": {
+                  "type": "object",
+                  "properties": {
+                      "id": {
+                          "type": "integer"
+                      },
+                      "name": {
+                          "type": "string"
+                      },
+                      "email": {
+                          "type": "string"
+                      }
+                  }
+              }
+          }
+      }
+  - req-confirm-material: |-
+      {
+          "type": "object",
+          "properties": {
+              "name": {
+                  "type": "string"
+              }
+          },
+          "required": [
+              "name"
+          ]
+      }
+  - req-create-material: |-
+      {
+          "type": "object"
+      }
+  - req-recover-password: |-
+      {
+          "type": "object",
+          "properties": {
+              "email": {
+                  "type": "string",
+                  "maxLength": 100,
+                  "format": "email"
+              }
+          },
+          "required": [
+              "email"
+          ]
+      }
+  - req-redefine-password: |-
+      {
+          "type": "object",
+          "properties": {
+              "password": {
+                  "type": "string",
+                  "minLength": 6,
+                  "maxLength": 32
+              }
+          },
+          "required": [
+              "password"
+          ]
+      }
+  - res-create-material: |-
+      {
+          "type": "object",
+          "properties": {
+              "fields": {
+                  "type": "object",
+                  "properties": {
+                      "key": {
+                          "type": "string"
+                      },
+                      "policy": {
+                          "type": "string"
+                      },
+                      "x-amz-credential": {
+                          "type": "string"
+                      },
+                      "x-amz-algorithm": {
+                          "type": "string"
+                      },
+                      "x-amz-date": {
+                          "type": "string"
+                      },
+                      "x-amz-signature": {
+                          "type": "string"
+                      }
+                  }
+              },
+              "url": {
+                  "type": "string"
+              },
+              "id": {
+                  "type": "integer"
+              }
+          }
+      }
+  - res-get-vote: |-
+      {
+          "type": "object",
+          "properties": {
+              "up": {
+                  "type": "boolean"
+              },
+              "person": {
+                  "type": "object",
+                  "properties": {
+                      "id": {
+                          "type": "integer"
+                      },
+                      "name": {
+                          "type": "string"
+                      },
+                      "email": {
+                          "type": "string"
+                      }
+                  }
+              }
+          }
+      }
+  - answer-with-material: |-
+      {
+          "type": "object",
+          "properties": {
+              "text": {
+                  "type": "string",
+                  "maxLength": 140
+              },
+              "anonymous": {
+                  "type": "boolean"
+              }
+          }
+      }
+  - res-answer-with-material: |-
+      {
+          "type": "object",
+          "properties": {
+              "fields": {
+                  "type": "object",
+                  "properties": {
+                      "key": {
+                          "type": "string"
+                      },
+                      "policy": {
+                          "type": "string"
+                      },
+                      "x-amz-credential": {
+                          "type": "string"
+                      },
+                      "x-amz-algorithm": {
+                          "type": "string"
+                      },
+                      "x-amz-date": {
+                          "type": "string"
+                      },
+                      "x-amz-signature": {
+                          "type": "string"
+                      }
+                  }
+              },
+              "url": {
+                  "type": "string"
+              },
+              "id": {
+                  "type": "integer"
+              },
+              "answer": {
+                  "type": "object",
+                  "properties": {
+                      "id": {
+                          "type": "integer"
+                      },
+                      "text": {
+                          "type": "string"
+                      },
+                      "anonymous": {
+                          "type": "boolean"
+                      },
+                      "accepted": {
+                          "type": "boolean"
+                      },
+                      "created_at": {
+                          "type": "string"
+                      },
+                      "question_id": {
+                          "type": "integer"
+                      },
+                      "person_id": {
+                          "type": "integer"
+                      }
+                  }
+              }
+          }
+      }
