@@ -32,11 +32,8 @@ Rails.application.routes.draw do
 
       resources :notices
       resources :dates, controller: 'calendars'
-      resources :works do
-        resources :materials
-        resources :submissions do
-          resources :materials
-        end
+      resources :works, concerns: :materializable do
+        resources :submissions, concerns: :materializable
       end
       resources :presentations, concerns: :materializable do
         member do

@@ -1,14 +1,20 @@
 class SubmissionsController < ApplicationController
   def index
-    render plain: 'I list all entities'
+    render json: Submission.all.where(work_id: params[:work_id])
   end
 
   def create
-    render plain: 'I create one entity'
+    work = Work.find params[:work_id]
+    person = current_person
+
+    submission = Submission.new text: params[:text] || '', person: person, work: work
+    submission.save!
+
+    render json: submission
   end
 
   def show
-    render plain: 'I show one entity'
+    render json: Submission.find(params[:id])
   end
 
   def update
@@ -16,6 +22,6 @@ class SubmissionsController < ApplicationController
   end
 
   def destroy
-    render plain: 'I delete one entity'
+    render json: Submission.find(params[:id]).delete
   end
 end

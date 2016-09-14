@@ -1,6 +1,6 @@
 class WorksController < ApplicationController
   def index
-    render json: Answer.all.where(instruction_id: params[:instruction_id])
+    render json: Work.all.where(instruction_id: params[:instruction_id])
   end
 
   def create

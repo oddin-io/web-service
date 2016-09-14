@@ -14,5 +14,5 @@ class Submission < ApplicationRecord
   belongs_to :work
   belongs_to :person
 
-  has_many :attachments, as: :attachable
+  has_many :materials, as: :attachable
 end

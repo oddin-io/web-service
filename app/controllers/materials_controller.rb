@@ -5,6 +5,8 @@ class MaterialsController < ApplicationController
     resp = Instruction.find(params[:instruction_id]).materials if params[:instruction_id]
     resp = Presentation.find(params[:presentation_id]).materials if params[:presentation_id]
     resp = Answer.find(params[:answer_id]).materials if params[:answer_id]
+    resp = Work.find(params[:work_id]).materials if params[:work_id]
+    resp = Submission.find(params[:submission_id]).materials if params[:submission_id]
 
     resp = resp.where checked: true
 
@@ -16,11 +18,15 @@ class MaterialsController < ApplicationController
     attachable = nil
 
     if params[:instruction_id]
-      attachable = Instruction.find(params[:instruction_id])
+      attachable = Instruction.find params[:instruction_id]
     elsif params[:presentation_id]
-      attachable = Presentation.find(params[:presentation_id])
+      attachable = Presentation.find params[:presentation_id]
     elsif params[:answer_id]
-      attachable = Answer.find(param[:answer_id])
+      attachable = Answer.find param[:answer_id]
+    elsif params[:work_id]
+      attachable = Work.find params[:work_id]
+    elsif params[:submission_id]
+      attachable = Submission.find params[:submission_id]
     end
 
     material.attachable = attachable
