@@ -1,6 +1,6 @@
 #%RAML 0.8
 title: Oddin Edu
-version: '0.1'
+version: 0.1
 protocols: [HTTP, HTTPS]
 baseUri: ws-edupanel.herokuapp.com
 mediaType: application/json
@@ -220,6 +220,33 @@ mediaType: application/json
                   "$ref": "#/definitions/res-get-lecture"
               }
 /instructions:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |-
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/res-get-instruction"
+                }
+              }
+  post:
+    body:
+      application/json:
+        schema: |-
+          {
+              "$ref": "#/definitions/req-create-instruction"
+          }
+    responses:
+      201:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/res-get-instruction"
+              }
   /{id}:
     uriParameters:
       id:
@@ -251,34 +278,63 @@ mediaType: application/json
     delete:
       responses:
         204: {}
-  get:
-    responses:
-      200:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "type": "array",
-                  "items": {
-                      "$ref": "#/definitions/res-get-instruction"
-                  }
-              }
-  post:
-    body:
-      application/json:
-        schema: |-
-          {
-              "$ref": "#/definitions/req-create-instruction"
-          }
-    responses:
-      201:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/res-get-instruction"
-              }
   /{instruction_id}:
+    /notices:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                schema: |-
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/res-get-notice"
+                    }
+                  }
+      post:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/req-create-notice"
+              }
+        responses:
+          201:
+            body:
+              application/json:
+                schema: |-
+                  {
+                      "$ref": "#/definitions/res-get-notice"
+                  }
+    /dates:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                schema: |-
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/res-get-date"
+                    }
+                  }
+      post:
+        body:
+          application/json:
+            schema: |-
+              {
+                  "$ref": "#/definitions/req-create-date"
+              }
+        responses:
+          201:
+            body:
+              application/json:
+                schema: |-
+                  {
+                      "$ref": "#/definitions/res-get-date"
+                  }
     /presentations:
       get:
         responses:
@@ -476,11 +532,6 @@ mediaType: application/json
         post:
           body:
             application/json:
-              example: |-
-                {
-                    "text": "Yes you can",
-                    "anonymous": false
-                }
               schema: |-
                 {
                     "$ref": "#/definitions/answer-with-material"
@@ -622,19 +673,6 @@ mediaType: application/json
     put:
       body:
         application/json:
-          example: |-
-            {
-                "id": 1,
-                "name": "example.pdf",
-                "mime": "application/pdf",
-                "checked": true,
-                "uploaded_at": "asdf",
-                "person": {
-                    "id": 1,
-                    "name": "Someone",
-                    "email": "someone@email.com"
-                }
-            }
           schema: |-
             {
                 "$ref": "#/definitions/res-get-material"
@@ -678,8 +716,6 @@ mediaType: application/json
                 {
                     "$ref": "#/definitions/res-create-material"
                 }
-/notices:
-/calendar:
 schemas:
   - req-create-person: |-
       {
@@ -958,6 +994,42 @@ schemas:
                       }
                   }
               }
+          }
+      }
+  - res-get-notice: |-
+      {
+          "type": "object",
+          "properties": {
+            "id": "integer",
+            "subject": "string",
+            "text": "string"
+          }
+      }
+  - res-get-date: |-
+      {
+          "type": "object",
+          "properties": {
+            "id": "integer",
+            "subject": "string",
+            "text": "string",
+            "date": "date"
+          }
+      }
+  - req-create-notice: |-
+      {
+          "type": "object",
+          "properties": {
+            "subject": "string",
+            "text": "string"
+          }
+      }
+  - req-create-date: |-
+      {
+          "type": "object",
+          "properties": {
+            "subject": "string",
+            "text": "string",
+            "date": "date"
           }
       }
   - req-create-instruction: |-
