@@ -15,6 +15,7 @@
 
 class Material < ApplicationRecord
   belongs_to :person
+  # maybe :cabinet or :locker
   belongs_to :attachable, polymorphic: true
 
   validates :person, :key, presence: true

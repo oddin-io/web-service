@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160914161804) do
+ActiveRecord::Schema.define(version: 20160914171912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,6 +141,16 @@ ActiveRecord::Schema.define(version: 20160914161804) do
     t.index ["token"], name: "index_sessions_on_token", unique: true, using: :btree
   end
 
+  create_table "submissions", force: :cascade do |t|
+    t.text     "text"
+    t.integer  "work_id",    null: false
+    t.integer  "person_id",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_submissions_on_person_id", using: :btree
+    t.index ["work_id"], name: "index_submissions_on_work_id", using: :btree
+  end
+
   create_table "votes", force: :cascade do |t|
     t.boolean "up",           default: true, null: false
     t.integer "person_id",                   null: false
@@ -180,6 +190,8 @@ ActiveRecord::Schema.define(version: 20160914161804) do
   add_foreign_key "questions", "presentations"
   add_foreign_key "redefine_tokens", "people"
   add_foreign_key "sessions", "people"
+  add_foreign_key "submissions", "people"
+  add_foreign_key "submissions", "works"
   add_foreign_key "votes", "people"
   add_foreign_key "works", "instructions"
   add_foreign_key "works", "people"
