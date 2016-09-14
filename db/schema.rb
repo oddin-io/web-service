@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160901040745) do
+ActiveRecord::Schema.define(version: 20160914161804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -151,6 +151,18 @@ ActiveRecord::Schema.define(version: 20160901040745) do
     t.index ["votable_type", "votable_id"], name: "index_votes_on_votable_type_and_votable_id", using: :btree
   end
 
+  create_table "works", force: :cascade do |t|
+    t.text     "subject",        null: false
+    t.text     "description",    null: false
+    t.datetime "deadline",       null: false
+    t.integer  "instruction_id", null: false
+    t.integer  "person_id",      null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["instruction_id"], name: "index_works_on_instruction_id", using: :btree
+    t.index ["person_id"], name: "index_works_on_person_id", using: :btree
+  end
+
   add_foreign_key "answers", "people"
   add_foreign_key "answers", "questions"
   add_foreign_key "calendars", "instructions"
@@ -169,4 +181,6 @@ ActiveRecord::Schema.define(version: 20160901040745) do
   add_foreign_key "redefine_tokens", "people"
   add_foreign_key "sessions", "people"
   add_foreign_key "votes", "people"
+  add_foreign_key "works", "instructions"
+  add_foreign_key "works", "people"
 end
