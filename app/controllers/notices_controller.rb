@@ -1,7 +1,7 @@
 class NoticesController < ApplicationController
   def index
     instruction = Instruction.find params[:instruction_id]
-    render json: instructions.notices
+    render json: instruction.notices
   end
 
   def create
