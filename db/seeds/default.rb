@@ -1,14 +1,14 @@
 # People
 # ======================================================================================================================
-eloize_person = Person.create name: 'Eloize', email: 'eloize@ifsp.com', password: '12345678'
-silvana_person = Person.create name: 'Silvana', email: 'silvana@ifsp.com', password: '12345678'
-pablo_person = Person.create name: 'Pablo', email: 'pablo@ifsp.com', password: '12345678'
-celia_person = Person.create name: 'Célia', email: 'celia@ifsp.com', password: '12345678'
-miriam_person = Person.create name: 'Miriam', email: 'miriam@ifsp.com', password: '12345678'
-bruno_person = Person.create name: 'Bruno', email: 'bruno@gmail.com', password: '12345678'
-heitor_person = Person.create name: 'Heitor', email: 'heitor@gmail.com', password: '12345678'
-leonardo_person = Person.create name: 'Leonardo', email: 'leonardo@gmail.com', password: '12345678'
-ana_person = Person.create name: 'Ana', email: 'ana@gmail.com', password: '12345678'
+eloize_person = Person.create name: 'Eloize', email: 'eloize@email.com', password: '12345678'
+silvana_person = Person.create name: 'Silvana', email: 'silvana@email.com', password: '12345678'
+pablo_person = Person.create name: 'Pablo', email: 'pablo@email.com', password: '12345678'
+celia_person = Person.create name: 'Célia', email: 'celia@email.com', password: '12345678'
+miriam_person = Person.create name: 'Miriam', email: 'miriam@email.com', password: '12345678'
+bruno_person = Person.create name: 'Bruno', email: 'bruno@email.com', password: '12345678'
+heitor_person = Person.create name: 'Heitor', email: 'heitor@email.com', password: '12345678'
+leonardo_person = Person.create name: 'Leonardo', email: 'leonardo@email.com', password: '12345678'
+ana_person = Person.create name: 'Ana', email: 'ana@email.com', password: '12345678'
 
 # Events
 # ======================================================================================================================
