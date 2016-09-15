@@ -1,7 +1,7 @@
 class CalendarsController < ApplicationController
   def index
     instruction = Instruction.find params[:instruction_id]
-    render json: instructions.calendars
+    render json: instruction.calendars
   end
 
   def create
