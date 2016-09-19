@@ -7,7 +7,7 @@ class CalendarsController < ApplicationController
   def create
     instruction = Instruction.find params[:instruction_id]
     date = Calendar.new person: current_person, instruction: instruction,
-      subject: params[:subject], text: params[:text], date: params[:date]
+      subject: params[:subject], text: params[:text], date: DateTime.parse(params[:date])
     date.save!
 
     render json: date
