@@ -1,107 +1,107 @@
-#%RAML 0.8
+#%RAML 1.0
 title: Oddin Edu
 version: 0.1
 protocols: [HTTP, HTTPS]
-baseUri: ws-edupanel.herokuapp.com
 mediaType: application/json
+securitySchemes:
+  Authorization:
+    description: Authenticate user using Firebase credentials by a JWT
+    type: x-Authorization
+    describedBy:
+      headers:
+        X-Session-Token:
+          description: Used to pass a previous registered session token
+          type: string
+      responses:
+        401:
+          description: Bad Token
+uses:
+  Request: !includes libraries/request.raml
+  Response: !includes libraries/response.raml
 
 /person:
+  post:
+    body:
+      application/json:
+        type: Request.CreatePerson
+
+    responses:
+      201:
+        body:
+          application/json:
+            type: Response.GetPerson
   get:
     responses:
       200:
         body:
           application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/res-get-person"
-              }
+            type: Response.GetPerson
   put:
     body:
       application/json:
-        schema: |-
-          {
-              "$ref": "#/definitions/req-update-person"
-          }
+        type: Request.UpdatePerson
+
     responses:
       200:
         body:
           application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/res-get-person"
-              }
-  post:
-    body:
-      application/json:
-        schema: |-
-          {
-              "$ref": "#/definitions/req-create-person"
-          }
-    responses:
-      201:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/res-get-person"
-              }
+            type: Response.GetPerson
   delete:
-    responses:
-      204: {}
+
 /recover-password:
   post:
     body:
       application/json:
-        schema: |-
-          {
-              "$ref": "#/definitions/req-recover-password"
-          }
-    responses: {}
+        type: Request.RecoverPassword
+
 /redefine-password:
   post:
-    body:
-      application/json:
-        schema: |-
-          {
-              "$ref": "#/definitions/req-redefine-password"
-          }
-    responses: {}
     queryParameters:
       token:
         type: string
         required: true
+    body:
+      application/json:
+        type: Request.RedefinePassword
+
 /session:
+  post:
+    body:
+      application/json:
+        type: Request.CreateSession
+
+    responses:
+      201:
+        body:
+          application/json:
+            type: Response.GetSession
   get:
     responses:
       200:
         body:
           application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/res-get-session"
-              }
-  post:
-    body:
-      application/json:
-        schema: |-
-          {
-              "$ref": "#/definitions/req-create-session"
-          }
-    responses:
-      201:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/res-get-session"
-              }
+            type: Response.GetSession
   delete:
-    responses:
-      204: {}
   /all:
     delete:
-      responses: {}
+
 /events:
+  post:
+    body:
+      application/json:
+        type: Request.CreateEvent
+
+    responses:
+      201:
+        body:
+          application/json:
+            type: Response.GetEvent
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Response.GetEvent[]
   /{id}:
     uriParameters:
       id:
@@ -111,56 +111,36 @@ mediaType: application/json
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-event"
-                }
+              type: Response.GetEvent
     put:
       body:
         application/json:
-          schema: |-
-            {
-                "$ref": "#/definitions/req-update-event"
-            }
+          type: Request.UpdateEvent
+
       responses:
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-event"
-                }
+              type: Response.GetEvent
     delete:
-      responses:
-        204: {}
-  get:
-    responses:
-      200:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "type": "array",
-                  "items": {
-                      "$ref": "#/definitions/res-get-event"
-                  }
-              }
-  post:
-    body:
-      application/json:
-        schema: |-
-          {
-              "$ref": "#/definitions/req-create-event"
-          }
-    responses:
-      201:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/res-get-event"
-              }
+
 /lectures:
+  post:
+    body:
+      application/json:
+        type: Request.CreateLecture
+
+    responses:
+      201:
+        body:
+          application/json:
+            type: Response.GetLecture
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Response.GetLecture[]
   /{id}:
     uriParameters:
       id:
@@ -170,83 +150,36 @@ mediaType: application/json
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-lecture"
-                }
+              type: Response.GetLecture
     put:
       body:
         application/json:
-          schema: |-
-            {
-                "$ref": "#/definitions/req-update-lecture"
-            }
+          type: Request.UpdateLecture
+
       responses:
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-lecture"
-                }
+              type: Response.GetLecture
     delete:
-      responses:
-        204: {}
-  get:
-    responses:
-      200:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "type": "array",
-                  "items": {
-                      "$ref": "#/definitions/res-get-lecture"
-                  }
-              }
-  post:
-    body:
-      application/json:
-        schema: |-
-          {
-              "$ref": "#/definitions/req-create-lecture"
-          }
-    responses:
-      201:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/res-get-lecture"
-              }
+
 /instructions:
   get:
     responses:
       200:
         body:
           application/json:
-            schema: |-
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/definitions/res-get-instruction"
-                }
-              }
+            type: Response.GetInstruction[]
   post:
     body:
       application/json:
-        schema: |-
-          {
-              "$ref": "#/definitions/req-create-instruction"
-          }
+        type: Request.CreateInstruction
+
     responses:
       201:
         body:
           application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/res-get-instruction"
-              }
+            type: Response.GetInstruction
   /{id}:
     uriParameters:
       id:
@@ -256,131 +189,82 @@ mediaType: application/json
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-instruction"
-                }
+              type: Response.GetInstruction
     put:
       body:
         application/json:
-          schema: |-
-            {
-                "$ref": "#/definitions/req-update-instruction"
-            }
+          type: Request.UpdateInstruction
+
       responses:
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-instruction"
-                }
+              type: Response.GetInstruction
     delete:
-      responses:
-        204: {}
-  /{instruction_id}:
+
+    /presentations:
+      post:
+        body:
+          application/json:
+            type: Request.CreatePresentation
+
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetPresentation
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetPresentation[]
+    /materials:
+      post:
+        body:
+          application/json:
+            type: object
+
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.CreateMaterial
     /notices:
       get:
         responses:
           200:
             body:
               application/json:
-                schema: |-
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/definitions/res-get-notice"
-                    }
-                  }
+                type: Response.GetNotice[]
       post:
         body:
           application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/req-create-notice"
-              }
+            type: Request.CreateNotice
+
         responses:
           201:
             body:
               application/json:
-                schema: |-
-                  {
-                      "$ref": "#/definitions/res-get-notice"
-                  }
+                type: Response.GetNotice
     /dates:
       get:
         responses:
           200:
             body:
               application/json:
-                schema: |-
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/definitions/res-get-date"
-                    }
-                  }
+                type: Response.GetDate[]
       post:
         body:
           application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/req-create-date"
-              }
+            type: Request.CreateDate
+
         responses:
           201:
             body:
               application/json:
-                schema: |-
-                  {
-                      "$ref": "#/definitions/res-get-date"
-                  }
-    /presentations:
-      get:
-        responses:
-          200:
-            body:
-              application/json:
-                schema: |-
-                  {
-                      "type": "array",
-                      "items": {
-                          "$ref": "#/definitions/res-get-presentation"
-                      }
-                  }
-    /materials:
-      post:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "type": "object"
-              }
-        responses:
-          201:
-            body:
-              application/json:
-                schema: |-
-                  {
-                      "$ref": "#/definitions/res-create-material"
-                  }
-  /{presentation_id}:
-    /presentations:
-      post:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/req-create-presentation"
-              }
-        responses:
-          201:
-            body:
-              application/json:
-                schema: |-
-                  {
-                      "$ref": "#/definitions/res-get-presentation"
-                  }
+                type: Response.GetDate
+
 /presentations:
   /{id}:
     uriParameters:
@@ -391,62 +275,55 @@ mediaType: application/json
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-presentation"
-                }
+              type: Response.GetPresentation
     put:
       body:
         application/json:
-          schema: |-
-            {
-                "$ref": "#/definitions/req-update-presentation"
-            }
+          type: Request.UpdatePresentation
+
       responses:
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-presentation"
-                }
+              type: Response.GetPresentation
     delete:
-      responses:
-        204: {}
-  /{presentation_id}:
+
     /questions:
       post:
         body:
           application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/req-create-question"
-              }
+            type: Request.CreateQuestion
+
         responses:
           201:
             body:
               application/json:
-                schema: |-
-                  {
-                      "$ref": "#/definitions/res-get-question"
-                  }
+                type: Response.GetQuestion
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetQuestion[]
     /materials:
       post:
         body:
           application/json:
-            schema: |-
-              {
-                  "type": "object"
-              }
+            type: object
         responses:
           201:
             body:
               application/json:
-                schema: |-
-                  {
-                      "$ref": "#/definitions/res-create-material"
-                  }
+                type: Response.CreateMaterial
+
 /questions:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Response.GetQuestion[]
+
   /{id}:
     uriParameters:
       id:
@@ -456,94 +333,70 @@ mediaType: application/json
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-question"
-                }
+              type: Response.GetQuestion
     put:
       body:
         application/json:
-          schema: |-
-            {
-                "$ref": "#/definitions/req-update-question"
-            }
+          type: Request.UpdateQuestion
+
       responses:
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-question"
-                }
+              type: Response.GetQuestion
     delete:
-      responses:
-        204: {}
-  get:
-    responses:
-      200:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "type": "array",
-                  "items": {
-                      "$ref": "#/definitions/res-get-question"
-                  }
-              }
-  /{question_id}:
+
     /upvote:
       post:
         body:
           application/json:
-            schema: |-
-              {
-                  "type": "object"
-              }
+            type: object
         responses:
           200:
             body:
               application/json:
-                schema: |-
-                  {
-                      "$ref": "#/definitions/res-get-vote"
-                  }
+                type: Response.GetVote
     /downvote:
       post:
         body:
           application/json:
-            schema: |-
-              {
-                  "type": "object"
-              }
+            type: object
         responses:
           201:
             body:
               application/json:
-                schema: |-
-                  {
-                      "$ref": "#/definitions/res-get-vote"
-                  }
+                type: Response.GetVote
     /vote:
       delete:
+
+    /answers:
+      get:
         responses:
-          204: {}
-    /answer:
+          200:
+            body:
+              application/json:
+                type: Response.GetAnswer[]
+      post:
+        body:
+          application/json:
+            type: Request.CreateAnswer
+
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetAnswer
       /materials:
         post:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/answer-with-material"
-                }
+              type: Request.AnswerWithMaterial
           responses:
             201:
               body:
                 application/json:
-                  schema: |-
-                    {
-                        "$ref": "#/definitions/res-answer-with-material"
-                    }
+                  type: Response.AnswerWithMaterial
+
 /answers:
   /{id}:
     uriParameters:
@@ -554,109 +407,59 @@ mediaType: application/json
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-answer"
-                }
+              type: Response.GetAnswer
     put:
       body:
         application/json:
-          schema: |-
-            {
-                "$ref": "#/definitions/req-update-answer"
-            }
+          type: Request.UpdateAnswer
+
       responses:
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-answer"
-                }
+              type: Response.GetAnswer
     delete:
-      responses:
-        204: {}
+
+    /materials:
+      post:
+        body:
+          application/json:
+            type: object
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.CreateMaterial
+    /upvote:
+      post:
+        body:
+          application/json:
+            type: object
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetVote
+    /downvote:
+      post:
+        body:
+          application/json:
+            type: object
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetVote
+    /vote:
+      delete:
+
+/materials:
   get:
     responses:
       200:
         body:
           application/json:
-            schema: |-
-              {
-                  "type": "array",
-                  "items": {
-                      "$ref": "#/definitions/res-get-answer"
-                  }
-              }
-  post:
-    body:
-      application/json:
-        schema: |-
-          {
-              "$ref": "#/definitions/req-create-answer"
-          }
-    responses:
-      201:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "$ref": "#/definitions/res-get-answer"
-              }
-  /{answer_id}:
-    /materials:
-      post:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "type": "object"
-              }
-        responses:
-          201:
-            body:
-              application/json:
-                schema: |-
-                  {
-                      "$ref": "#/definitions/res-create-material"
-                  }
-    /upvote:
-      post:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "type": "object"
-              }
-        responses:
-          200:
-            body:
-              application/json:
-                schema: |-
-                  {
-                      "$ref": "#/definitions/res-get-vote"
-                  }
-    /downvote:
-      post:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "type": "object"
-              }
-        responses:
-          201:
-            body:
-              application/json:
-                schema: |-
-                  {
-                      "$ref": "#/definitions/res-get-vote"
-                  }
-    /vote:
-      delete:
-        responses:
-          204: {}
-/materials:
+            type: Response.GetMaterial[]
   /{id}:
     uriParameters:
       id:
@@ -666,893 +469,14 @@ mediaType: application/json
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-material"
-                }
+              type: Response.GetMaterial
     put:
       body:
         application/json:
-          schema: |-
-            {
-                "$ref": "#/definitions/res-get-material"
-            }
+          type: Response.GetMaterial
       responses:
         200:
           body:
             application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-get-material"
-                }
+              type: Response.GetMaterial
     delete:
-      responses:
-        204: {}
-  get:
-    responses:
-      200:
-        body:
-          application/json:
-            schema: |-
-              {
-                  "type": "array",
-                  "items": {
-                      "$ref": "#/definitions/res-get-material"
-                  }
-              }
-  /new:
-    post:
-      body:
-        application/json:
-          schema: |-
-            {
-                "type": "object"
-            }
-      responses:
-        201:
-          body:
-            application/json:
-              schema: |-
-                {
-                    "$ref": "#/definitions/res-create-material"
-                }
-schemas:
-  - req-create-person: |-
-      {
-          "type": "object",
-          "properties": {
-              "name": {
-                  "type": "string",
-                  "maxLength": 100
-              },
-              "email": {
-                  "type": "string",
-                  "maxLength": 100,
-                  "format": "email"
-              },
-              "password": {
-                  "type": "string",
-                  "minLength": 6,
-                  "maxLength": 32
-              }
-          },
-          "required": [
-              "name",
-              "email",
-              "password"
-          ]
-      }
-  - res-get-person: |-
-      {
-          "type": "object",
-          "properties": {
-              "id": {
-                  "type": "integer"
-              },
-              "name": {
-                  "type": "string"
-              },
-              "email": {
-                  "type": "string"
-              }
-          }
-      }
-  - req-update-person: |-
-      {
-          "type": "object",
-          "properties": {
-              "name": {
-                  "type": "string",
-                  "maxLength": 100
-              },
-              "email": {
-                  "type": "string",
-                  "maxLength": 100,
-                  "format": "email"
-              },
-              "password": {
-                  "type": "string",
-                  "minLength": 6,
-                  "maxLength": 32
-              }
-          }
-      }
-  - res-get-session: |-
-      {
-          "type": "object",
-          "properties": {
-              "id": {
-                  "type": "integer"
-              },
-              "token": {
-                  "type": "string"
-              },
-              "created_at": {
-                  "type": "string"
-              },
-              "person": {
-                  "type": "object",
-                  "properties": {
-                      "id": {
-                          "type": "integer"
-                      },
-                      "name": {
-                          "type": "string"
-                      },
-                      "email": {
-                          "type": "string"
-                      }
-                  }
-              }
-          }
-      }
-  - req-create-session: |-
-      {
-          "type": "object",
-          "properties": {
-              "email": {
-                  "type": "string",
-                  "maxLength": 100,
-                  "format": "email"
-              },
-              "password": {
-                  "type": "string",
-                  "minLength": 6,
-                  "maxLength": 32
-              }
-          },
-          "required": [
-              "email",
-              "password"
-          ]
-      }
-  - res-get-event: |-
-      {
-          "type": "object",
-          "properties": {
-              "id": {
-                  "type": "integer"
-              },
-              "code": {
-                  "type": "string"
-              },
-              "name": {
-                  "type": "string"
-              },
-              "workload": {
-                  "type": "number"
-              }
-          }
-      }
-  - req-create-event: |-
-      {
-          "type": "object",
-          "properties": {
-              "code": {
-                  "type": "string",
-                  "maxLength": 30
-              },
-              "name": {
-                  "type": "string",
-                  "maxLength": 100
-              },
-              "workload": {
-                  "type": "number",
-                  "minimum": 0
-              }
-          },
-          "required": [
-              "code",
-              "name",
-              "workload"
-          ]
-      }
-  - req-update-event: |-
-      {
-          "type": "object",
-          "properties": {
-              "code": {
-                  "type": "string",
-                  "maxLength": 30
-              },
-              "name": {
-                  "type": "string",
-                  "maxLength": 100
-              },
-              "workload": {
-                  "type": "number",
-                  "minimum": 0
-              }
-          }
-      }
-  - req-create-lecture: |-
-      {
-          "type": "object",
-          "properties": {
-              "code": {
-                  "type": "string",
-                  "maxLength": 30
-              },
-              "name": {
-                  "type": "string",
-                  "maxLength": 100
-              },
-              "workload": {
-                  "type": "number",
-                  "minimum": 0
-              }
-          },
-          "required": [
-              "code",
-              "name",
-              "workload"
-          ]
-      }
-  - res-get-lecture: |-
-      {
-          "type": "object",
-          "properties": {
-              "id": {
-                  "type": "integer"
-              },
-              "code": {
-                  "type": "string"
-              },
-              "name": {
-                  "type": "string"
-              },
-              "workload": {
-                  "type": "number"
-              }
-          }
-      }
-  - req-update-lecture: |-
-      {
-          "type": "object",
-          "properties": {
-              "code": {
-                  "type": "string",
-                  "maxLength": 30
-              },
-              "name": {
-                  "type": "string",
-                  "maxLength": 100
-              },
-              "workload": {
-                  "type": "number",
-                  "minimum": 0
-              }
-          }
-      }
-  - res-get-instruction: |-
-      {
-          "type": "object",
-          "properties": {
-              "id": {
-                  "type": "integer"
-              },
-              "class_number": {
-                  "type": "integer"
-              },
-              "start_date": {
-                  "type": "string"
-              },
-              "end_date": {
-                  "type": "string"
-              },
-              "event": {
-                  "type": "object",
-                  "properties": {
-                      "id": {
-                          "type": "integer"
-                      },
-                      "code": {
-                          "type": "string"
-                      },
-                      "name": {
-                          "type": "string"
-                      },
-                      "workload": {
-                          "type": "number"
-                      }
-                  }
-              },
-              "lecture": {
-                  "type": "object",
-                  "properties": {
-                      "id": {
-                          "type": "integer"
-                      },
-                      "code": {
-                          "type": "string"
-                      },
-                      "name": {
-                          "type": "string"
-                      },
-                      "workload": {
-                          "type": "number"
-                      }
-                  }
-              }
-          }
-      }
-  - res-get-notice: |-
-      {
-          "type": "object",
-          "properties": {
-            "id": "integer",
-            "subject": "string",
-            "text": "string"
-          }
-      }
-  - res-get-date: |-
-      {
-          "type": "object",
-          "properties": {
-            "id": "integer",
-            "subject": "string",
-            "text": "string",
-            "date": "date"
-          }
-      }
-  - req-create-notice: |-
-      {
-          "type": "object",
-          "properties": {
-            "subject": "string",
-            "text": "string"
-          }
-      }
-  - req-create-date: |-
-      {
-          "type": "object",
-          "properties": {
-            "subject": "string",
-            "text": "string",
-            "date": "date"
-          }
-      }
-  - req-create-instruction: |-
-      {
-          "type": "object",
-          "properties": {
-              "class_number": {
-                  "type": "integer",
-                  "minimum": 1
-              },
-              "start_date": {
-                  "type": "string",
-                  "format": "date"
-              },
-              "end_date": {
-                  "type": "string",
-                  "format": "date"
-              },
-              "event_id": {
-                  "type": "integer",
-                  "minimum": 1
-              },
-              "lecture_id": {
-                  "type": "integer",
-                  "minimum": 1
-              }
-          },
-          "required": [
-              "class_number",
-              "start_date",
-              "end_date",
-              "event_id",
-              "lecture_id"
-          ]
-      }
-  - req-update-instruction: |-
-      {
-          "type": "object",
-          "properties": {
-              "class_number": {
-                  "type": "integer",
-                  "minimum": 1
-              },
-              "start_date": {
-                  "type": "string",
-                  "format": "date"
-              },
-              "end_date": {
-                  "type": "string",
-                  "format": "date"
-              },
-              "event_id": {
-                  "type": "integer",
-                  "minimum": 1
-              },
-              "lecture_id": {
-                  "type": "integer",
-                  "minimum": 1
-              }
-          }
-      }
-  - res-get-presentation: |-
-      {
-          "type": "object",
-          "properties": {
-              "id": {
-                  "type": "integer"
-              },
-              "subject": {
-                  "type": "string"
-              },
-              "status": {
-                  "type": "integer"
-              },
-              "created_at": {
-                  "type": "string"
-              },
-              "instruction": {
-                  "type": "object",
-                  "properties": {
-                      "id": {
-                          "type": "integer"
-                      },
-                      "class_number": {
-                          "type": "integer"
-                      },
-                      "start_date": {
-                          "type": "string"
-                      },
-                      "end_date": {
-                          "type": "string"
-                      }
-                  }
-              }
-          }
-      }
-  - req-create-presentation: |-
-      {
-          "type": "object",
-          "properties": {
-              "subject": {
-                  "type": "string",
-                  "maxLength": 100
-              }
-          },
-          "required": [
-              "subject"
-          ]
-      }
-  - req-update-presentation: |-
-      {
-          "type": "object",
-          "properties": {
-              "subject": {
-                  "type": "string",
-                  "maxLength": 100
-              }
-          }
-      }
-  - res-get-question: |-
-      {
-          "type": "object",
-          "properties": {
-              "id": {
-                  "type": "integer"
-              },
-              "text": {
-                  "type": "string"
-              },
-              "anonymous": {
-                  "type": "boolean"
-              },
-              "created_at": {
-                  "type": "string"
-              },
-              "votes": {
-                  "type": "object",
-                  "properties": {
-                      "down": {
-                          "type": "integer"
-                      },
-                      "up": {
-                          "type": "integer"
-                      },
-                      "ratio": {
-                          "type": "integer"
-                      },
-                      "total": {
-                          "type": "integer"
-                      },
-                      "my": {
-                          "type": "integer"
-                      }
-                  }
-              },
-              "presentation": {
-                  "type": "object",
-                  "properties": {
-                      "id": {
-                          "type": "integer"
-                      },
-                      "subject": {
-                          "type": "string"
-                      },
-                      "status": {
-                          "type": "integer"
-                      },
-                      "created_at": {
-                          "type": "string"
-                      }
-                  }
-              },
-              "person": {
-                  "type": "object",
-                  "properties": {
-                      "id": {
-                          "type": "integer"
-                      },
-                      "name": {
-                          "type": "string"
-                      },
-                      "email": {
-                          "type": "string"
-                      }
-                  }
-              }
-          }
-      }
-  - req-create-question: |-
-      {
-          "type": "object",
-          "properties": {
-              "text": {
-                  "type": "string",
-                  "maxLength": 140
-              },
-              "anonymous": {
-                  "type": "boolean"
-              }
-          },
-          "required": [
-              "text"
-          ]
-      }
-  - req-update-question: |-
-      {
-          "type": "object",
-          "properties": {
-              "text": {
-                  "type": "string",
-                  "maxLength": 140
-              },
-              "anonymous": {
-                  "type": "boolean"
-              }
-          }
-      }
-  - res-get-answer: |-
-      {
-          "type": "object",
-          "properties": {
-              "id": {
-                  "type": "integer"
-              },
-              "text": {
-                  "type": "string"
-              },
-              "anonymous": {
-                  "type": "boolean"
-              },
-              "created_at": {
-                  "type": "string"
-              },
-              "votes": {
-                  "type": "object",
-                  "properties": {
-                      "down": {
-                          "type": "integer"
-                      },
-                      "up": {
-                          "type": "integer"
-                      },
-                      "ratio": {
-                          "type": "integer"
-                      },
-                      "total": {
-                          "type": "integer"
-                      },
-                      "my": {
-                          "type": "integer"
-                      }
-                  }
-              },
-              "question": {
-                  "type": "object",
-                  "properties": {
-                      "id": {
-                          "type": "integer"
-                      },
-                      "text": {
-                          "type": "string"
-                      },
-                      "anonymous": {
-                          "type": "boolean"
-                      },
-                      "created_at": {
-                          "type": "string"
-                      }
-                  }
-              },
-              "person": {
-                  "type": "object",
-                  "properties": {
-                      "id": {
-                          "type": "integer"
-                      },
-                      "name": {
-                          "type": "string"
-                      },
-                      "email": {
-                          "type": "string"
-                      }
-                  }
-              }
-          }
-      }
-  - req-create-answer: |-
-      {
-          "type": "object",
-          "properties": {
-              "text": {
-                  "type": "string",
-                  "maxLength": 140
-              },
-              "anonymous": {
-                  "type": "boolean"
-              }
-          },
-          "required": [
-              "text"
-          ]
-      }
-  - req-update-answer: |-
-      {
-          "type": "object",
-          "properties": {
-              "text": {
-                  "type": "string",
-                  "maxLength": 140
-              },
-              "anonymous": {
-                  "type": "boolean"
-              }
-          }
-      }
-  - res-get-material: |-
-      {
-          "type": "object",
-          "properties": {
-              "id": {
-                  "type": "integer"
-              },
-              "name": {
-                  "type": "string"
-              },
-              "mime": {
-                  "type": "string"
-              },
-              "checked": {
-                  "type": "boolean"
-              },
-              "uploaded_at": {
-                  "type": "string"
-              },
-              "person": {
-                  "type": "object",
-                  "properties": {
-                      "id": {
-                          "type": "integer"
-                      },
-                      "name": {
-                          "type": "string"
-                      },
-                      "email": {
-                          "type": "string"
-                      }
-                  }
-              }
-          }
-      }
-  - req-confirm-material: |-
-      {
-          "type": "object",
-          "properties": {
-              "name": {
-                  "type": "string"
-              }
-          },
-          "required": [
-              "name"
-          ]
-      }
-  - req-create-material: |-
-      {
-          "type": "object"
-      }
-  - req-recover-password: |-
-      {
-          "type": "object",
-          "properties": {
-              "email": {
-                  "type": "string",
-                  "maxLength": 100,
-                  "format": "email"
-              }
-          },
-          "required": [
-              "email"
-          ]
-      }
-  - req-redefine-password: |-
-      {
-          "type": "object",
-          "properties": {
-              "password": {
-                  "type": "string",
-                  "minLength": 6,
-                  "maxLength": 32
-              }
-          },
-          "required": [
-              "password"
-          ]
-      }
-  - res-create-material: |-
-      {
-          "type": "object",
-          "properties": {
-              "fields": {
-                  "type": "object",
-                  "properties": {
-                      "key": {
-                          "type": "string"
-                      },
-                      "policy": {
-                          "type": "string"
-                      },
-                      "x-amz-credential": {
-                          "type": "string"
-                      },
-                      "x-amz-algorithm": {
-                          "type": "string"
-                      },
-                      "x-amz-date": {
-                          "type": "string"
-                      },
-                      "x-amz-signature": {
-                          "type": "string"
-                      }
-                  }
-              },
-              "url": {
-                  "type": "string"
-              },
-              "id": {
-                  "type": "integer"
-              }
-          }
-      }
-  - res-get-vote: |-
-      {
-          "type": "object",
-          "properties": {
-              "up": {
-                  "type": "boolean"
-              },
-              "person": {
-                  "type": "object",
-                  "properties": {
-                      "id": {
-                          "type": "integer"
-                      },
-                      "name": {
-                          "type": "string"
-                      },
-                      "email": {
-                          "type": "string"
-                      }
-                  }
-              }
-          }
-      }
-  - answer-with-material: |-
-      {
-          "type": "object",
-          "properties": {
-              "text": {
-                  "type": "string",
-                  "maxLength": 140
-              },
-              "anonymous": {
-                  "type": "boolean"
-              }
-          }
-      }
-  - res-answer-with-material: |-
-      {
-          "type": "object",
-          "properties": {
-              "fields": {
-                  "type": "object",
-                  "properties": {
-                      "key": {
-                          "type": "string"
-                      },
-                      "policy": {
-                          "type": "string"
-                      },
-                      "x-amz-credential": {
-                          "type": "string"
-                      },
-                      "x-amz-algorithm": {
-                          "type": "string"
-                      },
-                      "x-amz-date": {
-                          "type": "string"
-                      },
-                      "x-amz-signature": {
-                          "type": "string"
-                      }
-                  }
-              },
-              "url": {
-                  "type": "string"
-              },
-              "id": {
-                  "type": "integer"
-              },
-              "answer": {
-                  "type": "object",
-                  "properties": {
-                      "id": {
-                          "type": "integer"
-                      },
-                      "text": {
-                          "type": "string"
-                      },
-                      "anonymous": {
-                          "type": "boolean"
-                      },
-                      "accepted": {
-                          "type": "boolean"
-                      },
-                      "created_at": {
-                          "type": "string"
-                      },
-                      "question_id": {
-                          "type": "integer"
-                      },
-                      "person_id": {
-                          "type": "integer"
-                      }
-                  }
-              }
-          }
-      }
