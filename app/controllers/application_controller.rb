@@ -2,6 +2,25 @@ class ApplicationController < ActionController::API
   # Authentication check
   before_action :valid_session
 
+  def is_authorized(instruction_id, minimum_profile)
+    if instruction_id < 1
+      render body: nil, status: 401 and return false
+    end
+
+    person = current_person
+    enroll = Enroll.where(person_id: person.id, instruction_id: instruction_id).first
+
+    if !enroll
+      render body: nil, status: 401 and return false
+    end
+
+    if !(enroll.profile >= minimum_profile)
+      render body: nil, status: 401 and return false
+    end
+
+    return true
+  end
+
   def current_user
     current_person
   end

@@ -1,4 +1,8 @@
 class AnswersController < ApplicationController
+  before_action only: [:create, :update, :destroy, :create_only_material] do
+    is_authorized get_instruction_id, 1
+  end
+
   def index
     answers = nil
 
@@ -104,5 +108,19 @@ class AnswersController < ApplicationController
   def get_bucket
     # noinspection RubyArgCount
     Aws::S3::Resource.new(region: ENV['AWS_REGION']).bucket(ENV['BUCKET_NAME'])
+  end
+
+  def get_instruction_id
+    if params[:question_id]
+      question = Question.find params[:question_id]
+
+      return 0 if !question
+      return question.presentation.instruction.id
+    end
+
+    answer = Answer.find params[:id]
+
+    return 0 if !answer
+    return answer.question.presentation.instruction.id
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160914171912) do
+ActiveRecord::Schema.define(version: 20160919182231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20160914171912) do
   create_table "calendars", force: :cascade do |t|
     t.string   "text",           limit: 50
     t.string   "subject",        limit: 20
-    t.date     "date"
+    t.datetime "date"
     t.integer  "instruction_id",            null: false
     t.integer  "person_id",                 null: false
     t.datetime "created_at",                null: false
