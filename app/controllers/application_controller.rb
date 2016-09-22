@@ -3,6 +3,8 @@ class ApplicationController < ActionController::API
   before_action :valid_session
 
   def is_authorized(instruction_id, minimum_profile)
+    instruction_id = instruction_id.to_i
+
     if instruction_id < 1
       render body: nil, status: 401 and return false
     end

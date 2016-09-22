@@ -34,4 +34,10 @@ class AnswerSerializer < ActiveModel::Serializer
       0
     end
   end
+
+  def person
+    return object.person if !object.anonymous
+
+    return Person.new id: 0, name: 'Anônimo', email: 'anonymous@anonymous.com'
+  end
 end
