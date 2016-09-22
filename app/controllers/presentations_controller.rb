@@ -1,4 +1,8 @@
 class PresentationsController < ApplicationController
+  before_action only: [:create, :destroy, :update, :close] do
+    is_authorized get_instruction_id, 1
+  end
+
   def index
     resp = Presentation.includes(instruction: :people).where(people: current_person)
 
@@ -33,5 +37,18 @@ class PresentationsController < ApplicationController
     presentation.save!
 
     render json: presentation
+  end
+
+  private
+
+  def get_instruction_id
+    if params[:instruction_id]
+      return params[:instruction_id]
+    end
+
+    presentation = Presentation.find params[:id]
+
+    return 0 if !presentation
+    return presentation.instruction.id
   end
 end

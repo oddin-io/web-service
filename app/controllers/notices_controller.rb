@@ -1,4 +1,8 @@
 class NoticesController < ApplicationController
+  before_action only: [:create, :destroy] do
+    is_authorized get_instruction_id, 1
+  end
+
   def index
     instruction = Instruction.find params[:instruction_id]
     render json: instruction.notices
@@ -42,5 +46,18 @@ class NoticesController < ApplicationController
       }
       mg_client.send_message domain, message_params
     end
+  end
+
+  private
+
+  def get_instruction_id
+    if params[:instruction_id]
+      return params[:instruction_id]
+    end
+
+    notice = Notice.find params[:id]
+
+    return 0 if !notice
+    return notice.instruction.id
   end
 end

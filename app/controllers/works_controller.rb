@@ -1,4 +1,8 @@
 class WorksController < ApplicationController
+  before_action only: [:create, :update, :destroy] do
+    is_authorized get_instruction_id, 1
+  end
+
   def index
     render json: Work.all.where(instruction_id: params[:instruction_id])
   end
@@ -24,5 +28,16 @@ class WorksController < ApplicationController
 
   def destroy
     render json: Work.find(params[:id]).delete
+  end
+
+  def get_instruction_id
+    if params[:instruction_id]
+      return params[:instruction_id]
+    end
+
+    work = Work.find params[:id]
+
+    return 0 if !work
+    return work.instruction.id
   end
 end

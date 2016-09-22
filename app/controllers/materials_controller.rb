@@ -1,4 +1,11 @@
 class MaterialsController < ApplicationController
+  before_action only: [:create] do
+    minimum_profile = 1
+    minimum_profile = 0 if params[:submission_id]
+
+    is_authorized get_instruction_id, minimum_profile
+  end
+
   def index
     resp = current_person.materials
 
@@ -85,5 +92,39 @@ class MaterialsController < ApplicationController
   def get_bucket
     # noinspection RubyArgCount
     Aws::S3::Resource.new(region: ENV['AWS_REGION']).bucket(ENV['BUCKET_NAME'])
+  end
+
+  def get_instruction_id
+    if params[:instruction_id]
+      return params[:instruction_id]
+    end
+
+    if params[:presentation_id]
+      presentation = Presentation.find params[:presentation_id]
+
+      return 0 if !presentation
+      return presentation.instruction.id
+    end
+
+    if params[:answer_id]
+      answer = Answer.find params[:answer_id]
+
+      return 0 if !answer
+      return answer.question.presentation.instruction.id
+    end
+
+    if params[:work_id]
+      work = Work.find params[:work_id]
+
+      return 0 if !work
+      return work.instruction.id
+    end
+
+    if params[:submission_id]
+      submission = Submission.find params[:submission_id]
+
+      return 0 if !submission
+      return submission.work.instruction.id
+    end
   end
 end
