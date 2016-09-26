@@ -12,9 +12,9 @@
 #  updated_at     :datetime         not null
 #
 
-class Calendar < ApplicationRecord
-  belongs_to :instruction
-  belongs_to :person
+class CalendarSerializer < ActiveModel::Serializer
+  attributes :id, :text, :subject, :date, :created_at
 
-  validates :person, :instruction, presence: true
+  has_one :instruction
+  has_one :person
 end
