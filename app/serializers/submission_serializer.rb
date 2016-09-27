@@ -11,7 +11,7 @@
 #
 
 class SubmissionSerializer < ActiveModel::Serializer
-  attributes :text, :id
+  attributes :text, :id, :created_at, :materials
 
   has_one :work
   has_one :person

@@ -13,7 +13,7 @@
 #
 
 class WorkSerializer < ActiveModel::Serializer
-  attributes :id, :subject, :description, :deadline, :created_at
+  attributes :id, :subject, :description, :deadline, :created_at, :materials
 
   has_one :instruction
   has_one :person
