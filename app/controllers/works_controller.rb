@@ -23,7 +23,13 @@ class WorksController < ApplicationController
   end
 
   def update
-    render plain: 'I update one entity'
+    work = Work.find params[:id]
+    work.subject = params[:subject] if params[:subject]
+    work.description = params[:description] if params[:description]
+    work.deadline = DateTime.parse(params[:deadline]) if params[:deadline]
+
+    work.save!
+    render json: work
   end
 
   def destroy

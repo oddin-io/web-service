@@ -18,7 +18,11 @@ class SubmissionsController < ApplicationController
   end
 
   def update
-    render plain: 'I update one entity'
+    submission = Submission.find params[:id]
+    submission.text = params[:text] if params[:text]
+
+    submission.save!
+    render json: submission
   end
 
   def destroy
