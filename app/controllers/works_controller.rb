@@ -33,7 +33,7 @@ class WorksController < ApplicationController
   end
 
   def destroy
-    render json: Work.find(params[:id]).delete
+    render json: Work.find(params[:id]).destroy
   end
 
   def get_instruction_id

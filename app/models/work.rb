@@ -16,6 +16,7 @@ class Work < ApplicationRecord
   belongs_to :instruction
   belongs_to :person
   has_many :materials, as: :attachable
+  has_many :submissions, dependent: :delete_all
 
   validates :subject, :description, presence: true
 end
