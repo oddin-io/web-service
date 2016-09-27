@@ -1,6 +1,9 @@
 class InstructionsController < ApplicationController
   def index
-    render json: current_person.instructions
+    instructions = current_person.instructions
+    instructions = Instruction.all if current_person.admin
+
+    render json: instructions
   end
 
   def create

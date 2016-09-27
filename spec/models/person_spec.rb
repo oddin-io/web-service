@@ -8,6 +8,7 @@
 #  password_digest :string           not null
 #  online          :boolean          default(FALSE)
 #  last_activity   :datetime
+#  admin           :boolean
 #
 
 require 'rails_helper'
