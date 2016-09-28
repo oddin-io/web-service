@@ -15,6 +15,7 @@ types:
         type: string
         minLength: 6
         maxLength: 32
+
   UpdatePerson:
     properties:
       name?:
@@ -196,3 +197,19 @@ types:
         type: string
         maxLength: 140
       anonymous?: boolean
+
+  CreateWork:
+    properties:
+      subject: string
+      description: string
+      deadline?: datetime
+
+  UpdateWork:
+    properties:
+      subject?: string
+      description?: string
+      deadline?: datetime
+
+  CreateSubmission:
+    properties:
+      text?: string

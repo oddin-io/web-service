@@ -220,6 +220,12 @@ uses:
               application/json:
                 type: Response.GetPresentation[]
     /materials:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetMaterial[]
       post:
         body:
           application/json:
@@ -264,6 +270,94 @@ uses:
             body:
               application/json:
                 type: Response.GetDate
+
+    /works:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetWork[]
+      post:
+        body:
+          application/json:
+            type: Request.CreateWork
+
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetWork
+
+/works:
+  /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetWork
+
+    /materials:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetMaterial[]
+      post:
+        body:
+          application/json:
+            type: object
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.CreateMaterial
+
+    /submissions:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetSubmission[]
+      post:
+        body:
+          application/json:
+            type: Request.CreateSubmission
+
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetSubmission
+
+/submissions:
+  /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetSubmission
+
+    /materials:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetMaterial[]
+      post:
+        body:
+          application/json:
+            type: object
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.CreateMaterial
 
 /presentations:
   /{id}:

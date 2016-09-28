@@ -174,3 +174,51 @@ types:
       id: integer
       person_id: integer
       up: boolean
+
+  GetWork:
+    properties:
+      id: integer
+      subject: string
+      description: string
+      deadline: datetime
+      created_at: datetime
+      instruction:
+        properties:
+          id: integer
+          class_number: integer
+          start_date: date-only
+          end_date: date-only
+      person:
+        properties:
+          id: integer
+          name: string
+          email: string
+      materials:
+        type: array
+        items:
+          properties:
+            id: integer
+            name: string
+            mime: string
+            checked: string
+            uploaded_at: datetime
+
+  GetSubmission:
+    properties:
+      id: integer
+      text: string
+      created_at: datetime
+      person:
+        properties:
+          id: integer
+          name: string
+          email: string
+      materials:
+        type: array
+        items:
+          properties:
+            id: integer
+            name: string
+            mime: string
+            checked: string
+            uploaded_at: datetime
