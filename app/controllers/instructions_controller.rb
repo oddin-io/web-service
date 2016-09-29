@@ -25,7 +25,7 @@ class InstructionsController < ApplicationController
   end
 
   def destroy
-    render plain: 'I destroy one entity'
+    render json: Instruction.find(params[:id]).destroy
   end
 
   def profile

@@ -21,6 +21,6 @@ class LecturesController < ApplicationController
   end
 
   def destroy
-    render plain: 'I destroy one entity'
+    render json: Lecture.find(params[:id]).destroyLecture
   end
 end

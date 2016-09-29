@@ -21,6 +21,6 @@ class EventsController < ApplicationController
   end
 
   def destroy
-    render plain: 'I destroy one entity'
+    render json: Event.find(params[:id]).destroy
   end
 end
