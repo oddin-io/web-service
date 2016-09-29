@@ -1,7 +1,7 @@
 class LecturesController < ApplicationController
   def index
     lectures = Lecture.includes(instructions: :people).where(people: {email: current_person.email})
-    lectures = Lecture.all if current_person.all
+    lectures = Lecture.all if current_person.admin
 
     render json: lectures
   end
