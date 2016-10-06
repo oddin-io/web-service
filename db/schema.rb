@@ -10,30 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160927170443) do
+ActiveRecord::Schema.define(version: 20161006161911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "answers", force: :cascade do |t|
-    t.string   "text",        limit: 140,                 null: false
-    t.boolean  "anonymous",               default: false, null: false
-    t.boolean  "accepted",                default: false
-    t.datetime "created_at",                              null: false
-    t.integer  "question_id",                             null: false
-    t.integer  "person_id",                               null: false
+    t.text     "text",                        null: false
+    t.boolean  "anonymous",   default: false, null: false
+    t.boolean  "accepted",    default: false
+    t.datetime "created_at",                  null: false
+    t.integer  "question_id",                 null: false
+    t.integer  "person_id",                   null: false
     t.index ["person_id"], name: "index_answers_on_person_id", using: :btree
     t.index ["question_id"], name: "index_answers_on_question_id", using: :btree
   end
 
   create_table "calendars", force: :cascade do |t|
-    t.string   "text",           limit: 50
-    t.string   "subject",        limit: 20
+    t.text     "text"
+    t.text     "subject"
     t.datetime "date"
-    t.integer  "instruction_id",            null: false
-    t.integer  "person_id",                 null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "instruction_id", null: false
+    t.integer  "person_id",      null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.index ["instruction_id"], name: "index_calendars_on_instruction_id", using: :btree
     t.index ["person_id"], name: "index_calendars_on_person_id", using: :btree
   end
@@ -85,12 +85,12 @@ ActiveRecord::Schema.define(version: 20160927170443) do
   end
 
   create_table "notices", force: :cascade do |t|
-    t.string   "text",           limit: 100
-    t.string   "subject",        limit: 50
-    t.integer  "instruction_id",             null: false
-    t.integer  "person_id",                  null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.text     "text"
+    t.text     "subject"
+    t.integer  "instruction_id", null: false
+    t.integer  "person_id",      null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.index ["instruction_id"], name: "index_notices_on_instruction_id", using: :btree
     t.index ["person_id"], name: "index_notices_on_person_id", using: :btree
   end
@@ -116,11 +116,11 @@ ActiveRecord::Schema.define(version: 20160927170443) do
   end
 
   create_table "questions", force: :cascade do |t|
-    t.string   "text",            limit: 140,                 null: false
-    t.boolean  "anonymous",                   default: false, null: false
-    t.datetime "created_at",                                  null: false
-    t.integer  "presentation_id",                             null: false
-    t.integer  "person_id",                                   null: false
+    t.text     "text",                            null: false
+    t.boolean  "anonymous",       default: false, null: false
+    t.datetime "created_at",                      null: false
+    t.integer  "presentation_id",                 null: false
+    t.integer  "person_id",                       null: false
     t.index ["person_id"], name: "index_questions_on_person_id", using: :btree
     t.index ["presentation_id"], name: "index_questions_on_presentation_id", using: :btree
   end
