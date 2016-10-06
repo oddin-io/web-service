@@ -21,5 +21,4 @@ class Question < ApplicationRecord
 
   validates :text, presence: true
   validates :anonymous, exclusion: {in: [nil]}
-  validates :text, length: {maximum: self::TEXT_MAX_LENGTH}
 end

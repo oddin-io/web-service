@@ -20,5 +20,4 @@ class Answer < ApplicationRecord
   has_many :votes, as: :votable
 
   validates :anonymous, exclusion: {in: [nil]}
-  validates :text, length: {maximum: self::TEXT_MAX_LENGTH}
 end
