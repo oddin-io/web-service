@@ -17,7 +17,8 @@ class EventsController < ApplicationController
   end
 
   def update
-    render plain: 'I update one entity'
+    event = Event.find(params[:id]).update(name: params[:name], code: params[:code], workload: params[:workload])
+    render json: event
   end
 
   def destroy

@@ -17,10 +17,11 @@ class LecturesController < ApplicationController
   end
 
   def update
-    render plain: 'I update one entity'
+    lecture = Lecture.find(params[:id]).update(name: params[:name], code: params[:code], workload: params[:workload])
+    render json: lecture
   end
 
   def destroy
-    render json: Lecture.find(params[:id]).destroyLecture
+    render json: Lecture.find(params[:id]).destroy
   end
 end
