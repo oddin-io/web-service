@@ -7,9 +7,14 @@ class PeopleController < ApplicationController
     render json: person
   end
 
-  def show
-    render json: current_person
+  def index
+    people = Person.all
+    render json: people
   end
+
+  # def show
+  #   render json: current_person
+  # end
 
   def update
     render plain: 'I update one entity'
