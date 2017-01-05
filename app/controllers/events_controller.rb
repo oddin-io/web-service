@@ -7,7 +7,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    event = Event.new name: params[:name], code: params[:code], workload: [:workload]
+    event = Event.new name: params[:name], code: params[:code], workload: params[:workload]
     event.save!
     render json: event
   end

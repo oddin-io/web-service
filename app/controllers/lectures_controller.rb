@@ -7,7 +7,7 @@ class LecturesController < ApplicationController
   end
 
   def create
-    lecture = Lecture.new name: params[:name], code: params[:code], workload: [:workload]
+    lecture = Lecture.new name: params[:name], code: params[:code], workload: params[:workload]
     lecture.save!
     render json: lecture
   end
