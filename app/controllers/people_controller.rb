@@ -17,7 +17,8 @@ class PeopleController < ApplicationController
   # end
 
   def update
-    person = Person.find(params[:id]).update(name: params[:name], email: params[:email])
+    person = Person.find(params[:id])
+    person.update(name: params[:name], email: params[:email])
     render json: person
   end
 

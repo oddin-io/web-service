@@ -17,7 +17,8 @@ class LecturesController < ApplicationController
   end
 
   def update
-    lecture = Lecture.find(params[:id]).update(name: params[:name], code: params[:code], workload: params[:workload])
+    lecture = Lecture.find(params[:id])
+    lecture.update(name: params[:name], code: params[:code], workload: params[:workload])
     render json: lecture
   end
 
