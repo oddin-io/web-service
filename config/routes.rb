@@ -23,7 +23,13 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :events, :lectures
+  resources :events do
+    member do
+      get 'instructions'
+    end
+  end
+
+  resources :lectures
   shallow do
     resources :instructions, concerns: :materializable do
       member do

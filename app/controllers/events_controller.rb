@@ -17,11 +17,17 @@ class EventsController < ApplicationController
   end
 
   def update
-    event = Event.find(params[:id]).update(name: params[:name], code: params[:code], workload: params[:workload])
+    event = Event.find(params[:id])
+    event.update(name: params[:name], code: params[:code], workload: params[:workload])
     render json: event
   end
 
   def destroy
     render json: Event.find(params[:id]).destroy
+  end
+
+  def instructions
+    event = Event.find(params[:id])
+    render json: event.instructions
   end
 end
