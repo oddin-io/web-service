@@ -10,6 +10,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :enrolls
+
   resources :materials, only: [:show, :destroy, :update]
   concern :materializable do
     resources :materials
