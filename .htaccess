@@ -1,8 +1,0 @@
-Options -Indexes
-
-RewriteEngine on
-
-RewriteRule ^model/(.*) model/index.php [L,NC]
-RewriteRule ^controller/(.*) controller/index.php [L,NC]
-
-PassEnv DATABASE_URL

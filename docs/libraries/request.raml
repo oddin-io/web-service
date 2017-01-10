@@ -1,0 +1,215 @@
+#%RAML 1.0 Library
+
+usage: Representation of the request bodies
+
+types:
+  CreatePerson:
+    properties:
+      name:
+        type: string
+        maxLength: 100
+      email:
+        type: string
+        maxLength: 100
+      password:
+        type: string
+        minLength: 6
+        maxLength: 32
+
+  UpdatePerson:
+    properties:
+      name?:
+        type: string
+        maxLength: 100
+      email?:
+        type: string
+        maxLength: 100
+      password?:
+        type: string
+        minLength: 6
+        maxLength: 32
+
+  CreateSession:
+    properties:
+      email:
+        type: string
+        maxLength: 100
+      password:
+        type: string
+        minLength: 6
+        maxLength: 32
+
+  CreateEvent:
+    properties:
+      code:
+        type: string
+        maxLength: 30
+      name:
+        type: string
+        maxLength: 100
+      workload:
+        type: number
+        minimum: 0
+
+  UpdateEvent:
+    properties:
+      code?:
+        type: string
+        maxLength: 30
+      name?:
+        type: string
+        maxLength: 100
+      workload?:
+        type: number
+        minimum: 0
+
+
+  CreateLecture:
+    properties:
+      code:
+        type: string
+        maxLength: 30
+      name:
+        type: string
+        maxLength: 100
+      workload:
+        type: number
+        minimum: 0
+
+  UpdateLecture:
+    properties:
+      code?:
+        type: string
+        maxLength: 30
+      name?:
+        type: string
+        maxLength: 100
+      workload?:
+        type: number
+        minimum: 0
+
+  CreateNotice:
+    properties:
+      subject: string
+      text: string
+
+  CreateDate:
+    properties:
+      subject: string
+      text: string
+      date: datetime
+
+  CreateInstruction:
+    properties:
+      class_number:
+        type: integer
+        default: 1
+        minimum: 1
+      start_date: date-only
+      end_date: date-only
+      event_id:
+        type: integer
+        minimum: 1
+      lecture_id:
+        type: integer
+        minimum: 1
+
+  UpdateInstruction:
+    properties:
+      class_number?:
+        type: integer
+        default: 1
+        minimum: 1
+      start_date?: date-only
+      end_date?: date-only
+      event_id?:
+        type: integer
+        minimum: 1
+      lecture_id?:
+        type: integer
+        minimum: 1
+
+  CreatePresentation:
+    properties:
+      subject:
+        type: string
+        maxLength: 100
+
+  UpdatePresentation:
+    properties:
+      subject?:
+        type: string
+        maxLength: 100
+
+  CreateQuestion:
+    properties:
+      text:
+        type: string
+        maxLength: 140
+      anonymous?: boolean
+
+  UpdateQuestion:
+    properties:
+      text?:
+        type: string
+        maxLength: 140
+      anonymous?: boolean
+
+  CreateAnswer:
+    properties:
+      text:
+        type: string
+        maxLength: 140
+      anonymous?: boolean
+
+  UpdateAnswer:
+    properties:
+      text?:
+        type: string
+        maxLength: 140
+      anonymous?: boolean
+
+  ConfirmMaterial:
+    properties:
+      name: string
+
+  CreateMaterial:
+    properties:
+      name: string
+
+  RecoverPassword:
+    properties:
+      email:
+        type: string
+        maxLength: 100
+
+  RedefinePassword:
+    properties:
+      token: string
+      password:
+        type: string
+        minLength: 6
+        maxLength: 32
+
+  AnswerWithMaterial:
+    properties:
+      text?:
+        type: string
+        maxLength: 140
+      anonymous?: boolean
+
+  CreateWork:
+    properties:
+      subject: string
+      description: string
+      deadline?: datetime
+
+  UpdateWork:
+    properties:
+      subject?: string
+      description?: string
+      deadline?: datetime
+
+  CreateSubmission:
+    properties:
+      text?: string

@@ -1,0 +1,576 @@
+#%RAML 1.0
+title: Oddin Edu
+version: 0.1
+protocols: [HTTP, HTTPS]
+mediaType: application/json
+securitySchemes:
+  Authorization:
+    description: Authenticate user using Firebase credentials by a JWT
+    type: x-Authorization
+    describedBy:
+      headers:
+        X-Session-Token:
+          description: Used to pass a previous registered session token
+          type: string
+      responses:
+        401:
+          description: Bad Token
+uses:
+  Request: !includes libraries/request.raml
+  Response: !includes libraries/response.raml
+
+/person:
+  post:
+    body:
+      application/json:
+        type: Request.CreatePerson
+
+    responses:
+      201:
+        body:
+          application/json:
+            type: Response.GetPerson
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Response.GetPerson
+  put:
+    body:
+      application/json:
+        type: Request.UpdatePerson
+
+    responses:
+      200:
+        body:
+          application/json:
+            type: Response.GetPerson
+  delete:
+
+/recover-password:
+  post:
+    body:
+      application/json:
+        type: Request.RecoverPassword
+
+/redefine-password:
+  post:
+    queryParameters:
+      token:
+        type: string
+        required: true
+    body:
+      application/json:
+        type: Request.RedefinePassword
+
+/session:
+  post:
+    body:
+      application/json:
+        type: Request.CreateSession
+
+    responses:
+      201:
+        body:
+          application/json:
+            type: Response.GetSession
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Response.GetSession
+  delete:
+  /all:
+    delete:
+
+/events:
+  post:
+    body:
+      application/json:
+        type: Request.CreateEvent
+
+    responses:
+      201:
+        body:
+          application/json:
+            type: Response.GetEvent
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Response.GetEvent[]
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetEvent
+    put:
+      body:
+        application/json:
+          type: Request.UpdateEvent
+
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetEvent
+    delete:
+
+/lectures:
+  post:
+    body:
+      application/json:
+        type: Request.CreateLecture
+
+    responses:
+      201:
+        body:
+          application/json:
+            type: Response.GetLecture
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Response.GetLecture[]
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetLecture
+    put:
+      body:
+        application/json:
+          type: Request.UpdateLecture
+
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetLecture
+    delete:
+
+/instructions:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Response.GetInstruction[]
+  post:
+    body:
+      application/json:
+        type: Request.CreateInstruction
+
+    responses:
+      201:
+        body:
+          application/json:
+            type: Response.GetInstruction
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetInstruction
+    put:
+      body:
+        application/json:
+          type: Request.UpdateInstruction
+
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetInstruction
+    delete:
+
+    /presentations:
+      post:
+        body:
+          application/json:
+            type: Request.CreatePresentation
+
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetPresentation
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetPresentation[]
+    /materials:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetMaterial[]
+      post:
+        body:
+          application/json:
+            type: object
+
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.CreateMaterial
+    /notices:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetNotice[]
+      post:
+        body:
+          application/json:
+            type: Request.CreateNotice
+
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetNotice
+    /dates:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetDate[]
+      post:
+        body:
+          application/json:
+            type: Request.CreateDate
+
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetDate
+
+    /works:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetWork[]
+      post:
+        body:
+          application/json:
+            type: Request.CreateWork
+
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetWork
+
+/works:
+  /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetWork
+
+    /materials:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetMaterial[]
+      post:
+        body:
+          application/json:
+            type: object
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.CreateMaterial
+
+    /submissions:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetSubmission[]
+      post:
+        body:
+          application/json:
+            type: Request.CreateSubmission
+
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetSubmission
+
+/submissions:
+  /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetSubmission
+
+    /materials:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetMaterial[]
+      post:
+        body:
+          application/json:
+            type: object
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.CreateMaterial
+
+/presentations:
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetPresentation
+    put:
+      body:
+        application/json:
+          type: Request.UpdatePresentation
+
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetPresentation
+    delete:
+
+    /questions:
+      post:
+        body:
+          application/json:
+            type: Request.CreateQuestion
+
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetQuestion
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetQuestion[]
+    /materials:
+      post:
+        body:
+          application/json:
+            type: object
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.CreateMaterial
+
+/questions:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Response.GetQuestion[]
+
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetQuestion
+    put:
+      body:
+        application/json:
+          type: Request.UpdateQuestion
+
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetQuestion
+    delete:
+
+    /upvote:
+      post:
+        body:
+          application/json:
+            type: object
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetVote
+    /downvote:
+      post:
+        body:
+          application/json:
+            type: object
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetVote
+    /vote:
+      delete:
+
+    /answers:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetAnswer[]
+      post:
+        body:
+          application/json:
+            type: Request.CreateAnswer
+
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetAnswer
+      /materials:
+        post:
+          body:
+            application/json:
+              type: Request.AnswerWithMaterial
+          responses:
+            201:
+              body:
+                application/json:
+                  type: Response.AnswerWithMaterial
+
+/answers:
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetAnswer
+    put:
+      body:
+        application/json:
+          type: Request.UpdateAnswer
+
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetAnswer
+    delete:
+
+    /materials:
+      post:
+        body:
+          application/json:
+            type: object
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.CreateMaterial
+    /upvote:
+      post:
+        body:
+          application/json:
+            type: object
+        responses:
+          200:
+            body:
+              application/json:
+                type: Response.GetVote
+    /downvote:
+      post:
+        body:
+          application/json:
+            type: object
+        responses:
+          201:
+            body:
+              application/json:
+                type: Response.GetVote
+    /vote:
+      delete:
+
+/materials:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Response.GetMaterial[]
+  /{id}:
+    uriParameters:
+      id:
+        type: string
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetMaterial
+    put:
+      body:
+        application/json:
+          type: Response.GetMaterial
+      responses:
+        200:
+          body:
+            application/json:
+              type: Response.GetMaterial
+    delete:

@@ -1,0 +1,224 @@
+#%RAML 1.0 Library
+
+usage: Representation of the response bodies
+
+types:
+  GetPerson:
+    properties:
+      id: integer
+      name: string
+      email: string
+
+  GetSession:
+    properties:
+      id: integer
+      token: string
+      created_at: datetime
+      person:
+        properties:
+          id: integer
+          name: string
+          email: string
+
+  GetEvent:
+    properties:
+      id: integer
+      code: string
+      name: string
+      workload: number
+
+  GetLecture:
+    properties:
+      id: integer
+      code: string
+      name: string
+      workload: number
+
+  GetInstruction:
+    properties:
+      id: integer
+      class_number: integer
+      start_date: date-only
+      end_date: date-only
+      event:
+        properties:
+          id: integer
+          code: string
+          name: string
+          workload: number
+      lecture:
+        properties:
+          id: integer
+          code: string
+          name: string
+          workload: number
+
+  GetNotice:
+    properties:
+      id: integer
+      subject: string
+      text: string
+
+  GetDate:
+    properties:
+      id: integer
+      subject: string
+      text: string
+      date: datetime
+
+  GetPresentation:
+    properties:
+      id: integer
+      subject: string
+      status: integer
+      created_at: datetime
+      instruction:
+        properties:
+          id: integer
+          class_number: integer
+          start_date: date-only
+          end_date: date-only
+
+  GetQuestion:
+    properties:
+      id: integer
+      text: string
+      anonymous: boolean
+      created_at: datetime
+      upvote: integer
+      downvote: integer
+      myvote: integer
+      presentation:
+        properties:
+          id: integer
+          subject: string
+          status: integer
+          created_at: string
+      person:
+        properties:
+          id: integer
+          name: string
+          email: string
+
+  GetAnswer:
+    properties:
+      id: integer
+      text: string
+      anonymous: boolean
+      created_at: datetime
+      upvote: integer
+      downvote: integer
+      myvote: integer
+      question:
+        properties:
+          id: integer
+          text: string
+          anonymous: boolean
+          created_at: string
+      person:
+        properties:
+          id: integer
+          name: string
+          email: string
+
+  GetMaterial:
+    properties:
+      id: integer
+      name: string
+      mime: string
+      checked: string
+      uploaded_at: datetime
+      person:
+        properties:
+          id: integer
+          name: string
+          email: string
+
+  CreateMaterial:
+    properties:
+      id: integer
+      url: string
+      fields:
+        properties:
+          key: string
+          policy: string
+          x-amz-credentials: string
+          x-amz-algorithm: string
+          x-amz-date: string
+          x-amz-signature: string
+
+  AnswerWithMaterial:
+    properties:
+      id: integer
+      url: string
+      fields:
+        properties:
+          key: string
+          policy: string
+          x-amz-credentials: string
+          x-amz-algorithm: string
+          x-amz-date: string
+          x-amz-signature: string
+      answer:
+        properties:
+          id: integer
+          text: string
+          anonymous: boolean
+          accepted: boolean
+          created_at: string
+          question_id: integer
+          person_id: integer
+
+  GetVote:
+    properties:
+      id: integer
+      person_id: integer
+      up: boolean
+
+  GetWork:
+    properties:
+      id: integer
+      subject: string
+      description: string
+      deadline: datetime
+      created_at: datetime
+      instruction:
+        properties:
+          id: integer
+          class_number: integer
+          start_date: date-only
+          end_date: date-only
+      person:
+        properties:
+          id: integer
+          name: string
+          email: string
+      materials:
+        type: array
+        items:
+          properties:
+            id: integer
+            name: string
+            mime: string
+            checked: string
+            uploaded_at: datetime
+
+  GetSubmission:
+    properties:
+      id: integer
+      text: string
+      created_at: datetime
+      person:
+        properties:
+          id: integer
+          name: string
+          email: string
+      materials:
+        type: array
+        items:
+          properties:
+            id: integer
+            name: string
+            mime: string
+            checked: string
+            uploaded_at: datetime

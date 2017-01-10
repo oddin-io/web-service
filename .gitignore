@@ -1,2 +1,25 @@
-.idea/
-vendor/
+# Bundler config
+/.bundle
+
+# Logfiles and tempfiles
+/log/*
+/tmp/*
+
+# Keep files
+!**.keep
+
+# Byebug command history file
+.byebug_history
+
+# Pry history
+.pry_history
+
+# IDE
+.idea
+
+# Environment
+*.env
+
+# Generated files
+# /db/schema.rb
+Gemfile.lock
