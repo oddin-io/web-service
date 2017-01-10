@@ -7,7 +7,7 @@ class LecturesController < ApplicationController
   end
 
   def create
-    lecture = Lecture.new name: params[:name], code: params[:code], workload: [:workload]
+    lecture = Lecture.new name: params[:name], code: params[:code], workload: params[:workload]
     lecture.save!
     render json: lecture
   end
@@ -17,10 +17,12 @@ class LecturesController < ApplicationController
   end
 
   def update
-    render plain: 'I update one entity'
+    lecture = Lecture.find(params[:id])
+    lecture.update(name: params[:name], code: params[:code], workload: params[:workload])
+    render json: lecture
   end
 
   def destroy
-    render json: Lecture.find(params[:id]).destroyLecture
+    render json: Lecture.find(params[:id]).destroy
   end
 end

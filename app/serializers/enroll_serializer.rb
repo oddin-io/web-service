@@ -9,7 +9,8 @@
 #
 
 class EnrollSerializer < ActiveModel::Serializer
-  attributes :profile
+  attributes :id, :profile
 
+  has_one :instruction
   has_one :person
 end

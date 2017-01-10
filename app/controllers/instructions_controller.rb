@@ -37,7 +37,6 @@ class InstructionsController < ApplicationController
 
   def participants
     instruction = Instruction.find params[:id]
-
-    render json: instruction.people
+    render json: instruction.enrolls
   end
 end

@@ -2,12 +2,15 @@ Rails.application.routes.draw do
   post '/recover-password', to: 'people#recover_password'
   post '/redefine-password', to: 'people#redefine_password'
 
-  resource :person
+  resources :people
+
   resource :session do
     member do
       delete 'delete-all'
     end
   end
+
+  resources :enrolls
 
   resources :materials, only: [:show, :destroy, :update]
   concern :materializable do
@@ -22,7 +25,13 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :events, :lectures
+  resources :events do
+    member do
+      get 'instructions'
+    end
+  end
+
+  resources :lectures
   shallow do
     resources :instructions, concerns: :materializable do
       member do

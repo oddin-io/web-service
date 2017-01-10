@@ -7,16 +7,23 @@ class PeopleController < ApplicationController
     render json: person
   end
 
-  def show
-    render json: current_person
+  def index
+    people = Person.all
+    render json: people
   end
 
+  # def show
+  #   render json: current_person
+  # end
+
   def update
-    render plain: 'I update one entity'
+    person = Person.find(params[:id])
+    person.update(name: params[:name], email: params[:email])
+    render json: person
   end
 
   def destroy
-    render plain: 'I destroy one entity'
+    render json: Person.find(params[:id]).destroy
   end
 
   def redefine_password

@@ -7,7 +7,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    event = Event.new name: params[:name], code: params[:code], workload: [:workload]
+    event = Event.new name: params[:name], code: params[:code], workload: params[:workload]
     event.save!
     render json: event
   end
@@ -17,10 +17,17 @@ class EventsController < ApplicationController
   end
 
   def update
-    render plain: 'I update one entity'
+    event = Event.find(params[:id])
+    event.update(name: params[:name], code: params[:code], workload: params[:workload])
+    render json: event
   end
 
   def destroy
     render json: Event.find(params[:id]).destroy
+  end
+
+  def instructions
+    event = Event.find(params[:id])
+    render json: event.instructions
   end
 end
