@@ -40,6 +40,7 @@ Rails.application.routes.draw do
       end
 
       resources :notices
+      resources :surveys
       resources :dates, controller: 'calendars'
       resources :works, concerns: :materializable do
         resources :submissions, concerns: :materializable
