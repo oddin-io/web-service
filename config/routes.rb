@@ -25,6 +25,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :alternatives, only: [] do
+    member do
+      post 'choose', to: 'surveys#choose'
+    end
+  end
+
   resources :events do
     member do
       get 'instructions'
