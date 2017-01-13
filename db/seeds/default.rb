@@ -9,6 +9,7 @@ bruno_person = Person.create name: 'Bruno', email: 'bruno@email.com', password: 
 heitor_person = Person.create name: 'Heitor', email: 'heitor@email.com', password: '12345678'
 leonardo_person = Person.create name: 'Leonardo', email: 'leonardo@email.com', password: '12345678'
 ana_person = Person.create name: 'Ana', email: 'ana@email.com', password: '12345678'
+admin = Person.create name: 'Admin', email: 'admin@email.com', password: '12345678', admin: true
 
 # Events
 # ======================================================================================================================
