@@ -25,6 +25,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :alternatives, only: [] do
+    member do
+      post 'choose', to: 'surveys#choose'
+    end
+  end
+
   resources :events do
     member do
       get 'instructions'
@@ -40,6 +46,11 @@ Rails.application.routes.draw do
       end
 
       resources :notices
+      resources :surveys do
+        member do
+          post 'close'
+        end
+      end
       resources :dates, controller: 'calendars'
       resources :works, concerns: :materializable do
         resources :submissions, concerns: :materializable

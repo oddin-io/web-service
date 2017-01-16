@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161006161911) do
+ActiveRecord::Schema.define(version: 20170116123130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "alternatives", force: :cascade do |t|
+    t.string   "description", null: false
+    t.integer  "survey_id",   null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["survey_id"], name: "index_alternatives_on_survey_id", using: :btree
+  end
 
   create_table "answers", force: :cascade do |t|
     t.text     "text",                        null: false
@@ -36,6 +44,19 @@ ActiveRecord::Schema.define(version: 20161006161911) do
     t.datetime "updated_at",     null: false
     t.index ["instruction_id"], name: "index_calendars_on_instruction_id", using: :btree
     t.index ["person_id"], name: "index_calendars_on_person_id", using: :btree
+  end
+
+  create_table "choices", force: :cascade do |t|
+    t.integer  "alternative_id", null: false
+    t.integer  "survey_id",      null: false
+    t.integer  "person_id",      null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["alternative_id"], name: "index_choices_on_alternative_id", using: :btree
+    t.index ["person_id", "alternative_id"], name: "index_choices_on_person_id_and_alternative_id", unique: true, using: :btree
+    t.index ["person_id", "survey_id"], name: "index_choices_on_person_id_and_survey_id", unique: true, using: :btree
+    t.index ["person_id"], name: "index_choices_on_person_id", using: :btree
+    t.index ["survey_id"], name: "index_choices_on_survey_id", using: :btree
   end
 
   create_table "enrolls", force: :cascade do |t|
@@ -152,6 +173,18 @@ ActiveRecord::Schema.define(version: 20161006161911) do
     t.index ["work_id"], name: "index_submissions_on_work_id", using: :btree
   end
 
+  create_table "surveys", force: :cascade do |t|
+    t.string   "title",          null: false
+    t.string   "question",       null: false
+    t.integer  "instruction_id", null: false
+    t.integer  "person_id",      null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.boolean  "closed"
+    t.index ["instruction_id"], name: "index_surveys_on_instruction_id", using: :btree
+    t.index ["person_id"], name: "index_surveys_on_person_id", using: :btree
+  end
+
   create_table "votes", force: :cascade do |t|
     t.boolean "up",           default: true, null: false
     t.integer "person_id",                   null: false
@@ -174,10 +207,14 @@ ActiveRecord::Schema.define(version: 20161006161911) do
     t.index ["person_id"], name: "index_works_on_person_id", using: :btree
   end
 
+  add_foreign_key "alternatives", "surveys"
   add_foreign_key "answers", "people"
   add_foreign_key "answers", "questions"
   add_foreign_key "calendars", "instructions"
   add_foreign_key "calendars", "people"
+  add_foreign_key "choices", "alternatives"
+  add_foreign_key "choices", "people"
+  add_foreign_key "choices", "surveys"
   add_foreign_key "enrolls", "instructions"
   add_foreign_key "enrolls", "people"
   add_foreign_key "instructions", "events"
@@ -193,6 +230,8 @@ ActiveRecord::Schema.define(version: 20161006161911) do
   add_foreign_key "sessions", "people"
   add_foreign_key "submissions", "people"
   add_foreign_key "submissions", "works"
+  add_foreign_key "surveys", "instructions"
+  add_foreign_key "surveys", "people"
   add_foreign_key "votes", "people"
   add_foreign_key "works", "instructions"
   add_foreign_key "works", "people"
