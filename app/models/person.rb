@@ -27,6 +27,7 @@ class Person < ApplicationRecord
   has_many :materials
   has_many :surveys
   has_many :choices
+  has_many :faqs
 
   # validates :name, :email, :password, presence: true
   # validates :name, length: {maximum: self::NAME_MAX_LENGTH}
