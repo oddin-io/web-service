@@ -25,6 +25,8 @@ class Person < ApplicationRecord
   has_many :enrolls
   has_many :instructions, through: :enrolls
   has_many :materials
+  has_many :surveys
+  has_many :choices
 
   # validates :name, :email, :password, presence: true
   # validates :name, length: {maximum: self::NAME_MAX_LENGTH}

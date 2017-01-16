@@ -19,6 +19,7 @@ class Instruction < ApplicationRecord
   has_many :materials, as: :attachable
   has_many :notices
   has_many :calendars
+  has_many :surveys
 
   validates :class_number, :start_date, :end_date, presence: true
   validates :class_number, numericality: {only_integer: true}
