@@ -20,6 +20,7 @@ class Instruction < ApplicationRecord
   has_many :notices
   has_many :calendars
   has_many :surveys
+  has_many :faqs
 
   validates :class_number, :start_date, :end_date, presence: true
   validates :class_number, numericality: {only_integer: true}
