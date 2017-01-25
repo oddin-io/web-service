@@ -24,5 +24,5 @@ class Instruction < ApplicationRecord
 
   validates :class_number, :start_date, :end_date, presence: true
   validates :class_number, numericality: {only_integer: true}
-  validates :class_number, uniqueness: {scope: [:lecture, :event]}
+  # validates :class_number, uniqueness: {scope: [:lecture, :event]}
 end
