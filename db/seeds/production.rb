@@ -47,7 +47,7 @@ bd1 = Lecture.create code: 'BD1', name: 'Banco de Dados I', workload: 79.2
 
 # Instructions
 # ======================================================================================================================
-bd1_instruction = Instruction.create event: ads , lecture: bd1, class_number: 1, start_date: '2015-07-28', end_date: '2015-12-22'
+bd1_instruction = Instruction.create event: ads , lecture: bd1, class_code: "1", start_date: '2015-07-28', end_date: '2015-12-22'
 
 # Enrolls
 # ======================================================================================================================

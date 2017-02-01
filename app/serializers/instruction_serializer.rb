@@ -11,7 +11,7 @@
 #
 
 class InstructionSerializer < ActiveModel::Serializer
-  attributes :id, :class_number, :start_date, :end_date, :profile
+  attributes :id, :class_code, :start_date, :end_date, :profile
 
   has_one :event
   has_one :lecture

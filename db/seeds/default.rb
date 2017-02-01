@@ -25,13 +25,13 @@ lp1_lecture = Lecture.create code: 'LP1', name: 'Linguagem de Programação I', 
 
 # Instructions
 # ======================================================================================================================
-foc_c1_instruction = Instruction.create event: ads_event , lecture: foc_lecture, class_number: 1, start_date: '2015-07-28', end_date: '2015-12-22'
-eng_c1_instruction = Instruction.create event: ads_event , lecture: eng_lecture, class_number: 1, start_date: '2015-07-28', end_date: '2015-12-22'
-iso_c1_instruction = Instruction.create event: ads_event , lecture: iso_lecture, class_number: 1, start_date: '2015-07-28', end_date: '2015-12-22'
-bd1_c1_instruction = Instruction.create event: ads_event , lecture: bd1_lecture, class_number: 1, start_date: '2015-07-28', end_date: '2015-12-22'
-bd1_c2_instruction = Instruction.create event: ads_event , lecture: bd1_lecture, class_number: 2, start_date: '2015-07-28', end_date: '2015-12-22'
-lp1_c1_instruction = Instruction.create event: ads_event , lecture: lp1_lecture, class_number: 1, start_date: '2015-07-28', end_date: '2015-12-22'
-lp1_c2_instruction = Instruction.create event: ads_event , lecture: lp1_lecture, class_number: 2, start_date: '2015-07-28', end_date: '2015-12-22'
+foc_c1_instruction = Instruction.create event: ads_event , lecture: foc_lecture, class_code: "1", start_date: '2015-07-28', end_date: '2015-12-22'
+eng_c1_instruction = Instruction.create event: ads_event , lecture: eng_lecture, class_code: "2", start_date: '2015-07-28', end_date: '2015-12-22'
+iso_c1_instruction = Instruction.create event: ads_event , lecture: iso_lecture, class_code: "3", start_date: '2015-07-28', end_date: '2015-12-22'
+bd1_c1_instruction = Instruction.create event: ads_event , lecture: bd1_lecture, class_code: "4", start_date: '2015-07-28', end_date: '2015-12-22'
+bd1_c2_instruction = Instruction.create event: ads_event , lecture: bd1_lecture, class_code: "5", start_date: '2015-07-28', end_date: '2015-12-22'
+lp1_c1_instruction = Instruction.create event: ads_event , lecture: lp1_lecture, class_code: "6", start_date: '2015-07-28', end_date: '2015-12-22'
+lp1_c2_instruction = Instruction.create event: ads_event , lecture: lp1_lecture, class_code: "7", start_date: '2015-07-28', end_date: '2015-12-22'
 
 # Enrolls
 # ======================================================================================================================
