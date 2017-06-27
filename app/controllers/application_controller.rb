@@ -66,6 +66,6 @@ class ApplicationController < ActionController::API
   #
   # @return [String | nil]
   def session_token
-    request.headers['X-Session-Token']
+    request.headers['Authorization']
   end
 end
