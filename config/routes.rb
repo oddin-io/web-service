@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :test_alternatives
+  resources :test_questions
+  resources :tests
   post '/recover-password', to: 'people#recover_password'
   post '/redefine-password', to: 'people#redefine_password'
 
