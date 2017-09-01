@@ -1,51 +1,51 @@
 class TestsController < ApplicationController
   before_action :set_test, only: [:show, :update, :destroy]
 
-  # GET /tests
   def index
-    @tests = Test.all
-
-    render json: @tests
+    instruction = Instruction.find params[:instruction_id]
+    render json: instruction.tests
   end
 
-  # GET /tests/1
   def show
-    render json: @test
+    render json: Test.find(params[:id])
   end
 
-  # POST /tests
   def create
-    @test = Test.new(test_params)
+    instruction = Instruction.find params[:instruction_id]
+    test = Test.new  title: params[:title],
+                     available_at: params[:available_at],
+                     instruction: instruction,
+                     person: current_person
+    test.save!
 
-    if @test.save
-      render json: @test, status: :created, location: @test
-    else
-      render json: @test.errors, status: :unprocessable_entity
-    end
+    #params[:questions].each do |question|
+      #Question.create number: question[:number], description: question[:description], answer: question[:answer], value: question[:value], kind: question[:kind], attachable: question[:attachable], test: test
+    #end
+
+    render json: test
   end
 
-  # PATCH/PUT /tests/1
   def update
-    if @test.update(test_params)
-      render json: @test
-    else
-      render json: @test.errors, status: :unprocessable_entity
-    end
+    test = Test.find params[:id]
+    test.title = params[:title] if params[:title]
+    test.available_at = params[:available_at] if params[:available_at]
+    test.save!
+
+    #params[:questions].each do |elem|
+      #question = Question.find elem[:id]
+      #question.number = elem[:number]
+      #question.description = elem[:description]
+      #question.value = elem[:value]
+      #question.kind = elem[:kind]
+      #question.attachable = elem[:attachable]
+      #question.save!
+    #end
+
+    render json: test
   end
 
-  # DELETE /tests/1
   def destroy
-    @test.destroy
+    render json: Test.find(params[:id]).destroy
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_test
-      @test = Test.find(params[:id])
-    end
-
-    # Only allow a trusted parameter "white list" through.
-    def test_params
-      params.require(:test).permit(:title, :available_at, :instruction_id, :person_id)
-    end
 end

@@ -1,51 +1,50 @@
 class TestQuestionsController < ApplicationController
   before_action :set_test_question, only: [:show, :update, :destroy]
 
-  # GET /test_questions
   def index
-    @test_questions = TestQuestion.all
-
-    render json: @test_questions
+    instruction = Instruction.find params[:instruction_id]
+    test = Test.find params[:test_id]
+    render json: instruction.test.questions
   end
 
-  # GET /test_questions/1
   def show
-    render json: @test_question
+    question = Question.find params[:id]
+    render json: question
   end
 
-  # POST /test_questions
   def create
-    @test_question = TestQuestion.new(test_question_params)
+    test = Test.find params[:test_id]
+    attachable = nil
+    question = Question.new number: params[:number],
+                            description: params[:description],
+                            answer: params[:answer],
+                            value: params[:value],
+                            kind: params[:kind],
+                            test: test
 
-    if @test_question.save
-      render json: @test_question, status: :created, location: @test_question
-    else
-      render json: @test_question.errors, status: :unprocessable_entity
+    if params[:test_id]
+      attachable = Test.find params[:test_id]
     end
+
+    question.attachable = attachable
+    question.save!
+
+    render json: question
   end
 
-  # PATCH/PUT /test_questions/1
   def update
-    if @test_question.update(test_question_params)
-      render json: @test_question
-    else
-      render json: @test_question.errors, status: :unprocessable_entity
-    end
+    question = Question.find params[:id]
+    question.number = params[:number] if params[:number]
+    question.description = params[:description] if params[:description]
+    question.answer = params[:answer] if params[:answer]
+    question.value = params[:value] if params[:value]
+    question.kind = params[:kind] if params[:kind]
+    question.attachable = params[:attachable] if params[:attachable]
+    question.save!
   end
 
-  # DELETE /test_questions/1
   def destroy
-    @test_question.destroy
+    render json: Question.find(params[:id]).destroy
   end
-
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_test_question
-      @test_question = TestQuestion.find(params[:id])
-    end
-
-    # Only allow a trusted parameter "white list" through.
-    def test_question_params
-      params.require(:test_question).permit(:number, :question, :answer, :file, :value, :kind, :test_id)
-    end
+  
 end

@@ -1,6 +1,4 @@
 class TestAlternativeSerializer < ActiveModel::Serializer
-  attributes :id, :answer, :correct
-  has_one :person
-  has_one :test
+  attributes :id, :text, :correct
   has_one :test_question
 end

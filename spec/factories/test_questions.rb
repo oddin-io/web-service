@@ -1,9 +1,8 @@
 FactoryGirl.define do
   factory :test_question do
     number 1
-    question "MyText"
+    description "MyText"
     answer "MyText"
-    file ""
     value "9.99"
     kind false
     test nil

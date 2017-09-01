@@ -46,6 +46,6 @@ class TestAlternativesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def test_alternative_params
-      params.require(:test_alternative).permit(:answer, :correct, :person_id, :test_id, :test_question_id)
+      params.require(:test_alternative).permit(:text, :correct, :test_question_id)
     end
 end
