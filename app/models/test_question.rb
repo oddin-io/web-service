@@ -1,4 +1,4 @@
 class TestQuestion < ApplicationRecord
   belongs_to :test
-  belongs_to :attachable, polymorphic: true
+  has_one :file, as: :attachable
 end

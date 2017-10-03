@@ -1,8 +1,4 @@
 Rails.application.routes.draw do
-  resources :test_answers
-  resources :test_alternatives
-  resources :test_questions
-  resources :tests
   post '/recover-password', to: 'people#recover_password'
   post '/redefine-password', to: 'people#redefine_password'
 
@@ -49,6 +45,8 @@ Rails.application.routes.draw do
         get 'participants'
       end
 
+      resources :tests
+      resources :test_questions
       resources :notices
       resources :faqs, except: [:show]
       resources :surveys do

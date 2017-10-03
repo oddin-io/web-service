@@ -1,51 +1,33 @@
 class TestAnswersController < ApplicationController
-  before_action :set_test_answer, only: [:show, :update, :destroy]
 
-  # GET /test_answers
   def index
-    @test_answers = TestAnswer.all
-
-    render json: @test_answers
+    instruction = Instruction.find params[:instruction_id]
+    test = Test.find params[:test_id]
+    question = Question.find params[:question_id]
+    alternative = Alternative.find params [:alternative_id]
+    person = current_person
+    render json: instruction.test.question.alternative.answers
   end
 
-  # GET /test_answers/1
   def show
-    render json: @test_answer
-  end
-
-  # POST /test_answers
-  def create
-    @test_answer = TestAnswer.new(test_answer_params)
-
-    if @test_answer.save
-      render json: @test_answer, status: :created, location: @test_answer
-    else
-      render json: @test_answer.errors, status: :unprocessable_entity
-    end
-  end
-
-  # PATCH/PUT /test_answers/1
-  def update
-    if @test_answer.update(test_answer_params)
-      render json: @test_answer
-    else
-      render json: @test_answer.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /test_answers/1
-  def destroy
-    @test_answer.destroy
-  end
-
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_test_answer
-      @test_answer = TestAnswer.find(params[:id])
+      answer = Answer.find params[:id]
+      render json: answer
     end
 
-    # Only allow a trusted parameter "white list" through.
-    def test_answer_params
-      params.require(:test_answer).permit(:answer, :person_id, :test_question_id, :test_alternative_id)
+    def create
+      question = Question.find params[:question_id]
+      alternative = Alternative.find params [:alternative_id]
+      person = current_person
+      answer = Answer.new answer: params[:answer],
+                          question: question
+                          alternative: alternative
+                          person: person
+      answer.save!
+
+      render json: answer
+    end
+
+    def destroy
+      render json: Answer.find(params[:id]).destroy
     end
 end

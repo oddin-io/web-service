@@ -1,4 +1,4 @@
 class TestQuestionSerializer < ActiveModel::Serializer
-  attributes :id, :number, :description, :answer, :value, :kind, :attachable_type, :attachable_id
+  attributes :id, :number, :description, :answer, :value, :kind, :comment
   has_one :test
 end

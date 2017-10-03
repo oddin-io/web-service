@@ -6,6 +6,7 @@ class CreateTestQuestions < ActiveRecord::Migration[5.0]
       t.text :answer, null: true
       t.decimal :value, null: false
       t.boolean :kind, null: false
+      t.text :comment, null: true
       
       t.belongs_to :attachable, polymorphic: true, index: true
       t.references :test, foreign_key: true, null: false
