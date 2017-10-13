@@ -5,6 +5,8 @@ FactoryGirl.define do
     answer "MyText"
     value "9.99"
     kind false
+    comment "MyText"
+    attachable nil
     test nil
   end
 end

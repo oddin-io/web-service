@@ -1,7 +1,9 @@
 FactoryGirl.define do
   factory :test do
     title "MyString"
-    available_at "2017-08-24 03:43:58"
+    date_available "2017-10-12"
+    available_at "2017-10-12 23:45:15"
+    closes_at "2017-10-12 23:45:15"
     instruction nil
     person nil
   end

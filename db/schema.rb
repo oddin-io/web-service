@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170901051109) do
+ActiveRecord::Schema.define(version: 20171013045748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -205,24 +205,13 @@ ActiveRecord::Schema.define(version: 20170901051109) do
     t.index ["test_question_id"], name: "index_test_alternatives_on_test_question_id", using: :btree
   end
 
-  create_table "test_answers", force: :cascade do |t|
-    t.text     "answer"
-    t.integer  "person_id",           null: false
-    t.integer  "test_question_id",    null: false
-    t.integer  "test_alternative_id"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-    t.index ["person_id"], name: "index_test_answers_on_person_id", using: :btree
-    t.index ["test_alternative_id"], name: "index_test_answers_on_test_alternative_id", using: :btree
-    t.index ["test_question_id"], name: "index_test_answers_on_test_question_id", using: :btree
-  end
-
   create_table "test_questions", force: :cascade do |t|
     t.integer  "number",          null: false
     t.text     "description",     null: false
     t.text     "answer"
     t.decimal  "value",           null: false
     t.boolean  "kind",            null: false
+    t.text     "comment"
     t.string   "attachable_type"
     t.integer  "attachable_id"
     t.integer  "test_id",         null: false
@@ -234,11 +223,13 @@ ActiveRecord::Schema.define(version: 20170901051109) do
 
   create_table "tests", force: :cascade do |t|
     t.string   "title",          null: false
-    t.datetime "available_at",   null: false
+    t.date     "date_available", null: false
     t.integer  "instruction_id", null: false
     t.integer  "person_id",      null: false
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.datetime "available_at",   null: false
+    t.datetime "closes_at",      null: false
     t.index ["instruction_id"], name: "index_tests_on_instruction_id", using: :btree
     t.index ["person_id"], name: "index_tests_on_person_id", using: :btree
   end
@@ -293,9 +284,6 @@ ActiveRecord::Schema.define(version: 20170901051109) do
   add_foreign_key "surveys", "instructions"
   add_foreign_key "surveys", "people"
   add_foreign_key "test_alternatives", "test_questions"
-  add_foreign_key "test_answers", "people"
-  add_foreign_key "test_answers", "test_alternatives"
-  add_foreign_key "test_answers", "test_questions"
   add_foreign_key "test_questions", "tests"
   add_foreign_key "tests", "instructions"
   add_foreign_key "tests", "people"

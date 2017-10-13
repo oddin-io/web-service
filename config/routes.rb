@@ -36,7 +36,6 @@ Rails.application.routes.draw do
       get 'instructions'
     end
   end
-
   resources :lectures
   shallow do
     resources :instructions, concerns: :materializable do
@@ -45,8 +44,10 @@ Rails.application.routes.draw do
         get 'participants'
       end
 
-      resources :tests
-      resources :test_questions
+      resources :tests do
+        resources :test_questions
+      end
+      
       resources :notices
       resources :faqs, except: [:show]
       resources :surveys do
