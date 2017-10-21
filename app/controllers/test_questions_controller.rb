@@ -21,8 +21,8 @@ class TestQuestionsController < ApplicationController
                                 test: test
     question.save!
 
-    params[:alternatives].each do |alternative|
-      TestAlternative.create text: alternative[:text], correct: alternative[:correct], question: question
+    params[:alternatives].each do |test_alternative|
+      TestAlternative.create text: test_alternative[:text], correct: test_alternative[:correct], test_question: question
     end
 
     render json: question

@@ -4,7 +4,7 @@ class CreateTestQuestions < ActiveRecord::Migration[5.0]
       t.integer :number, null: false
       t.text :description, null: false
       t.text :answer, null: true
-      t.decimal :value, null: false
+      t.float :value, null: false
       t.boolean :kind, null: false
       t.text :comment, null: true
       

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171019001835) do
+ActiveRecord::Schema.define(version: 20171021045258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -209,7 +209,7 @@ ActiveRecord::Schema.define(version: 20171019001835) do
     t.integer  "number",          null: false
     t.text     "description",     null: false
     t.text     "answer"
-    t.decimal  "value",           null: false
+    t.float    "value",           null: false
     t.boolean  "kind",            null: false
     t.text     "comment"
     t.string   "attachable_type"
