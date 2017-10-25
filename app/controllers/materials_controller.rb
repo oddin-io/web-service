@@ -50,7 +50,7 @@ class MaterialsController < ApplicationController
     material = Material.find params[:id]
 
     if !material
-      render status: 404, body: nil and return
+     render status: 404, body: nil and return
     end
 
     object = get_bucket.object(material.key + '/' + params[:name])
