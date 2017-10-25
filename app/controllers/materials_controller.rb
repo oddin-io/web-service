@@ -29,7 +29,7 @@ class MaterialsController < ApplicationController
     elsif params[:presentation_id]
       attachable = Presentation.find params[:presentation_id]
     elsif params[:answer_id]
-      attachable = Answer.find param[:answer_id]
+      attachable = Answer.find params[:answer_id]
     elsif params[:work_id]
       attachable = Work.find params[:work_id]
     elsif params[:submission_id]
@@ -55,9 +55,10 @@ class MaterialsController < ApplicationController
 
     object = get_bucket.object(material.key + '/' + params[:name])
 
-    if !object.exists?
-      render status: 404, body: nil and return
-    end
+    # TODO: How to check for generated video and audio blobs
+    # if !object.exists?
+    #   render status: 404, body: nil and return
+    # end
 
     material.name = params[:name]
     material.mime = params[:mime]
