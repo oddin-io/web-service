@@ -2,7 +2,7 @@ class TestQuestionsController < ApplicationController
 
   def index
     test = Test.find params[:test_id]
-    render json: test.questions
+    render json: test.test_questions
   end
 
   def show
