@@ -12,20 +12,21 @@ class TestQuestionsController < ApplicationController
 
   def create
     test = Test.find params[:test_id]
-    question = TestQuestion.new number: params[:number],
-                                description: params[:description],
-                                answer: params[:answer],
-                                value: params[:value],
-                                kind: params[:kind],
-                                comment: params[:comment],
-                                test: test
-    question.save!
+    params[:questions].each do |question|
+      newQuestion = TestQuestion.new number: question[:number],
+                                     description: question[:description],
+                                     answer: question[:answer],
+                                     value: question[:value],
+                                     kind: question[:kind],
+                                     comment: question[:comment],
+                                     test: test
+      
+      question[:alternatives].each do |alternative|
+        TestAlternative.create text: alternative[:text], correct: alternative[:correct], test_question: newQuestion
+      end
 
-    params[:alternatives].each do |test_alternative|
-      TestAlternative.create text: test_alternative[:text], correct: test_alternative[:correct], test_question: question
+      newQuestion.save!
     end
-
-    render json: question
   end
 
   def update
