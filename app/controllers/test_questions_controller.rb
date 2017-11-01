@@ -20,9 +20,10 @@ class TestQuestionsController < ApplicationController
                                      kind: question[:kind],
                                      comment: question[:comment],
                                      test: test
-      
-      question[:alternatives].each do |alternative|
-        TestAlternative.create text: alternative[:text], correct: alternative[:correct], test_question: newQuestion
+      if question[:alternatives]
+        question[:alternatives].each do |alternative|
+          TestAlternative.create text: alternative[:text], correct: alternative[:correct], test_question: newQuestion
+        end
       end
 
       newQuestion.save!
