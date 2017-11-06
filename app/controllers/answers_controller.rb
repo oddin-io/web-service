@@ -33,7 +33,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    render plain: 'I destroy one entity'
+    render json: Answer.find(params[:id]).destroy
   end
 
   def create_only_material
