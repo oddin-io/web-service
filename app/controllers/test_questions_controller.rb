@@ -31,23 +31,24 @@ class TestQuestionsController < ApplicationController
   end
 
   def update
-    question = TestQuestion.find params[:id]
-    question.number = params[:number] if params[:number]
-    question.description = params[:description] if params[:description]
-    question.answer = params[:answer] if params[:answer]
-    question.value = params[:value] if params[:value]
-    question.kind = params[:kind] if params[:kind]
-    question.comment = params[:comment] if params [:comment]
-    question.save!
+    params[:questions].each do |quest|
+      question = TestQuestion.find quest[:id]
+      question.description = quest[:description]
+      question.answer = quest[:answer]
+      question.value = quest[:value]
+      question.comment = quest[:comment]
 
-    params[:alternatives].each do |elem|
-      alternative = TestAlternative.find elem[:id]
-      alternative.text = elem[:text]
-      alternative.correct = elem[:correct]
-      alternative.save!
+      if quest[:test_alternatives]
+        quest[:test_alternatives].each do |alter|
+          alternative = TestAlternative.find alter[:id]
+          alternative.text = alter[:text]
+          alternative.correct = alter[:correct]
+          alternative.save!
+        end
+      end
+
+      question.save!
     end
-
-    render json: question
   end
 
   def destroy
