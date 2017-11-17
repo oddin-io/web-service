@@ -46,6 +46,9 @@ Rails.application.routes.draw do
 
       resources :tests do
         resources :test_questions
+        resources :test_responses do
+          resources :test_answers
+        end
       end
       
       resources :notices
