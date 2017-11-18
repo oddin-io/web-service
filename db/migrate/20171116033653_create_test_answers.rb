@@ -1,7 +1,7 @@
 class CreateTestAnswers < ActiveRecord::Migration[5.0]
   def change
     create_table :test_answers do |t|
-      t.text :answer, null: true
+      t.text :response, null: true
       t.integer :choice, null: true
       t.float :value, null: true
       t.text :comment, null: true

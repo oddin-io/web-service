@@ -15,9 +15,14 @@ class TestResponsesController < ApplicationController
                                      test: test
 
     params[:questions].each do |quest|
-      TestAnswer.create answer: quest[:answer], choice: quest[:choice]
+      question = TestQuestion.find quest[:id]
+      #puts "#{quest[:id]}"
+      quest[:test_alternatives].each do |alt|
+        alternative = TestAlternative.find alt[:id]
+        #puts "#{alt[:id]}"
+        TestAnswer.create response: quest[:response], choice: alt[:choice], test_response: testResponse, test_question: question, test_alternative: alternative
+      end
     end
-
     testResponse.save!
   end
 
