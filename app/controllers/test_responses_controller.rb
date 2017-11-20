@@ -17,10 +17,17 @@ class TestResponsesController < ApplicationController
     params[:questions].each do |quest|
       question = TestQuestion.find quest[:id]
       #puts "#{quest[:id]}"
+      if quest[:response]
+        TestAnswer.create response: quest[:response], test_response: testResponse, test_question: question
+      end
+
       quest[:test_alternatives].each do |alt|
-        alternative = TestAlternative.find alt[:id]
+        
+        if alt[:choice]
+          alternative = TestAlternative.find alt[:id]
+          TestAnswer.create choice: alt[:choice], test_response: testResponse, test_question: question, test_alternative: alternative
+        end
         #puts "#{alt[:id]}"
-        TestAnswer.create response: quest[:response], choice: alt[:choice], test_response: testResponse, test_question: question, test_alternative: alternative
       end
     end
     testResponse.save!

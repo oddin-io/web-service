@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171118013116) do
+ActiveRecord::Schema.define(version: 20171120034923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -212,9 +212,9 @@ ActiveRecord::Schema.define(version: 20171118013116) do
     t.text     "comment"
     t.integer  "test_response_id",    null: false
     t.integer  "test_question_id",    null: false
-    t.integer  "test_alternative_id", null: false
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
+    t.integer  "test_alternative_id"
     t.index ["test_alternative_id"], name: "index_test_answers_on_test_alternative_id", using: :btree
     t.index ["test_question_id"], name: "index_test_answers_on_test_question_id", using: :btree
     t.index ["test_response_id"], name: "index_test_answers_on_test_response_id", using: :btree
