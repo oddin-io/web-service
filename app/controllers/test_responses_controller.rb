@@ -15,20 +15,20 @@ class TestResponsesController < ApplicationController
                                      test: test
 
     params[:questions].each do |quest|
+
       question = TestQuestion.find quest[:id]
-      #puts "#{quest[:id]}"
-      if quest[:response]
-        TestAnswer.create response: quest[:response], test_response: testResponse, test_question: question
+
+      if quest[:choice]
+        alternative = TestAlternative.find quest[:choice]
+
+        if alternative.correct == true
+          value = question.value
+        else
+          value = 0
+        end 
       end
 
-      quest[:test_alternatives].each do |alt|
-        
-        if alt[:choice]
-          alternative = TestAlternative.find alt[:id]
-          TestAnswer.create choice: alt[:choice], test_response: testResponse, test_question: question, test_alternative: alternative
-        end
-        #puts "#{alt[:id]}"
-      end
+      TestAnswer.create response: quest[:response], value: value, choice: quest[:choice], test_response: testResponse, test_question: question, test_alternative: alternative
     end
     testResponse.save!
   end
