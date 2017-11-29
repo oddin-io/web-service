@@ -27,9 +27,11 @@ class TestResponsesController < ApplicationController
           value = 0
         end 
       end
-
       TestAnswer.create response: quest[:response], value: value, choice: quest[:choice], test_response: testResponse, test_question: question, test_alternative: alternative
     end
+
+    testResponse.score = testResponse.test_answers.reduce 0 do |accum, answer| accum += answer.value end
+
     testResponse.save!
   end
 
