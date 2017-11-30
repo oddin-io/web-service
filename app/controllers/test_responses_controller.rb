@@ -1,7 +1,8 @@
 class TestResponsesController < ApplicationController
   def index
-    testResponse = TestResponse.find params[:id]
-    render json: testResponse
+    test = Test.find params[:test_id]
+    #testResponse = TestResponse.where(test_id: params[:test_id])
+    render json: test.test_responses
   end
 
   def show
@@ -32,6 +33,9 @@ class TestResponsesController < ApplicationController
 
     testResponse.score = testResponse.test_answers.reduce 0 do |accum, answer| accum += answer.value end
 
+    test.test_response = testResponse
+
+    test.save!
     testResponse.save!
   end
 
