@@ -33,9 +33,6 @@ class TestResponsesController < ApplicationController
 
     testResponse.score = testResponse.test_answers.reduce 0 do |accum, answer| accum += answer.value end
 
-    test.test_response = testResponse
-
-    test.save!
     testResponse.save!
   end
 
