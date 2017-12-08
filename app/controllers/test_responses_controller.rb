@@ -1,7 +1,6 @@
 class TestResponsesController < ApplicationController
   def index
     test = Test.find params[:test_id]
-    #testResponse = TestResponse.where(test_id: params[:test_id])
     render json: test.test_responses
   end
 
@@ -11,6 +10,7 @@ class TestResponsesController < ApplicationController
   end
 
   def create
+    value = 0
     test = Test.find params[:test_id]
     testResponse = TestResponse.new  person: current_person,
                                      test: test
@@ -24,8 +24,6 @@ class TestResponsesController < ApplicationController
 
         if alternative.correct == true
           value = question.value
-        else
-          value = 0
         end 
       end
       TestAnswer.create response: quest[:response], value: value, choice: quest[:choice], test_response: testResponse, test_question: question, test_alternative: alternative
