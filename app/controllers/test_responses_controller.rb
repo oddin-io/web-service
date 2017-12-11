@@ -35,7 +35,24 @@ class TestResponsesController < ApplicationController
   end
 
   def update
+    testResponse = TestResponse.find params[:id]
+    testResponse.closed = true
 
+    params[:test_answers].each do |answer|
+
+      testAnswer = TestAnswer.find answer[:id]
+
+      if answer[:response]
+        testAnswer.value = answer[:newValue]
+      end
+
+      testAnswer.comment = answer[:comment]
+      testAnswer.save!
+    end
+
+    testResponse.score = testResponse.test_answers.reduce 0 do |accum, answer| accum += answer.value end
+
+    testResponse.save!
   end
 
   def destroy
