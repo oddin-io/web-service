@@ -24,6 +24,8 @@ class TestResponsesController < ApplicationController
 
         if alternative.correct == true
           value = question.value
+        else
+          value = 0
         end
       else
         value = 0
