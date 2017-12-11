@@ -24,7 +24,9 @@ class TestResponsesController < ApplicationController
 
         if alternative.correct == true
           value = question.value
-        end 
+        end
+      else
+        value = 0
       end
       TestAnswer.create response: quest[:response], value: value, choice: quest[:choice], test_response: testResponse, test_question: question, test_alternative: alternative
     end
@@ -43,7 +45,11 @@ class TestResponsesController < ApplicationController
       testAnswer = TestAnswer.find answer[:id]
 
       if answer[:response]
-        testAnswer.value = answer[:newValue]
+        if answer[:newValue]
+          testAnswer.value = answer[:newValue]
+        else
+          testAnswer.value = 0
+        end
       end
 
       testAnswer.comment = answer[:comment]
