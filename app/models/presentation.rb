@@ -16,6 +16,7 @@ class Presentation < ApplicationRecord
   belongs_to :instruction
   belongs_to :person
   has_many :questions
+  has_many :requests
   has_many :materials, as: :attachable
 
   validates :subject, :status, presence: true

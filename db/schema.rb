@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171116033653) do
+ActiveRecord::Schema.define(version: 20171213024524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,6 +165,16 @@ ActiveRecord::Schema.define(version: 20171116033653) do
     t.index ["person_id"], name: "index_redefine_tokens_on_person_id", using: :btree
   end
 
+  create_table "requests", force: :cascade do |t|
+    t.boolean  "status",          default: false, null: false
+    t.integer  "person_id",                       null: false
+    t.integer  "presentation_id",                 null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.index ["person_id"], name: "index_requests_on_person_id", using: :btree
+    t.index ["presentation_id"], name: "index_requests_on_presentation_id", using: :btree
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.string   "token",      limit: 192, null: false
     t.integer  "person_id",              null: false
@@ -304,6 +314,8 @@ ActiveRecord::Schema.define(version: 20171116033653) do
   add_foreign_key "questions", "people"
   add_foreign_key "questions", "presentations"
   add_foreign_key "redefine_tokens", "people"
+  add_foreign_key "requests", "people"
+  add_foreign_key "requests", "presentations"
   add_foreign_key "sessions", "people"
   add_foreign_key "submissions", "people"
   add_foreign_key "submissions", "works"
