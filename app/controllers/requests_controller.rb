@@ -5,9 +5,6 @@ class RequestsController < ApplicationController
     render json: presentation.requests
   end
 
-  def show
-  end
-
   def create
     presentation = Presentation.find params[:presentation_id]
     request = Request.new presentation: presentation,
@@ -25,5 +22,4 @@ class RequestsController < ApplicationController
 
     render json: request
   end
-
 end
