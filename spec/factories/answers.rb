@@ -11,7 +11,7 @@
 #  person_id   :integer          not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :answer do
     
   end

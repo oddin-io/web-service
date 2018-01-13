@@ -9,7 +9,7 @@
 #  votable_id   :integer          not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :vote do
     
   end

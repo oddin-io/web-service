@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :test_question do
     number 1
     description "MyText"

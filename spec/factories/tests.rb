@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :test do
     title "MyString"
     date_available "2017-10-12"

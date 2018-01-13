@@ -11,7 +11,7 @@
 #  admin           :boolean
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :person do
     
   end

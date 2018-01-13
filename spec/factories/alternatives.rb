@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :alternative do
     description "MyString"
     survey nil

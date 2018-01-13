@@ -48,7 +48,8 @@ group :development, :test do
   gem 'rspec-rails'
 
   # Test support
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
+  gem 'factory_bot'
   gem 'faker', group: :production
   gem 'database_cleaner'
   gem 'shoulda-matchers', require: false

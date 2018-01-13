@@ -8,7 +8,7 @@
 #  workload :decimal(7, 2)    default(0.0), not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :event do
     
   end

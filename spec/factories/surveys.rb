@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :survey do
     title "MyString"
     question "MyString"

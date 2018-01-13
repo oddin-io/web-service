@@ -9,7 +9,7 @@
 #  updated_at :datetime         not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :redefine_token do
     token "MyString"
     user nil

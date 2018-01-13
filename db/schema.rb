@@ -260,12 +260,12 @@ ActiveRecord::Schema.define(version: 20171213024524) do
   create_table "tests", force: :cascade do |t|
     t.string   "title",          null: false
     t.date     "date_available", null: false
+    t.datetime "available_at",   null: false
+    t.datetime "closes_at",      null: false
     t.integer  "instruction_id", null: false
     t.integer  "person_id",      null: false
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
-    t.datetime "available_at",   null: false
-    t.datetime "closes_at",      null: false
     t.index ["instruction_id"], name: "index_tests_on_instruction_id", using: :btree
     t.index ["person_id"], name: "index_tests_on_person_id", using: :btree
   end
@@ -273,7 +273,7 @@ ActiveRecord::Schema.define(version: 20171213024524) do
   create_table "votes", force: :cascade do |t|
     t.boolean "up",           default: true, null: false
     t.integer "person_id",                   null: false
-    t.string  "votable_type"
+    t.string  "votable_type",                null: false
     t.integer "votable_id",                  null: false
     t.index ["person_id", "votable_id", "votable_type"], name: "index_votes_on_person_id_and_votable_id_and_votable_type", unique: true, using: :btree
     t.index ["person_id"], name: "index_votes_on_person_id", using: :btree
