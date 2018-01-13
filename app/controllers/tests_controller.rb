@@ -12,11 +12,11 @@ class TestsController < ApplicationController
   def create
     instruction = Instruction.find params[:instruction_id]
     test = Test.new  title: params[:title],
-                     date_available: params[:date_available],
-                     available_at: params[:available_at],
-                     closes_at: params[:closes_at],
-                     instruction: instruction,
-                     person: current_person
+      date_available: params[:date_available],
+      available_at: params[:available_at],
+      closes_at: params[:closes_at],
+      instruction: instruction,
+      person: current_person
     test.save!
 
     render json: test

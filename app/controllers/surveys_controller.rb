@@ -8,9 +8,9 @@ class SurveysController < ApplicationController
   def create
     instruction = Instruction.find params[:instruction_id]
     survey = Survey.new title: params[:title],
-                        question: params[:question],
-                        instruction: instruction,
-                        person: current_person
+      question: params[:question],
+      instruction: instruction,
+      person: current_person
     survey.save!
 
     params[:alternatives].each do |alternative|

@@ -13,20 +13,20 @@ class TestQuestionsController < ApplicationController
   def create
     test = Test.find params[:test_id]
     params[:questions].each do |question|
-      newQuestion = TestQuestion.new number: question[:number],
-                                     description: question[:description],
-                                     answer: question[:answer],
-                                     value: question[:value],
-                                     kind: question[:kind],
-                                     comment: question[:comment],
-                                     test: test
+      new_question = TestQuestion.new number: question[:number],
+        description: question[:description],
+        answer: question[:answer],
+        value: question[:value],
+        kind: question[:kind],
+        comment: question[:comment],
+        test: test
       if question[:alternatives]
         question[:alternatives].each do |alternative|
-          TestAlternative.create text: alternative[:text], correct: alternative[:correct], test_question: newQuestion
+          TestAlternative.create text: alternative[:text], correct: alternative[:correct], test_question: new_question
         end
       end
 
-      newQuestion.save!
+      new_question.save!
     end
   end
 

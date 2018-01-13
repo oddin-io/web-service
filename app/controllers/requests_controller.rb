@@ -8,7 +8,7 @@ class RequestsController < ApplicationController
   def create
     presentation = Presentation.find params[:presentation_id]
     request = Request.new presentation: presentation,
-                          person: current_person
+      person: current_person
     request.save!
 
     render json: request

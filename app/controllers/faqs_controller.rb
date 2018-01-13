@@ -8,9 +8,9 @@ class FaqsController < ApplicationController
   def create
     instruction = Instruction.find params[:instruction_id]
     faq = Faq.new question: params[:question],
-                  answer: params[:answer],
-                  instruction: instruction,
-                  person: current_person
+      answer: params[:answer],
+      instruction: instruction,
+      person: current_person
     faq.save!
     render json: faq
   end

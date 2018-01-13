@@ -11,7 +11,7 @@ class QuestionsController < ApplicationController
     presentation = Presentation.find params[:presentation_id]
     person = current_person
     question = Question.new text: params[:text], anonymous: params[:anonymous] || false, created_at: DateTime.now,
-                            presentation: presentation, person: person
+      presentation: presentation, person: person
     question.save!
     render json: question
   end

@@ -5,14 +5,14 @@ class TestResponsesController < ApplicationController
   end
 
   def show
-    testResponse = TestResponse.find params[:id]
-    render json: testResponse
+    test_response = TestResponse.find params[:id]
+    render json: test_response
   end
 
   def create
     value = 0
     test = Test.find params[:test_id]
-    testResponse = TestResponse.new  person: current_person,
+    test_response = TestResponse.new  person: current_person,
                                      test: test
 
     params[:questions].each do |quest|
@@ -30,17 +30,17 @@ class TestResponsesController < ApplicationController
       else
         value = 0
       end
-      TestAnswer.create response: quest[:response], value: value, choice: quest[:choice], test_response: testResponse, test_question: question, test_alternative: alternative
+      TestAnswer.create response: quest[:response], value: value, choice: quest[:choice], test_response: test_response, test_question: question, test_alternative: alternative
     end
 
-    testResponse.score = testResponse.test_answers.reduce 0 do |accum, answer| accum += answer.value end
+    test_response.score = test_response.test_answers.reduce 0 do |accum, answer| accum += answer.value end
 
-    testResponse.save!
+    test_response.save!
   end
 
   def update
-    testResponse = TestResponse.find params[:id]
-    testResponse.closed = true
+    test_response = TestResponse.find params[:id]
+    test_response.closed = true
 
     params[:test_answers].each do |answer|
 
@@ -58,9 +58,9 @@ class TestResponsesController < ApplicationController
       testAnswer.save!
     end
 
-    testResponse.score = testResponse.test_answers.reduce 0 do |accum, answer| accum += answer.value end
+    test_response.score = test_response.test_answers.reduce 0 do |accum, answer| accum += answer.value end
 
-    testResponse.save!
+    test_response.save!
   end
 
   def destroy

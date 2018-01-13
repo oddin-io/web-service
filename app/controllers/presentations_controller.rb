@@ -14,7 +14,7 @@ class PresentationsController < ApplicationController
   def create
     instruction = Instruction.find params[:instruction_id]
     presentation = Presentation.new subject: params[:subject], status: 0, created_at: DateTime.now,
-                                    instruction: instruction, person: current_person
+      instruction: instruction, person: current_person
     presentation.save!
     render json: presentation
   end
