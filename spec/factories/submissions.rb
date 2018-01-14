@@ -12,7 +12,6 @@
 
 FactoryBot.define do
   factory :submission do
-    work nil
-    person nil
+
   end
 end

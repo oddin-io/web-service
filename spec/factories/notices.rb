@@ -13,8 +13,6 @@
 
 FactoryBot.define do
   factory :notice do
-    text "MyString"
-    instruction ""
-    person ""
+
   end
 end

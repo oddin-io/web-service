@@ -14,7 +14,6 @@
 
 FactoryBot.define do
   factory :work do
-    instruction ""
-    person ""
+
   end
 end

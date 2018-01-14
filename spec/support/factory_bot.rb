@@ -3,7 +3,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     begin
       DatabaseCleaner.start
-      FactoryBot.lint
+      # FactoryBot.lint
     ensure
       DatabaseCleaner.clean
     end
