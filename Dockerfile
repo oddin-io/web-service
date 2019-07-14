@@ -1,4 +1,4 @@
-FROM ruby:2.3.0
+FROM ruby:2.5.0
 
 MAINTAINER Bruno Felipe Leal Delfino <bruno.delfino1995@gmail.com>
 
@@ -7,7 +7,7 @@ MAINTAINER Bruno Felipe Leal Delfino <bruno.delfino1995@gmail.com>
 # - libpq-dev: Communicate with postgres through the postgres gem
 # - postgresql-client-9.4: In case you want to talk directly to postgres
 RUN apt-get update && apt-get install -qq -y \
-  build-essential libpq-dev postgresql-client-9.4 \
+  build-essential libpq-dev postgresql-client-9.6 \
   --fix-missing --no-install-recommends
 
 # Set an environment variable to store where the app is installed to inside
