@@ -18,6 +18,8 @@ class Presentation < ApplicationRecord
   has_many :questions
   has_many :requests
   has_many :materials, as: :attachable
+  has_many :clusters
+  has_many :presentation_faq
 
   validates :subject, :status, presence: true
   validates :subject, length: {maximum: self::SUBJECT_MAX_LENGTH}

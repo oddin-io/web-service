@@ -18,7 +18,8 @@ class Question < ApplicationRecord
   has_many :answers
   has_one  :answer, -> { where(accepted: true) }
   has_many :votes, as: :votable
-
+  belongs_to :cluster, optional: true
+  belongs_to :presentatio_faq, optional: true
   validates :text, presence: true
   validates :anonymous, exclusion: {in: [nil]}
 end

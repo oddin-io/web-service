@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -qq -y \
   build-essential libpq-dev postgresql-client-9.6 \
   --fix-missing --no-install-recommends
 
+RUN apt-get update
+RUN apt-get install -y python3 python-pip
+RUN pip install nltk psycopg2
 # Set an environment variable to store where the app is installed to inside
 # of the Docker image.
 ENV INSTALL_PATH /home/app

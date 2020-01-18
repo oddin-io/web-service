@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171213024524) do
+ActiveRecord::Schema.define(version: 20191104220027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,11 @@ ActiveRecord::Schema.define(version: 20171213024524) do
     t.index ["person_id", "survey_id"], name: "index_choices_on_person_id_and_survey_id", unique: true, using: :btree
     t.index ["person_id"], name: "index_choices_on_person_id", using: :btree
     t.index ["survey_id"], name: "index_choices_on_survey_id", using: :btree
+  end
+
+  create_table "clusters", force: :cascade do |t|
+    t.integer "presentation_id", null: false
+    t.index ["presentation_id"], name: "index_clusters_on_presentation_id", using: :btree
   end
 
   create_table "enrolls", force: :cascade do |t|
@@ -153,6 +158,9 @@ ActiveRecord::Schema.define(version: 20171213024524) do
     t.datetime "created_at",                      null: false
     t.integer  "presentation_id",                 null: false
     t.integer  "person_id",                       null: false
+    t.integer  "cluster_id"
+    t.boolean  "isfaq"
+    t.index ["cluster_id"], name: "index_questions_on_cluster_id", using: :btree
     t.index ["person_id"], name: "index_questions_on_person_id", using: :btree
     t.index ["presentation_id"], name: "index_questions_on_presentation_id", using: :btree
   end
@@ -300,6 +308,7 @@ ActiveRecord::Schema.define(version: 20171213024524) do
   add_foreign_key "choices", "alternatives"
   add_foreign_key "choices", "people"
   add_foreign_key "choices", "surveys"
+  add_foreign_key "clusters", "presentations"
   add_foreign_key "enrolls", "instructions"
   add_foreign_key "enrolls", "people"
   add_foreign_key "faqs", "instructions"
@@ -311,6 +320,7 @@ ActiveRecord::Schema.define(version: 20171213024524) do
   add_foreign_key "notices", "people"
   add_foreign_key "presentations", "instructions"
   add_foreign_key "presentations", "people"
+  add_foreign_key "questions", "clusters"
   add_foreign_key "questions", "people"
   add_foreign_key "questions", "presentations"
   add_foreign_key "redefine_tokens", "people"
