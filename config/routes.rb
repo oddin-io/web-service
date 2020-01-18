@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   post '/redefine-password', to: 'people#redefine_password'
 
   resources :people
-
+  resources :teste
   resource :session do
     member do
       delete 'delete-all'
@@ -80,6 +80,8 @@ Rails.application.routes.draw do
             end
           end
         end
+        resources :cluster, controller: 'cluster'
+        resources :faqs, controller: 'presentation_faq'
       end
     end
   end
