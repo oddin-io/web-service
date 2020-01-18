@@ -11,9 +11,10 @@
 #
 
 class QuestionSerializer < ActiveModel::Serializer
-  attributes :id, :text, :anonymous, :created_at, :upvotes, :my_vote, :answered, :has_answer
+  attributes :id, :text, :anonymous, :created_at, :upvotes, :my_vote, :answered, :has_answer, :isfaq
 
   has_one :presentation
+  has_one :cluster
   has_one :person
 
   def upvotes
