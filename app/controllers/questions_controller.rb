@@ -11,8 +11,9 @@ class QuestionsController < ApplicationController
     presentation = Presentation.find params[:presentation_id]
     person = current_person
     question = Question.new text: params[:text], anonymous: params[:anonymous] || false, created_at: DateTime.now,
-      presentation: presentation, person: person
+    presentation: presentation, person: person, cluster: nil, isfaq: false
     question.save!
+    system "python clustering.py -idf 0.4 15 "+params[:presentation_id]
     render json: question
   end
 
@@ -22,10 +23,17 @@ class QuestionsController < ApplicationController
     puts question.answer
 
     render json: question
+
   end
 
   def update
-    render plain: 'I update one entity'
+    question = Question.find(params[:id])
+    
+    question.update(isfaq: params[:isfaq])
+
+    question.save
+
+    render json: question
   end
 
   def destroy
@@ -50,7 +58,7 @@ class QuestionsController < ApplicationController
 
   def vote
     Vote.find_by(person: current_person, votable: Question.find(params[:id])).delete
-
+      
     render status: 200, body: nil
   end
 end
