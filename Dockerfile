@@ -1,7 +1,5 @@
 FROM ruby:2.5.0
 
-MAINTAINER Bruno Felipe Leal Delfino <bruno.delfino1995@gmail.com>
-
 # Install dependencies:
 # - build-essential: To ensure certain gems can be compiled
 # - libpq-dev: Communicate with postgres through the postgres gem
