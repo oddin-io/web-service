@@ -13,7 +13,7 @@ services:
     environment:
       # Rails Settings
       DATABASE_URL: postgres://server:123@api-database/server?pool=5
-      SECRET_KEY_BASE:
+      SECRET_KEY_BASE: Wa4Kdu6hMt3tYKm4jb9p4vZUuc7jBVFw
 
       # AWS Settings
       AWS_ACCESS_KEY_ID:

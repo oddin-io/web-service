@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "parameters",
+  "description": "Format expected by templates when importing `values.json`",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["database", "secret_key_base"],
+  "properties": {
+    "database": {
+      "required": ["url", "host", "port"],
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "default": 5432
+        }
+      }
+    },
+    "secret_key_base": {
+      "type": "string"
+    }
+  }
+}
