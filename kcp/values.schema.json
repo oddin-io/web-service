@@ -1,29 +1,22 @@
 {
-  "$schema": "http://json-schema.org/schema#",
-  "title": "parameters",
-  "description": "Format expected by templates when importing `values.json`",
-  "type": "object",
-  "additionalProperties": false,
-  "required": ["database", "secret_key_base"],
-  "properties": {
-    "database": {
-      "required": ["url", "host", "port"],
-      "type": "object",
-      "properties": {
-        "url": {
-          "type": "string"
-        },
-        "host": {
-          "type": "string"
-        },
-        "port": {
-          "type": "integer",
-          "default": 5432
-        }
-      }
-    },
-    "secret_key_base": {
-      "type": "string"
-    }
-  }
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["database", "secret_key_base"],
+	"properties": {
+		"domain": { "type": "string", "format": "hostname" },
+		"tag": { "type": "string" },
+		"tls_secret": { "type": "string" },
+		"database": {
+			"required": ["host", "user", "pass"],
+			"type": "object",
+			"properties": {
+				"host": { "type": "string" },
+				"port": { "type": "integer" },
+				"user": { "type": "string" },
+				"pass": { "type": "string" },
+				"database": { "type": "string" }
+			}
+		},
+		"secret_key_base": { "type": "string" }
+	}
 }

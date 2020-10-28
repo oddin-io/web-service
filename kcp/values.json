@@ -1,0 +1,13 @@
+{
+	"domain": "api.oddin.localhost",
+	"tag": "latest",
+	"tls_secret": "domain-tls",
+	"database": {
+		"host": "host",
+		"port": 5432,
+		"user": "user",
+		"pass": "pass",
+		"database": "database"
+	},
+	"secret_key_base": "I'm very secret"
+}
